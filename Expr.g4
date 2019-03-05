@@ -1,5 +1,5 @@
 grammar Expr;
-prog: expr;
+prog: expr';';
 expr: expr '*' expr #mult
     | expr '+' expr #add
     | expr '-' expr #sub
