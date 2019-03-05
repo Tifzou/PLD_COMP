@@ -27,6 +27,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitDiv(ExprParser::DivContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitAdd(ExprParser::AddContext *ctx) override {
     return visitChildren(ctx);
   }

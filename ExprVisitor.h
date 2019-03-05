@@ -25,6 +25,8 @@ public:
 
     virtual antlrcpp::Any visitPar(ExprParser::ParContext *context) = 0;
 
+    virtual antlrcpp::Any visitDiv(ExprParser::DivContext *context) = 0;
+
     virtual antlrcpp::Any visitAdd(ExprParser::AddContext *context) = 0;
 
     virtual antlrcpp::Any visitSub(ExprParser::SubContext *context) = 0;

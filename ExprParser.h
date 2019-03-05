@@ -13,7 +13,7 @@ class  ExprParser : public antlr4::Parser {
 public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    T__7 = 8, INT = 9, VAR = 10, RET = 11
+    T__7 = 8, T__8 = 9, RET = 10, INT = 11, VAR = 12
   };
 
   enum {
@@ -73,6 +73,16 @@ public:
     ParContext(ExprContext *ctx);
 
     ExprContext *expr();
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  DivContext : public ExprContext {
+  public:
+    DivContext(ExprContext *ctx);
+
+    std::vector<ExprContext *> expr();
+    ExprContext* expr(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
