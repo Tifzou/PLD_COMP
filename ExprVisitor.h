@@ -21,6 +21,8 @@ public:
    */
     virtual antlrcpp::Any visitProg(ExprParser::ProgContext *context) = 0;
 
+    virtual antlrcpp::Any visitLine(ExprParser::LineContext *context) = 0;
+
     virtual antlrcpp::Any visitRet(ExprParser::RetContext *context) = 0;
 
     virtual antlrcpp::Any visitPar(ExprParser::ParContext *context) = 0;
@@ -36,6 +38,8 @@ public:
     virtual antlrcpp::Any visitVar(ExprParser::VarContext *context) = 0;
 
     virtual antlrcpp::Any visitLdconst(ExprParser::LdconstContext *context) = 0;
+
+    virtual antlrcpp::Any visitFunction(ExprParser::FunctionContext *context) = 0;
 
     virtual antlrcpp::Any visitBrac(ExprParser::BracContext *context) = 0;
 

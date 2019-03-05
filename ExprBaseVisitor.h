@@ -19,6 +19,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitLine(ExprParser::LineContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitRet(ExprParser::RetContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -48,6 +52,10 @@ public:
   }
 
   virtual antlrcpp::Any visitLdconst(ExprParser::LdconstContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitFunction(ExprParser::FunctionContext *ctx) override {
     return visitChildren(ctx);
   }
 

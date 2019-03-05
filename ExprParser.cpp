@@ -63,10 +63,63 @@ ExprParser::ProgContext* ExprParser::prog() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(4);
+    setState(6);
     expr(0);
-    setState(5);
+    setState(7);
     match(ExprParser::T__0);
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- CodeContext ------------------------------------------------------------------
+
+ExprParser::CodeContext::CodeContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+
+size_t ExprParser::CodeContext::getRuleIndex() const {
+  return ExprParser::RuleCode;
+}
+
+void ExprParser::CodeContext::copyFrom(CodeContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
+}
+
+//----------------- LineContext ------------------------------------------------------------------
+
+ExprParser::ExprContext* ExprParser::LineContext::expr() {
+  return getRuleContext<ExprParser::ExprContext>(0);
+}
+
+ExprParser::LineContext::LineContext(CodeContext *ctx) { copyFrom(ctx); }
+
+
+antlrcpp::Any ExprParser::LineContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<ExprVisitor*>(visitor))
+    return parserVisitor->visitLine(this);
+  else
+    return visitor->visitChildren(this);
+}
+ExprParser::CodeContext* ExprParser::code() {
+  CodeContext *_localctx = _tracker.createInstance<CodeContext>(_ctx, getState());
+  enterRule(_localctx, 2, ExprParser::RuleCode);
+
+  auto onExit = finally([=] {
+    exitRule();
+  });
+  try {
+    _localctx = dynamic_cast<CodeContext *>(_tracker.createInstance<ExprParser::LineContext>(_localctx));
+    enterOuterAlt(_localctx, 1);
+    setState(9);
+    expr(0);
    
   }
   catch (RecognitionException &e) {
@@ -97,6 +150,10 @@ void ExprParser::ExprContext::copyFrom(ExprContext *ctx) {
 
 tree::TerminalNode* ExprParser::RetContext::RET() {
   return getToken(ExprParser::RET, 0);
+}
+
+ExprParser::ExprContext* ExprParser::RetContext::expr() {
+  return getRuleContext<ExprParser::ExprContext>(0);
 }
 
 ExprParser::RetContext::RetContext(ExprContext *ctx) { copyFrom(ctx); }
@@ -229,6 +286,29 @@ antlrcpp::Any ExprParser::LdconstContext::accept(tree::ParseTreeVisitor *visitor
   else
     return visitor->visitChildren(this);
 }
+//----------------- FunctionContext ------------------------------------------------------------------
+
+tree::TerminalNode* ExprParser::FunctionContext::RETOUR() {
+  return getToken(ExprParser::RETOUR, 0);
+}
+
+tree::TerminalNode* ExprParser::FunctionContext::VAR() {
+  return getToken(ExprParser::VAR, 0);
+}
+
+ExprParser::ExprContext* ExprParser::FunctionContext::expr() {
+  return getRuleContext<ExprParser::ExprContext>(0);
+}
+
+ExprParser::FunctionContext::FunctionContext(ExprContext *ctx) { copyFrom(ctx); }
+
+
+antlrcpp::Any ExprParser::FunctionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<ExprVisitor*>(visitor))
+    return parserVisitor->visitFunction(this);
+  else
+    return visitor->visitChildren(this);
+}
 //----------------- BracContext ------------------------------------------------------------------
 
 ExprParser::ExprContext* ExprParser::BracContext::expr() {
@@ -255,8 +335,8 @@ ExprParser::ExprContext* ExprParser::expr(int precedence) {
   ExprParser::ExprContext *_localctx = _tracker.createInstance<ExprContext>(_ctx, parentState);
   ExprParser::ExprContext *previousContext = _localctx;
   (void)previousContext; // Silence compiler, in case the context is not used by generated code.
-  size_t startState = 2;
-  enterRecursionRule(_localctx, 2, ExprParser::RuleExpr, precedence);
+  size_t startState = 4;
+  enterRecursionRule(_localctx, 4, ExprParser::RuleExpr, precedence);
 
     
 
@@ -266,7 +346,7 @@ ExprParser::ExprContext* ExprParser::expr(int precedence) {
   try {
     size_t alt;
     enterOuterAlt(_localctx, 1);
-    setState(19);
+    setState(28);
     _errHandler->sync(this);
     switch (_input->LA(1)) {
       case ExprParser::INT: {
@@ -274,7 +354,7 @@ ExprParser::ExprContext* ExprParser::expr(int precedence) {
         _ctx = _localctx;
         previousContext = _localctx;
 
-        setState(8);
+        setState(12);
         match(ExprParser::INT);
         break;
       }
@@ -283,8 +363,10 @@ ExprParser::ExprContext* ExprParser::expr(int precedence) {
         _localctx = _tracker.createInstance<RetContext>(_localctx);
         _ctx = _localctx;
         previousContext = _localctx;
-        setState(9);
+        setState(13);
         match(ExprParser::RET);
+        setState(14);
+        expr(5);
         break;
       }
 
@@ -292,7 +374,7 @@ ExprParser::ExprContext* ExprParser::expr(int precedence) {
         _localctx = _tracker.createInstance<VarContext>(_localctx);
         _ctx = _localctx;
         previousContext = _localctx;
-        setState(10);
+        setState(15);
         match(ExprParser::VAR);
         break;
       }
@@ -301,11 +383,11 @@ ExprParser::ExprContext* ExprParser::expr(int precedence) {
         _localctx = _tracker.createInstance<BracContext>(_localctx);
         _ctx = _localctx;
         previousContext = _localctx;
-        setState(11);
+        setState(16);
         match(ExprParser::T__5);
-        setState(12);
+        setState(17);
         expr(0);
-        setState(13);
+        setState(18);
         match(ExprParser::T__6);
         break;
       }
@@ -314,12 +396,27 @@ ExprParser::ExprContext* ExprParser::expr(int precedence) {
         _localctx = _tracker.createInstance<ParContext>(_localctx);
         _ctx = _localctx;
         previousContext = _localctx;
-        setState(15);
+        setState(20);
         match(ExprParser::T__7);
-        setState(16);
+        setState(21);
         expr(0);
-        setState(17);
+        setState(22);
         match(ExprParser::T__8);
+        break;
+      }
+
+      case ExprParser::RETOUR: {
+        _localctx = _tracker.createInstance<FunctionContext>(_localctx);
+        _ctx = _localctx;
+        previousContext = _localctx;
+        setState(24);
+        match(ExprParser::RETOUR);
+        setState(25);
+        match(ExprParser::VAR);
+        setState(26);
+        match(ExprParser::T__9);
+        setState(27);
+        expr(1);
         break;
       }
 
@@ -327,7 +424,7 @@ ExprParser::ExprContext* ExprParser::expr(int precedence) {
       throw NoViableAltException(this);
     }
     _ctx->stop = _input->LT(-1);
-    setState(35);
+    setState(44);
     _errHandler->sync(this);
     alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 2, _ctx);
     while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER) {
@@ -335,20 +432,20 @@ ExprParser::ExprContext* ExprParser::expr(int precedence) {
         if (!_parseListeners.empty())
           triggerExitRuleEvent();
         previousContext = _localctx;
-        setState(33);
+        setState(42);
         _errHandler->sync(this);
         switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 1, _ctx)) {
         case 1: {
           auto newContext = _tracker.createInstance<MultContext>(_tracker.createInstance<ExprContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpr);
-          setState(21);
+          setState(30);
 
-          if (!(precpred(_ctx, 9))) throw FailedPredicateException(this, "precpred(_ctx, 9)");
-          setState(22);
+          if (!(precpred(_ctx, 10))) throw FailedPredicateException(this, "precpred(_ctx, 10)");
+          setState(31);
           match(ExprParser::T__1);
-          setState(23);
-          expr(10);
+          setState(32);
+          expr(11);
           break;
         }
 
@@ -356,13 +453,13 @@ ExprParser::ExprContext* ExprParser::expr(int precedence) {
           auto newContext = _tracker.createInstance<DivContext>(_tracker.createInstance<ExprContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpr);
-          setState(24);
+          setState(33);
 
-          if (!(precpred(_ctx, 8))) throw FailedPredicateException(this, "precpred(_ctx, 8)");
-          setState(25);
+          if (!(precpred(_ctx, 9))) throw FailedPredicateException(this, "precpred(_ctx, 9)");
+          setState(34);
           match(ExprParser::T__2);
-          setState(26);
-          expr(9);
+          setState(35);
+          expr(10);
           break;
         }
 
@@ -370,13 +467,13 @@ ExprParser::ExprContext* ExprParser::expr(int precedence) {
           auto newContext = _tracker.createInstance<AddContext>(_tracker.createInstance<ExprContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpr);
-          setState(27);
+          setState(36);
 
-          if (!(precpred(_ctx, 7))) throw FailedPredicateException(this, "precpred(_ctx, 7)");
-          setState(28);
+          if (!(precpred(_ctx, 8))) throw FailedPredicateException(this, "precpred(_ctx, 8)");
+          setState(37);
           match(ExprParser::T__3);
-          setState(29);
-          expr(8);
+          setState(38);
+          expr(9);
           break;
         }
 
@@ -384,19 +481,19 @@ ExprParser::ExprContext* ExprParser::expr(int precedence) {
           auto newContext = _tracker.createInstance<SubContext>(_tracker.createInstance<ExprContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpr);
-          setState(30);
+          setState(39);
 
-          if (!(precpred(_ctx, 6))) throw FailedPredicateException(this, "precpred(_ctx, 6)");
-          setState(31);
+          if (!(precpred(_ctx, 7))) throw FailedPredicateException(this, "precpred(_ctx, 7)");
+          setState(40);
           match(ExprParser::T__4);
-          setState(32);
-          expr(7);
+          setState(41);
+          expr(8);
           break;
         }
 
         } 
       }
-      setState(37);
+      setState(46);
       _errHandler->sync(this);
       alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 2, _ctx);
     }
@@ -411,7 +508,7 @@ ExprParser::ExprContext* ExprParser::expr(int precedence) {
 
 bool ExprParser::sempred(RuleContext *context, size_t ruleIndex, size_t predicateIndex) {
   switch (ruleIndex) {
-    case 1: return exprSempred(dynamic_cast<ExprContext *>(context), predicateIndex);
+    case 2: return exprSempred(dynamic_cast<ExprContext *>(context), predicateIndex);
 
   default:
     break;
@@ -421,10 +518,10 @@ bool ExprParser::sempred(RuleContext *context, size_t ruleIndex, size_t predicat
 
 bool ExprParser::exprSempred(ExprContext *_localctx, size_t predicateIndex) {
   switch (predicateIndex) {
-    case 0: return precpred(_ctx, 9);
-    case 1: return precpred(_ctx, 8);
-    case 2: return precpred(_ctx, 7);
-    case 3: return precpred(_ctx, 6);
+    case 0: return precpred(_ctx, 10);
+    case 1: return precpred(_ctx, 9);
+    case 2: return precpred(_ctx, 8);
+    case 3: return precpred(_ctx, 7);
 
   default:
     break;
@@ -441,15 +538,16 @@ atn::ATN ExprParser::_atn;
 std::vector<uint16_t> ExprParser::_serializedATN;
 
 std::vector<std::string> ExprParser::_ruleNames = {
-  "prog", "expr"
+  "prog", "code", "expr"
 };
 
 std::vector<std::string> ExprParser::_literalNames = {
-  "", "';'", "'*'", "'/'", "'+'", "'-'", "'{'", "'}'", "'('", "')'"
+  "", "';'", "'*'", "'/'", "'+'", "'-'", "'{'", "'}'", "'('", "')'", "'()'"
 };
 
 std::vector<std::string> ExprParser::_symbolicNames = {
-  "", "", "", "", "", "", "", "", "", "", "RET", "INT", "VAR"
+  "", "", "", "", "", "", "", "", "", "", "", "RETOUR", "RET", "INT", "VAR", 
+  "WS"
 };
 
 dfa::Vocabulary ExprParser::_vocabulary(_literalNames, _symbolicNames);
@@ -472,33 +570,39 @@ ExprParser::Initializer::Initializer() {
 
   _serializedATN = {
     0x3, 0x608b, 0xa72a, 0x8133, 0xb9ed, 0x417c, 0x3be7, 0x7786, 0x5964, 
-    0x3, 0xe, 0x29, 0x4, 0x2, 0x9, 0x2, 0x4, 0x3, 0x9, 0x3, 0x3, 0x2, 0x3, 
-    0x2, 0x3, 0x2, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 
-    0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x5, 
-    0x3, 0x16, 0xa, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 
-    0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 
-    0x7, 0x3, 0x24, 0xa, 0x3, 0xc, 0x3, 0xe, 0x3, 0x27, 0xb, 0x3, 0x3, 0x3, 
-    0x2, 0x3, 0x4, 0x4, 0x2, 0x4, 0x2, 0x2, 0x2, 0x2e, 0x2, 0x6, 0x3, 0x2, 
-    0x2, 0x2, 0x4, 0x15, 0x3, 0x2, 0x2, 0x2, 0x6, 0x7, 0x5, 0x4, 0x3, 0x2, 
-    0x7, 0x8, 0x7, 0x3, 0x2, 0x2, 0x8, 0x3, 0x3, 0x2, 0x2, 0x2, 0x9, 0xa, 
-    0x8, 0x3, 0x1, 0x2, 0xa, 0x16, 0x7, 0xd, 0x2, 0x2, 0xb, 0x16, 0x7, 0xc, 
-    0x2, 0x2, 0xc, 0x16, 0x7, 0xe, 0x2, 0x2, 0xd, 0xe, 0x7, 0x8, 0x2, 0x2, 
-    0xe, 0xf, 0x5, 0x4, 0x3, 0x2, 0xf, 0x10, 0x7, 0x9, 0x2, 0x2, 0x10, 0x16, 
-    0x3, 0x2, 0x2, 0x2, 0x11, 0x12, 0x7, 0xa, 0x2, 0x2, 0x12, 0x13, 0x5, 
-    0x4, 0x3, 0x2, 0x13, 0x14, 0x7, 0xb, 0x2, 0x2, 0x14, 0x16, 0x3, 0x2, 
-    0x2, 0x2, 0x15, 0x9, 0x3, 0x2, 0x2, 0x2, 0x15, 0xb, 0x3, 0x2, 0x2, 0x2, 
-    0x15, 0xc, 0x3, 0x2, 0x2, 0x2, 0x15, 0xd, 0x3, 0x2, 0x2, 0x2, 0x15, 
-    0x11, 0x3, 0x2, 0x2, 0x2, 0x16, 0x25, 0x3, 0x2, 0x2, 0x2, 0x17, 0x18, 
-    0xc, 0xb, 0x2, 0x2, 0x18, 0x19, 0x7, 0x4, 0x2, 0x2, 0x19, 0x24, 0x5, 
-    0x4, 0x3, 0xc, 0x1a, 0x1b, 0xc, 0xa, 0x2, 0x2, 0x1b, 0x1c, 0x7, 0x5, 
-    0x2, 0x2, 0x1c, 0x24, 0x5, 0x4, 0x3, 0xb, 0x1d, 0x1e, 0xc, 0x9, 0x2, 
-    0x2, 0x1e, 0x1f, 0x7, 0x6, 0x2, 0x2, 0x1f, 0x24, 0x5, 0x4, 0x3, 0xa, 
-    0x20, 0x21, 0xc, 0x8, 0x2, 0x2, 0x21, 0x22, 0x7, 0x7, 0x2, 0x2, 0x22, 
-    0x24, 0x5, 0x4, 0x3, 0x9, 0x23, 0x17, 0x3, 0x2, 0x2, 0x2, 0x23, 0x1a, 
-    0x3, 0x2, 0x2, 0x2, 0x23, 0x1d, 0x3, 0x2, 0x2, 0x2, 0x23, 0x20, 0x3, 
-    0x2, 0x2, 0x2, 0x24, 0x27, 0x3, 0x2, 0x2, 0x2, 0x25, 0x23, 0x3, 0x2, 
-    0x2, 0x2, 0x25, 0x26, 0x3, 0x2, 0x2, 0x2, 0x26, 0x5, 0x3, 0x2, 0x2, 
-    0x2, 0x27, 0x25, 0x3, 0x2, 0x2, 0x2, 0x5, 0x15, 0x23, 0x25, 
+    0x3, 0x11, 0x32, 0x4, 0x2, 0x9, 0x2, 0x4, 0x3, 0x9, 0x3, 0x4, 0x4, 0x9, 
+    0x4, 0x3, 0x2, 0x3, 0x2, 0x3, 0x2, 0x3, 0x3, 0x3, 0x3, 0x3, 0x4, 0x3, 
+    0x4, 0x3, 0x4, 0x3, 0x4, 0x3, 0x4, 0x3, 0x4, 0x3, 0x4, 0x3, 0x4, 0x3, 
+    0x4, 0x3, 0x4, 0x3, 0x4, 0x3, 0x4, 0x3, 0x4, 0x3, 0x4, 0x3, 0x4, 0x3, 
+    0x4, 0x3, 0x4, 0x5, 0x4, 0x1f, 0xa, 0x4, 0x3, 0x4, 0x3, 0x4, 0x3, 0x4, 
+    0x3, 0x4, 0x3, 0x4, 0x3, 0x4, 0x3, 0x4, 0x3, 0x4, 0x3, 0x4, 0x3, 0x4, 
+    0x3, 0x4, 0x3, 0x4, 0x7, 0x4, 0x2d, 0xa, 0x4, 0xc, 0x4, 0xe, 0x4, 0x30, 
+    0xb, 0x4, 0x3, 0x4, 0x2, 0x3, 0x6, 0x5, 0x2, 0x4, 0x6, 0x2, 0x2, 0x2, 
+    0x37, 0x2, 0x8, 0x3, 0x2, 0x2, 0x2, 0x4, 0xb, 0x3, 0x2, 0x2, 0x2, 0x6, 
+    0x1e, 0x3, 0x2, 0x2, 0x2, 0x8, 0x9, 0x5, 0x6, 0x4, 0x2, 0x9, 0xa, 0x7, 
+    0x3, 0x2, 0x2, 0xa, 0x3, 0x3, 0x2, 0x2, 0x2, 0xb, 0xc, 0x5, 0x6, 0x4, 
+    0x2, 0xc, 0x5, 0x3, 0x2, 0x2, 0x2, 0xd, 0xe, 0x8, 0x4, 0x1, 0x2, 0xe, 
+    0x1f, 0x7, 0xf, 0x2, 0x2, 0xf, 0x10, 0x7, 0xe, 0x2, 0x2, 0x10, 0x1f, 
+    0x5, 0x6, 0x4, 0x7, 0x11, 0x1f, 0x7, 0x10, 0x2, 0x2, 0x12, 0x13, 0x7, 
+    0x8, 0x2, 0x2, 0x13, 0x14, 0x5, 0x6, 0x4, 0x2, 0x14, 0x15, 0x7, 0x9, 
+    0x2, 0x2, 0x15, 0x1f, 0x3, 0x2, 0x2, 0x2, 0x16, 0x17, 0x7, 0xa, 0x2, 
+    0x2, 0x17, 0x18, 0x5, 0x6, 0x4, 0x2, 0x18, 0x19, 0x7, 0xb, 0x2, 0x2, 
+    0x19, 0x1f, 0x3, 0x2, 0x2, 0x2, 0x1a, 0x1b, 0x7, 0xd, 0x2, 0x2, 0x1b, 
+    0x1c, 0x7, 0x10, 0x2, 0x2, 0x1c, 0x1d, 0x7, 0xc, 0x2, 0x2, 0x1d, 0x1f, 
+    0x5, 0x6, 0x4, 0x3, 0x1e, 0xd, 0x3, 0x2, 0x2, 0x2, 0x1e, 0xf, 0x3, 0x2, 
+    0x2, 0x2, 0x1e, 0x11, 0x3, 0x2, 0x2, 0x2, 0x1e, 0x12, 0x3, 0x2, 0x2, 
+    0x2, 0x1e, 0x16, 0x3, 0x2, 0x2, 0x2, 0x1e, 0x1a, 0x3, 0x2, 0x2, 0x2, 
+    0x1f, 0x2e, 0x3, 0x2, 0x2, 0x2, 0x20, 0x21, 0xc, 0xc, 0x2, 0x2, 0x21, 
+    0x22, 0x7, 0x4, 0x2, 0x2, 0x22, 0x2d, 0x5, 0x6, 0x4, 0xd, 0x23, 0x24, 
+    0xc, 0xb, 0x2, 0x2, 0x24, 0x25, 0x7, 0x5, 0x2, 0x2, 0x25, 0x2d, 0x5, 
+    0x6, 0x4, 0xc, 0x26, 0x27, 0xc, 0xa, 0x2, 0x2, 0x27, 0x28, 0x7, 0x6, 
+    0x2, 0x2, 0x28, 0x2d, 0x5, 0x6, 0x4, 0xb, 0x29, 0x2a, 0xc, 0x9, 0x2, 
+    0x2, 0x2a, 0x2b, 0x7, 0x7, 0x2, 0x2, 0x2b, 0x2d, 0x5, 0x6, 0x4, 0xa, 
+    0x2c, 0x20, 0x3, 0x2, 0x2, 0x2, 0x2c, 0x23, 0x3, 0x2, 0x2, 0x2, 0x2c, 
+    0x26, 0x3, 0x2, 0x2, 0x2, 0x2c, 0x29, 0x3, 0x2, 0x2, 0x2, 0x2d, 0x30, 
+    0x3, 0x2, 0x2, 0x2, 0x2e, 0x2c, 0x3, 0x2, 0x2, 0x2, 0x2e, 0x2f, 0x3, 
+    0x2, 0x2, 0x2, 0x2f, 0x7, 0x3, 0x2, 0x2, 0x2, 0x30, 0x2e, 0x3, 0x2, 
+    0x2, 0x2, 0x5, 0x1e, 0x2c, 0x2e, 
   };
 
   atn::ATNDeserializer deserializer;

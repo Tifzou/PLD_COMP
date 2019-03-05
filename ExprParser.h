@@ -13,11 +13,12 @@ class  ExprParser : public antlr4::Parser {
 public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    T__7 = 8, T__8 = 9, RET = 10, INT = 11, VAR = 12
+    T__7 = 8, T__8 = 9, T__9 = 10, RETOUR = 11, RET = 12, INT = 13, VAR = 14, 
+    WS = 15
   };
 
   enum {
-    RuleProg = 0, RuleExpr = 1
+    RuleProg = 0, RuleCode = 1, RuleExpr = 2
   };
 
   ExprParser(antlr4::TokenStream *input);
@@ -31,6 +32,7 @@ public:
 
 
   class ProgContext;
+  class CodeContext;
   class ExprContext; 
 
   class  ProgContext : public antlr4::ParserRuleContext {
@@ -45,6 +47,30 @@ public:
   };
 
   ProgContext* prog();
+
+  class  CodeContext : public antlr4::ParserRuleContext {
+  public:
+    CodeContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+   
+    CodeContext() = default;
+    void copyFrom(CodeContext *context);
+    using antlr4::ParserRuleContext::copyFrom;
+
+    virtual size_t getRuleIndex() const override;
+
+   
+  };
+
+  class  LineContext : public CodeContext {
+  public:
+    LineContext(CodeContext *ctx);
+
+    ExprContext *expr();
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  CodeContext* code();
 
   class  ExprContext : public antlr4::ParserRuleContext {
   public:
@@ -64,6 +90,7 @@ public:
     RetContext(ExprContext *ctx);
 
     antlr4::tree::TerminalNode *RET();
+    ExprContext *expr();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
@@ -131,6 +158,17 @@ public:
     LdconstContext(ExprContext *ctx);
 
     antlr4::tree::TerminalNode *INT();
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  FunctionContext : public ExprContext {
+  public:
+    FunctionContext(ExprContext *ctx);
+
+    antlr4::tree::TerminalNode *RETOUR();
+    antlr4::tree::TerminalNode *VAR();
+    ExprContext *expr();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
