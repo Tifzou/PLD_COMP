@@ -1,3 +1,5 @@
+ANTLR=/shares/public/tp/ANTLR4-CPP/bin/antlr4 # a changer pour chaque ordi /!\
+ANTLRRUNTIME=/shares/public/tp/ANTLR4-CPP # a changer pour chaque ordi /!\
 EXEC     = exec
 CC       = g++
 
@@ -10,8 +12,8 @@ OBJ      = $(SRC:.cpp=.o)
 all: antlr
 
 antlr : 
-	antlr -visitor -no-listener -Dlanguage=Cpp Expr.g4
-	clang++ -g -std=c++11 -I ./antlr4-runtime/ -o exe *.cpp ./lib/libantlr4-runtime.a
+	$(ANTLR) -visitor -no-listener -Dlanguage=Cpp Expr.g4
+	clang++ -g -std=c++11 -I $(ANTLRRUNTIME)/antlr4-runtime/ -o exe *.cpp $(ANTLRRUNTIME)/lib/libantlr4-runtime.a
 
 ${EXEC}: $(OBJ)
 	$(CC) -o $@ $^ $(LDFLAGS)
