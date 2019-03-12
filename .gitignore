@@ -1,0 +1,9 @@
+*.tokens
+*.interp
+*.o
+antlr4-runtime
+exe.dSYM
+lib
+makefile_2
+projet.pdf
+.DS_Store
