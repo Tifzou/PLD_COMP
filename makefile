@@ -7,18 +7,19 @@ LDFLAGS  =
 SRC      = $(wildcard *.cpp)
 OBJ      = $(SRC:.cpp=.o)
 
-all: antlr $(EXEC)
+all: antlr
 
 antlr : 
-	antlr4 -visitor -no-listener -Dlanguage=Cpp Expr.g4
-	clang++ -g -std=c++11 \
-		-I $ANTLRRUNTIMEDIR/antlr-runtime \
-		-o exe *.cpp \
-		$ANTLRRUNTIMEDIR/lib/libantlr4-runtime.a
+	antlr -visitor -no-listener -Dlanguage=Cpp Expr.g4
+	clang++ -g -std=c++11 -I ./antlr4-runtime/ -o exe *.cpp ./lib/libantlr4-runtime.a
+
+
+
 
 ${EXEC}: $(OBJ)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
+	
 %.o: %.cpp
 	$(CC) -o $@ -c $< $(CFLAGS)
 
