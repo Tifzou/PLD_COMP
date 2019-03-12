@@ -8,7 +8,35 @@ using namespace std;
 class Visiteur : public ExprBaseVisitor
 {
    public:
+	
+
+
+	antlrcpp::Any visitCode(ExprParser::CodeContext *ctx) override
+	{
+		return (int)stoi(ctx->INT()->getText());
+	}
+
+	antlrcpp::Any visitCore(ExprParser::CoreContext *ctx) override
+	{
+		return (int)visit(ctx->code());
+	}
+
 	antlrcpp::Any visitProg(ExprParser::ProgContext *ctx) override
+	{
+		return (int)visit(ctx->expr());
+	}
+
+	antlrcpp::Any visitExpr(ExprParser::ExprContext *ctx) override
+	{
+		return (int)visit(ctx->core());
+	}
+	/*
+    antlrcpp::Any visitFunc(ExprParser::FuncContext *ctx) override
+	{
+		return (int)visit(ctx->expr(0));
+	}
+
+	antlrcpp::Any visitExpr1(ExprParser::Expr1Context *ctx) override
 	{
 		return (int)visit(ctx->expr());
 	}
@@ -29,4 +57,5 @@ class Visiteur : public ExprBaseVisitor
 	{
 		return (int)stoi(ctx->INT()->getText());
 	}
+	*/
 };

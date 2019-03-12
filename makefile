@@ -13,9 +13,6 @@ antlr :
 	antlr -visitor -no-listener -Dlanguage=Cpp Expr.g4
 	clang++ -g -std=c++11 -I ./antlr4-runtime/ -o exe *.cpp ./lib/libantlr4-runtime.a
 
-
-
-
 ${EXEC}: $(OBJ)
 	$(CC) -o $@ $^ $(LDFLAGS)
 

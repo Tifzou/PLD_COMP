@@ -19,43 +19,15 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitLine(ExprParser::LineContext *ctx) override {
+  virtual antlrcpp::Any visitExpr(ExprParser::ExprContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitRet(ExprParser::RetContext *ctx) override {
+  virtual antlrcpp::Any visitCore(ExprParser::CoreContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitPar(ExprParser::ParContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitDiv(ExprParser::DivContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitAdd(ExprParser::AddContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitSub(ExprParser::SubContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitMult(ExprParser::MultContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitVar(ExprParser::VarContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitLdconst(ExprParser::LdconstContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitBrac(ExprParser::BracContext *ctx) override {
+  virtual antlrcpp::Any visitCode(ExprParser::CodeContext *ctx) override {
     return visitChildren(ctx);
   }
 
