@@ -11,7 +11,7 @@ all: antlr
 
 antlr : 
 	antlr -visitor -no-listener -Dlanguage=Cpp Expr.g4
-	clang++ -g -std=c++11 -I ./antlr4-cpp-runtime-4.7.2-macos/antlr4-runtime/ -o exe *.cpp ./antlr4-cpp-runtime-4.7.2-macos/lib/libantlr4-runtime.a
+	clang++ -g -std=c++11 -I ./antlr4-runtime/ -o exe *.cpp ./lib/libantlr4-runtime.a
 
 
 

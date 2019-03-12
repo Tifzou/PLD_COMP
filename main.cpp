@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "antlr4-cpp-runtime-4.7.2-macos/antlr4-runtime/antlr4-runtime.h"
+#include "antlr4-runtime/antlr4-runtime.h"
 #include "ExprLexer.h"
 #include "ExprParser.h"
 #include "ExprBaseVisitor.h"

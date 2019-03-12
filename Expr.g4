@@ -13,7 +13,6 @@ expr: expr '*' expr #mult
     |   VAR	    #var
     |  '{' expr '}' #brac
     |  '(' expr ')' #par
-    | RETOUR VAR'()' expr #function
     ;
 
 RETOUR : 'void'|'int'|'double'|'char';

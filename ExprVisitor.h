@@ -39,8 +39,6 @@ public:
 
     virtual antlrcpp::Any visitLdconst(ExprParser::LdconstContext *context) = 0;
 
-    virtual antlrcpp::Any visitFunction(ExprParser::FunctionContext *context) = 0;
-
     virtual antlrcpp::Any visitBrac(ExprParser::BracContext *context) = 0;
 
 

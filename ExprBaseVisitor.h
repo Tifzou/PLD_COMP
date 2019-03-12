@@ -55,10 +55,6 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitFunction(ExprParser::FunctionContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
   virtual antlrcpp::Any visitBrac(ExprParser::BracContext *ctx) override {
     return visitChildren(ctx);
   }
