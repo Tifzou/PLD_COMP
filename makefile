@@ -13,18 +13,15 @@ LDFLAGS  =
 SRC      = $(wildcard *.cpp)
 OBJ      = $(SRC:.cpp=.o)
 
-all: exec
+all: antlr $(EXEC)
 
 antlr : 
-	@echo ---- Compilation des sources avec antlr --------
+	@echo --------- Génération avec antlr ----------------
 	$(ANTLR) -visitor -no-listener -Dlanguage=Cpp Expr.g4
-	$(CXX) $(CXXFLAGS) $(ANTLRRUNTIME)/antlr4-runtime/ -o exe *.cpp $(ANTLRRUNTIME)/lib/libantlr4-runtime.a
-	
 
-exec:
+$(EXEC) :
 	@echo --------- Compilation des sources --------------
-	$(CXX) $(CXXFLAGS) $(ANTLRRUNTIME)/antlr4-runtime/ -o exe *.cpp $(ANTLRRUNTIME)/lib/libantlr4-runtime.a
-
+	$(CXX) $(CXXFLAGS) $(ANTLRRUNTIME)/antlr4-runtime/ -o $(EXEC) *.cpp $(ANTLRRUNTIME)/lib/libantlr4-runtime.a
 
 .PHONY: clean mrproper
 
