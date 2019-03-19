@@ -1,5 +1,7 @@
-ANTLR=/shares/public/tp/ANTLR4-CPP/bin/antlr4
-ANTLRRUNTIME=/shares/public/tp/ANTLR4-CPP
+# POUR IF : ANTLR=/shares/public/tp/ANTLR4-CPP/bin/antlr4
+#           ANTLRRUNTIME=/shares/public/tp/ANTLR4-CPP
+ANTLR=/shares/public/tp/antlr4/bin/antlr4
+ANTLRRUNTIME=/shares/public/tp/antlr4
 OPTIONS=
 
 EXEC     = exec
