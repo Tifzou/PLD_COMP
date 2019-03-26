@@ -7,6 +7,7 @@
 #include "ExprParser.h"
 #include "ExprBaseVisitor.h"
 #include "Visiteur.h"
+#include "AsmWriter.h"
 
 using namespace antlr4;
 using namespace std;
@@ -71,7 +72,10 @@ int main(int argc, char *argv[])
 		Visiteur visitor;
 		int resultat = (int)visitor.visit(tree);
 		cout << "Résultat " << resultat << endl;
-		
+
+		AsmWriter *a=new AsmWriter(argv[1],tree->toStringTree(&parser));
+		a->convert();
+
 		string outFile = "resultat.s";
 		ofstream myfile (outFile);
 		if (myfile.is_open()){
