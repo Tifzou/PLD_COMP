@@ -1,14 +1,37 @@
 #pragma once
 
-#include "antlr4-runtime/antlr4-runtime.h"
+#include "antlr4-runtime.h"
 #include "ExprBaseVisitor.h"
+
+#include <list>
+#include <string>
 
 using namespace std;
 
 class Visiteur : public ExprBaseVisitor
 {
    public:
+
+	antlrcpp::Any visitCode(ExprParser::CodeContext *ctx) override
+	{
+		return (int)stoi(ctx->INT()->getText());
+	}
+
+	antlrcpp::Any visitCore(ExprParser::CoreContext *ctx) override
+	{
+		return (int)visit(ctx->code());
+	}
+
 	antlrcpp::Any visitProg(ExprParser::ProgContext *ctx) override
+	{
+		return (int)visit(ctx->expr());
+	}
+
+	antlrcpp::Any visitExpr(ExprParser::ExprContext *ctx) override
+	{
+		return (int)visit(ctx->core());
+	}
+	/*antlrcpp::Any visitProg(ExprParser::ProgContext *ctx) override
 	{
 		return (int)visit(ctx->expr());
 	}
@@ -28,5 +51,8 @@ class Visiteur : public ExprBaseVisitor
 	virtual antlrcpp::Any visitLdconst(ExprParser::LdconstContext *ctx) override
 	{
 		return (int)stoi(ctx->INT()->getText());
-	}
+	}*/
+
+   private:
+	list<string> cmdAsm;
 };
