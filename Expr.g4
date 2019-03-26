@@ -1,23 +1,39 @@
 grammar Expr;
-prog: expr';';
+prog:base;
 
 
-code: expr #line;
+
+base: 'int main' '(' ')'core; 
+
+core: '{' code* ret ';' '}'; 
+
+code: typevar vari ';'; 
+
+
+ret: 'return' VAR;
+vari: VAR  #dec
+    | VAR '=' INT #aff
+    | VAR '=' expr #expression
+    ;
 
 expr: expr '*' expr #mult
     | expr '/' expr #div
     | expr '+' expr #add
     | expr '-' expr #sub
-    |   INT 	    #ldconst
-    |   RET	expr  #ret
     |   VAR	    #var
-    |  '{' expr '}' #brac
+    |   INT 	#ldconst
     |  '(' expr ')' #par
     ;
 
-RETOUR : 'void'|'int'|'double'|'char';
-RET : 'RETURN'|'return' ;    
-INT : [0-9]+ ;
-VAR : [a-zA-Z]+ ;   
-WS : [ |\t|\r|\n]+ -> skip;
 
+typevar : TYPEINT #int
+    |TYPECHAR #char
+    ;
+
+TYPEINT : 'int';
+TYPECHAR :'char';
+INT : [0-9]+ ; 
+
+
+VAR : [a-zA-Z]+ ; 
+WS : [ \t\r\n] -> skip;

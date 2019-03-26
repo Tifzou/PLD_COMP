@@ -1,0 +1,57 @@
+#Définition des variables
+OPTIONS=
+# Pour l'utiliser, écrire $ make OPTIONS="..." dans un shell
+# -DMAP pour afficher les traces
+# -DDEBUG pour passer le main et la classe Generateur en mode debug
+# -DDEBUG_LECTURE pour passer la classe Lecture en mode debug
+# -DDEBUG_FORMATEUR pour passer la classe Formateur en mode debug
+
+#Définition des fichiers sources
+sources=$(wildcard *.cpp)
+#Définition des options de compilation
+CLEAN=raz
+CXXFLAGS= -g -ansi -pedantic -Wall -std=c++11
+LDFLAGS= -g -ansi -pedantic -Wall -std=c++11
+COMPILATEUR=g++
+REP_TEST = ger/
+EXEC_TEST = ./mktest.sh
+#Définition du nom de l'éxécutable à créer
+EXEC=analog
+#Définition des fichiers à compiler en .o
+objets = $(sources:.cpp=.o)
+
+#Création de l'éxécutable avec l'édition des liens
+all: $(EXEC)
+
+analog: $(objets)
+	@echo "-----Edition des liens-----"
+	$(COMPILATEUR) $(LDFLAGS) -o $@ $^
+
+#Création des classes compilées en .o
+%.o: %.cpp
+	@echo "-----Compilation de "$@"-----"
+	$(COMPILATEUR) $(CXXFLAGS) $(OPTIONS) -o $@ -c $<
+
+#La fonction raz n'est pas associé aux fichiers
+.PHONY: $(CLEAN)
+
+#Fonction pour re/construire les dépendances au sein du makefile
+#NE FONCTIONNE PAS SUR LES POSTES DES SALLES DE TD
+#depend:
+#	makedepend $(sources)
+	
+#Fonction de suppression de l'ensemble des fichiers crées par le makefile
+$(CLEAN):
+	@echo "-----Supression des fichiers antérieurs-----"
+	rm -f $@ $(objets) $(EXEC) core
+
+Generateur.o: Generateur.h
+Formateur.o: Formateur.h
+Lecture.o: Lecture.h Formateur.h
+Analog.o: Generateur.h Lecture.h Formateur.h
+
+
+test:	
+	$(MAKE)
+	@echo "Lancement du script de test : \n"
+	@(cd $(REP_TEST) && bash $(EXEC_TEST) )

@@ -25,9 +25,13 @@ int main(int argc, char *argv[])
 		tree::ParseTree *tree = parser.prog();
 
 		Visiteur visitor;
-		int resultat = (int)visitor.visit(tree);
-		cout << "Résultat " << resultat << endl;
-
+		vector<vector<string>> resultat = visitor.visit(tree);
+		cout << "Résultat :" << endl;
+		for (string i : resultat.back())
+		{
+			cout << i << endl;
+		}
+		cout<<resultat.back().size()<<endl;
 		return 0;
 	}
 	else
