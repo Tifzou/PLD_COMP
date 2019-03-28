@@ -69,41 +69,14 @@ int main(int argc, char *argv[])
 
 		cout << tree->toStringTree(&parser) << endl;
 
-		Visiteur visitor;
-		int resultat = (int)visitor.visit(tree);
-		cout << "Résultat " << resultat << endl;
+        Visiteur visitor;
+        map<string, pair<string,int>> variables; // nom, <adresse, val>
+        vector<vector<string>> resultat = visitor.visit(tree);
+        cout << "resultat size " << resultat.size() << endl
 
-		AsmWriter *a=new AsmWriter(argv[1],tree->toStringTree(&parser));
+		AsmWriter *a=new AsmWriter(argv[1], "resultat.s",tree->toStringTree(&parser));
 		a->convert();
-
-		string outFile = "resultat.s";
-		ofstream myfile (outFile);
-		if (myfile.is_open()){
-			myfile << ".text\n";
-			myfile << ".global main\n";
-			// TODO rajouter le body du code assembleur
-			myfile << "main:\n";
-			myfile << "movl\t$" << resultat << ", %eax\n";
-			myfile << "ret";
-			myfile.close();
-		}else{
-			cerr << "Unable to create .s file !"<< endl;
-		}
-		/*size_t foundCpp=outFile.find(".cpp",0);
-		if (foundCpp!=std::string::npos){
-			outFile.replace(outFile.end()-4,outFile.end(),".asm");
-			cout<<"Okay, .cpp rules"<<endl;
-		}else{
-			size_t foundC=outFile.find(".c",0);
-			if (foundC!=std::string::npos){
-				cout<<"Okay, .c rules"<<endl;
-				outFile.replace(outFile.end()-2,outFile.end(),".s");
-			}else{
-				cerr<<"Le fichier d'entrée n'a pas la bonne extension !\n";
-				return -1;
-			}
-		}
-*/
+        a->writeOutputFile();
 
 		return 0;
 	}

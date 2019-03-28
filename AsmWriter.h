@@ -14,12 +14,16 @@ using namespace std;
 
 class AsmWriter {
     public:
-        AsmWriter(string const nom, string const arbre) : nomFichier(nom), arbreAntlr(arbre) {}
-        void setNomFichier(string nomFichier);
+        AsmWriter(string const nom, string const outName, string const arbre)
+            : inFile(nom), outFile(outName), arbreAntlr(arbre) {}
+        void setNomFichierInput(string nomFichier);
+        void setNomFichierOutput(string nomFichier);
         bool convert();
+        bool writeOutputFile();
 
     protected:
-        string nomFichier;
+        string inFile;
+        string outFile;
         string arbreAntlr;
 };
 
