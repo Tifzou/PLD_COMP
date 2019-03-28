@@ -18,15 +18,15 @@ void AsmWriter::setNomFichierOutput(string nom){
 }
 
 bool AsmWriter::convert(){
-    size_t foundCpp=nomFichier.find(".cpp",0);
+    size_t foundCpp=inFile.find(".cpp",0);
     if (foundCpp!=std::string::npos){
-        nomFichier.replace(nomFichier.end()-4,nomFichier.end(),".asm");
+        inFile.replace(inFile.end()-4,inFile.end(),".asm");
         cout<<"Okay, .cpp rules"<<endl;
     }else{
-        size_t foundC=nomFichier.find(".c",0);
+        size_t foundC=inFile.find(".c",0);
         if (foundC!=std::string::npos){
             cout<<"Okay, .c rules"<<endl;
-            nomFichier.replace(nomFichier.end()-2,nomFichier.end(),".s");
+            inFile.replace(inFile.end()-2,inFile.end(),".s");
         }else{
             cerr<<"Le fichier d'entrée n'a pas la bonne extension !\n";
             return 0;
@@ -35,7 +35,7 @@ bool AsmWriter::convert(){
     return 1;
 }
 
-bool AsmWriter::writeOutputFile() {
+bool AsmWriter::writeOutputFile(vector<vector<string>> resultat) {
     ofstream myfile (outFile);
     if (myfile.is_open()){
         myfile << ".text\n";

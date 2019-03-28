@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 
 #include "antlr4-runtime.h"
 #include "ExprLexer.h"
@@ -58,7 +59,6 @@ int main(int argc, char *argv[])
 	{
 		ifstream file;
 		file.open(argv[1]);
-		//file.open("index.cpp");
 		ANTLRInputStream input(file);
 		ExprLexer lexer(&input);
 		CommonTokenStream tokens(&lexer);
@@ -70,13 +70,12 @@ int main(int argc, char *argv[])
 		cout << tree->toStringTree(&parser) << endl;
 
         Visiteur visitor;
-        map<string, pair<string,int>> variables; // nom, <adresse, val>
         vector<vector<string>> resultat = visitor.visit(tree);
-        cout << "resultat size " << resultat.size() << endl
+        cout << "resultat size " << resultat.size() << endl;
 
-		AsmWriter *a=new AsmWriter(argv[1], "resultat.s",tree->toStringTree(&parser));
+		AsmWriter *a = new AsmWriter(argv[1], "resultat.s", tree->toStringTree(&parser));
 		a->convert();
-        a->writeOutputFile();
+        a->writeOutputFile(resultat);
 
 		return 0;
 	}

@@ -8,6 +8,9 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <map>
+#include <utility> // pair
+#include <vector>
 #include <stdio.h>
 
 using namespace std;
@@ -19,12 +22,14 @@ class AsmWriter {
         void setNomFichierInput(string nomFichier);
         void setNomFichierOutput(string nomFichier);
         bool convert();
-        bool writeOutputFile();
+        bool writeOutputFile(vector<vector<string>> resultat);
 
     protected:
         string inFile;
         string outFile;
         string arbreAntlr;
+        map<string, pair<string,int>> variables; // nom, <adresse, val>
+
 };
 
 
