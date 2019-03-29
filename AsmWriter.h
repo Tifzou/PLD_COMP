@@ -29,6 +29,7 @@ protected:
     string writeReturn(Commande returnCmd);
     string writeAff(Commande affectationCmd);
     void writeDec(Commande declarationCmd);
+    string writeDef(Commande definitionCmd);
     string writeAdd(Commande additionCmd);
 
 

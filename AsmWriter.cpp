@@ -127,6 +127,12 @@ void AsmWriter::writeDec(Commande declarationCmd)
     variables.insert(make_pair(varName, varAddress));
 }
 
+string AsmWriter::writeDef(Commande definitionCmd)
+{
+    writeDec(definitionCmd);
+    string asmInstr = writeAff(definitionCmd);
+}
+
 string AsmWriter::writeAdd(Commande additionCmd)
 {
     map<string, string>::iterator it;
