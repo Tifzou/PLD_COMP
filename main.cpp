@@ -1,12 +1,11 @@
 #include <iostream>
 #include <fstream>
 
-#include "antlr4-runtime/antlr4-runtime.h"
+#include "antlr4-runtime.h"
 #include "ExprLexer.h"
 #include "ExprParser.h"
 #include "ExprBaseVisitor.h"
 #include "Visiteur.h"
-
 using namespace antlr4;
 using namespace std;
 
@@ -25,13 +24,28 @@ int main(int argc, char *argv[])
 		tree::ParseTree *tree = parser.prog();
 
 		Visiteur visitor;
-		vector<vector<string>> resultat = visitor.visit(tree);
+		//vector<vector<string>> resultat = visitor.visit(tree);
+		Symbole resultat = visitor.visit(tree);
+		
+		matrice *stack = resultat.getStack();
+
+		for(Commande curCommande: *stack)
+		{
+            cout<<curCommande.type<<" : ";
+			for(string s : curCommande.elements)
+			{
+				cout<<s<<" ";
+			}
+			cout<<endl;
+		}
+		/*
 		cout << "Résultat :" << endl;
 		for (string i : resultat.back())
 		{
 			cout << i << endl;
 		}
 		cout<<resultat.back().size()<<endl;
+		*/
 		return 0;
 	}
 	else

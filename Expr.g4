@@ -5,15 +5,14 @@ prog:base;
 
 base: 'int main' '(' ')'core; 
 
-core: '{' code* ret ';' '}'; 
+core: '{' code* ret '}';
 
-code: typevar vari ';'; 
+code: typevar vari ';';
 
 
-ret: 'return' VAR;
-vari: VAR  #dec
-    | VAR '=' INT #aff
-    | VAR '=' expr #expression
+ret: 'return' VAR ';' ;
+vari: VAR (','VAR)* #decVar
+    | VAR '=' expr #defVar
     ;
 
 expr: expr '*' expr #mult

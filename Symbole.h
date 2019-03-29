@@ -7,154 +7,172 @@
     e-mail               : matthieu.halunka@insa-lyon.fr (chef de projet)
 *************************************************************************/
 
-//---------- Interface de la classe <Visiteur> (fichier Visiteur.h) ----------------
-#if ! defined ( VISITEUR_H )
-#define VISITEUR_H
+//---------- Interface de la classe <Symbole> (fichier Symbole.h) ----------------
+#if ! defined (SYMBOLE_H)
+#define SYMBOLE_H
 
 //--------------------------------------------------- Interfaces utilisées
 
-#include "antlr4-runtime.h"
-#include "ExprBaseVisitor.h"
-#include "Symbole.h"
 #include <string>
+#include <vector>
 
+using namespace std;
 
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
 
+enum commandeType {ERR, WARN, VAR_DEC, VAR_DEF, OPER, RET, AFF};
+
+typedef struct Commande
+{
+    commandeType type;
+    vector<string> elements;
+} Commande;
+
+typedef vector<Commande> matrice;
+
 //------------------------------------------------------------------------
-// Rôle de la classe <Visiteur>
+// Rôle de la classe <Symbole>
 //
 //
 //------------------------------------------------------------------------
 
-class Visiteur : public ExprBaseVisitor
+class Symbole
 {
 //----------------------------------------------------------------- PUBLIC
 
 public:
 //----------------------------------------------------- Méthodes publiques
-    antlrcpp::Any visitProg(ExprParser::ProgContext *ctx);
+    bool varExist(string var);
     // Mode d'emploi :
     //
     // Contrat :
     //
 
 
-    antlrcpp::Any visitBase(ExprParser::BaseContext *ctx);
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
-    antlrcpp::Any visitCore(ExprParser::CoreContext *ctx);
+    bool varDef(string var);
     // Mode d'emploi :
     //
     // Contrat :
     //
 
 
-    antlrcpp::Any visitCode(ExprParser::CodeContext *ctx);
+    void writeStack(Commande curCommande)
     // Mode d'emploi :
     //
     // Contrat :
     //
+    {
+        resp.push_back(curCommande);
+    }
 
 
-    //antlrcpp::Any visitAff(ExprParser::AffContext *ctx);
+    void writeStack(commandeType code, vector<string> commande)
     // Mode d'emploi :
     //
     // Contrat :
     //
+    {
+        Commande curCommande;
+        curCommande.type=code;
+        curCommande.elements = commande;
+        resp.push_back(curCommande);
+    }
 
 
-    antlrcpp::Any visitRet(ExprParser::RetContext *ctx);
+    void pushInTemporalCommande(commandeType code, vector<string> commande)
     // Mode d'emploi :
     //
     // Contrat :
     //
+    {
+        temporalStackCommande.type = code;
+        temporalStackCommande.elements = commande;
+    }
 
-    antlrcpp::Any visitDecVar(ExprParser::DecVarContext *ctx);
+    void pushInTemporalCommande(vector<string> commande)
     // Mode d'emploi :
     //
     // Contrat :
     //
+    {
+        temporalStackCommande.elements=commande;
+    }
 
-    antlrcpp::Any visitDefVar(ExprParser::DefVarContext *ctx);
+    void pushInTemporalCommande(commandeType code)
     // Mode d'emploi :
     //
     // Contrat :
     //
+    {
+        temporalStackCommande.type=code;
+    }
 
-
-    antlrcpp::Any visitPar(ExprParser::ParContext *ctx);
+    void pushInTemporalCommande(string element)
     // Mode d'emploi :
     //
     // Contrat :
     //
+    {
+        temporalStackCommande.elements.push_back(element);
+    }
 
-    antlrcpp::Any visitDiv(ExprParser::DivContext *ctx);
+    void popBackLastElemTmpCommande()
     // Mode d'emploi :
     //
     // Contrat :
     //
+    {
+        temporalStackCommande.elements.pop_back();
+    }
 
-    antlrcpp::Any visitAdd(ExprParser::AddContext *ctx);
+    void deleteTemporalCommand()
     // Mode d'emploi :
     //
     // Contrat :
     //
+    {
+        temporalStackCommande.type=ERR;
+        temporalStackCommande.elements.clear();
+    }
 
-    antlrcpp::Any visitSub(ExprParser::SubContext *ctx);
+
+//----------------------------------------------------- Getter et Setter
+
+    Commande getTemporalCommande()
     // Mode d'emploi :
     //
     // Contrat :
     //
+    {
+        return temporalStackCommande;
+    }
 
-    antlrcpp::Any visitMult(ExprParser::MultContext *ctx);
+
+    matrice* getStack()
     // Mode d'emploi :
     //
     // Contrat :
     //
-
-    antlrcpp::Any visitVar(ExprParser::VarContext *ctx);
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
-    antlrcpp::Any visitLdconst(ExprParser::LdconstContext *ctx);
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
-    antlrcpp::Any visitInt(ExprParser::IntContext *ctx);
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
-    antlrcpp::Any visitChar(ExprParser::CharContext *ctx);
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
+    {
+        return &resp;
+    }
 
 
 //-------------------------------------------- Constructeurs - destructeur
-    Visiteur (){}
+    Symbole(){}
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-    virtual ~Visiteur(){}
+    virtual ~Symbole(){}
     // Mode d'emploi :
     //
     // Contrat :
     //
+
 
 //------------------------------------------------------------------ PRIVE
 
@@ -164,30 +182,17 @@ protected:
 private:
 //------------------------------------------------------- Méthodes privées
 
-    bool checkVarDec(string varName);
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
-
-    bool checkVarDef(string varName);
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
-
 protected:
 //----------------------------------------------------- Attributs protégés
 
 private:
 //------------------------------------------------------- Attributs privés
-    Symbole symboleManager;
+    matrice resp;
+    Commande temporalStackCommande;
+    int SP;
 
 //----------------------------------------------------------- Types privés
 
 };
 
-
-#endif // VISITEUR_H
+#endif // SYMBOLE_H
