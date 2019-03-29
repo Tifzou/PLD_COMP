@@ -22,14 +22,20 @@ using namespace std;
 
 //------------------------------------------------------------------ Types
 
+//enume qui definit les différents type de commandes contenue dans la structure
+// il n'est pas obligatoire d'adopter la même notation sur tout le projet
+//mais peut être pratique pour la claireté
 enum commandeType {ERR, WARN, VAR_DEC, VAR_DEF, OPER, RET, AFF};
 
+//structure contenant une commande correspondant à un type definit par 1 enum particulier
+//dont les elements de la commandes sont contenues dans un vecteur de string
 typedef struct Commande
 {
     commandeType type;
     vector<string> elements;
 } Commande;
 
+//la liste des commandes
 typedef vector<Commande> matrice;
 
 //------------------------------------------------------------------------
