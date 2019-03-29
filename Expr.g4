@@ -7,7 +7,9 @@ base: 'int main' '(' ')'core;
 
 core: '{' code* ret '}';
 
-code: typevar vari ';';
+code: typevar vari ';' #decdef
+    | VAR '=' expr ';' #aff
+    ;
 
 
 ret: 'return' VAR ';' ;

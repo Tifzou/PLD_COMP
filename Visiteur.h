@@ -55,14 +55,14 @@ public:
     //
 
 
-    antlrcpp::Any visitCode(ExprParser::CodeContext *ctx);
+    antlrcpp::Any visitDecdef(ExprParser::DecdefContext *ctx);
     // Mode d'emploi :
     //
     // Contrat :
     //
 
 
-    //antlrcpp::Any visitAff(ExprParser::AffContext *ctx);
+    antlrcpp::Any visitAff(ExprParser::AffContext *ctx);
     // Mode d'emploi :
     //
     // Contrat :
