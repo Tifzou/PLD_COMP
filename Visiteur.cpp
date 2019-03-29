@@ -54,16 +54,17 @@ antlrcpp::Any Visiteur::visitCore(ExprParser::CoreContext *ctx)
     commandeType code = commandeType ::RET;
     //symboleManager./****/;
     symboleManager.pushInTemporalCommande(code);
-    visit(ctx->ret());
-    symboleManager.writeStack(symboleManager.getTemporalCommande()); // Surcharge juste vector<string> commande en argument
-    symboleManager.deleteTemporalCommand();                         //deleteTemporalStack() = null;
-
+    if((bool)visit(ctx->ret()))
+    {
+        symboleManager.writeStack(symboleManager.getTemporalCommande());
+    }
+    symboleManager.deleteTemporalCommand();
     return true;
 }
 
 
 //------------------------------------------------------------------------
-antlrcpp::Any Visiteur::visitCode(ExprParser::CodeContext *ctx)
+antlrcpp::Any Visiteur::visitDecdef(ExprParser::DecdefContext *ctx)
 // Algorithme :
 //
 {
@@ -71,6 +72,41 @@ antlrcpp::Any Visiteur::visitCode(ExprParser::CodeContext *ctx)
 
     symboleManager.pushInTemporalCommande(typeVar);
     visit(ctx->vari());
+
+    return true;
+}
+
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitAff(ExprParser::AffContext *ctx)
+// Algorithme :
+//
+{
+
+    string varName = ctx->VAR()->getText();
+    commandeType code = commandeType ::AFF;
+    symboleManager.pushInTemporalCommande(code);
+
+    if(symboleManager.varExist(varName))
+    {
+        symboleManager.pushInTemporalCommande(" ");
+        symboleManager.pushInTemporalCommande(varName);
+        visit(ctx->expr());
+        symboleManager.writeStack(symboleManager.getTemporalCommande());
+        symboleManager.deleteTemporalCommand();
+    }
+    else
+    {
+        commandeType code = commandeType::ERR;
+        vector<string> err;
+        string error3 = "name of variable '" + varName + "' not assigned";
+        err.push_back("0323");
+        err.push_back(error3);
+        symboleManager.deleteTemporalCommand(); //temporalStack = null;
+        symboleManager.pushInTemporalCommande(code, err);
+        symboleManager.writeStack(symboleManager.getTemporalCommande());
+        symboleManager.deleteTemporalCommand();
+    }
 
     return true;
 }
@@ -92,20 +128,12 @@ antlrcpp::Any Visiteur::visitDecVar(ExprParser::DecVarContext *ctx)
 // Algorithme :
 //
 {
-    string type;
     for(antlr4::tree::TerminalNode *tmpNode : ctx->VAR())
     {
         string nameVar = tmpNode->getText();
 
-        if (symboleManager.varExist(nameVar))
+        if (!checkVarDec(nameVar))
         {
-            commandeType code = commandeType::ERR;
-            vector<string> err;
-            string error1 = "name of variable '" + nameVar + "' already assigned";
-            err.push_back("0321");
-            err.push_back(error1);
-            symboleManager.deleteTemporalCommand(); //temporalStack = null;
-            symboleManager.pushInTemporalCommande(code, err);
             return false;
         }
 
@@ -113,11 +141,11 @@ antlrcpp::Any Visiteur::visitDecVar(ExprParser::DecVarContext *ctx)
         {
             commandeType code = commandeType::VAR_DEC;
             symboleManager.pushInTemporalCommande(code); // Surchage pushTemporalStack(vector<string> commande)
-            symboleManager.pushInTemporalCommande(nameVar);
             symboleManager.writeStack(symboleManager.getTemporalCommande());
             symboleManager.popBackLastElemTmpCommande();
         }
     }
+    symboleManager.deleteTemporalCommand();
 
     return true;
 
@@ -131,15 +159,8 @@ antlrcpp::Any Visiteur::visitDefVar(ExprParser::DefVarContext *ctx)
     string nameVar = ctx->VAR()->getText();
 
     //Si nameVar et typeVariable existe dans la table des symboles
-    if (symboleManager.varExist(nameVar))
+    if (!checkVarDec(nameVar))
     {
-        commandeType code = commandeType::ERR;
-        vector<string> err;
-        string error1 = "name of variable '" + nameVar + "' already assigned";
-        err.push_back("0321");
-        err.push_back(error1);
-        symboleManager.deleteTemporalCommand(); //temporalStack = null;
-        symboleManager.pushInTemporalCommande(code, err);
         return false;
     }
     //Si nameVar et typeVariable n'existe pas dans la table des symboles
@@ -148,9 +169,10 @@ antlrcpp::Any Visiteur::visitDefVar(ExprParser::DefVarContext *ctx)
         commandeType code = commandeType::VAR_DEF;
 
         symboleManager.pushInTemporalCommande(code); // Surchage pushTemporalStack(vector<string> commande)
-        symboleManager.pushInTemporalCommande(nameVar);
-        visit(ctx->expr());
-        symboleManager.writeStack(symboleManager.getTemporalCommande());
+        if(visit(ctx->expr()))
+        {
+            symboleManager.writeStack(symboleManager.getTemporalCommande());
+        }
         symboleManager.deleteTemporalCommand();                       //deleteTemporalStack() = null;
         return true;
     }
@@ -201,10 +223,23 @@ antlrcpp::Any Visiteur::visitAdd(ExprParser::AddContext *ctx)
 // Algorithme :
 //
 {
-    visit(ctx->expr(0));
-    symboleManager.pushInTemporalCommande("+");
-    visit(ctx->expr(1));
-    return true;
+    if (visit(ctx->expr(0)))
+    {
+        string addSymb = "+";
+        symboleManager.pushInTemporalCommande(addSymb);
+        if (visit(ctx->expr(1)))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        return false;
+    }
 }
 
 
@@ -213,10 +248,23 @@ antlrcpp::Any Visiteur::visitSub(ExprParser::SubContext *ctx)
 // Algorithme :
 //
 {
-    visit(ctx->expr(0));
-    symboleManager.pushInTemporalCommande("-");
-    visit(ctx->expr(1));
-    return true;
+    if (visit(ctx->expr(0)))
+    {
+        string subSymb = "-";
+        symboleManager.pushInTemporalCommande(subSymb);
+        if (visit(ctx->expr(1)))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        return false;
+    }
 }
 
 
@@ -225,12 +273,14 @@ antlrcpp::Any Visiteur::visitMult(ExprParser::MultContext *ctx)
 // Algorithme :
 //
 {
+    symboleManager.pushInTemporalCommande("(");
     if (visit(ctx->expr(0)))
     {
         string multSymb = "*";
         symboleManager.pushInTemporalCommande(multSymb);
         if (visit(ctx->expr(1)))
         {
+            symboleManager.pushInTemporalCommande(")");
             return true;
         }
         else
@@ -270,8 +320,7 @@ antlrcpp::Any Visiteur::visitVar(ExprParser::VarContext *ctx)
 //
 {
     string varName = ctx->VAR()->getText();
-    Commande tmpCommande = symboleManager.getTemporalCommande();
-    return checkVarDec(varName)&&checkVarDef(varName);
+    return checkVarDef(varName);
 }
 
 //------------------------------------------------------------------------
@@ -294,10 +343,10 @@ antlrcpp::Any Visiteur::visitLdconst(ExprParser::LdconstContext *ctx)
 
 //------------------------------------------------------------------------
 bool Visiteur::checkVarDec(string varName)
-// Algorithme :
+// Algorithme : renvoi "true" si la variable n'est pas déclarée
 //
 {
-    if (!symboleManager.varExist(varName)) //doit verifier que la variable est bien au dessus et pas en dessous
+    if (symboleManager.varExist(varName)) //doit verifier que la variable est bien au dessus et pas en dessous
     {                                     //check if the variable exist
         commandeType code = commandeType::ERR;
         vector<string> err;
@@ -306,6 +355,8 @@ bool Visiteur::checkVarDec(string varName)
         err.push_back(error1);
         symboleManager.deleteTemporalCommand(); //temporalStack = null;
         symboleManager.pushInTemporalCommande(code, err);
+        symboleManager.writeStack(symboleManager.getTemporalCommande());
+        symboleManager.deleteTemporalCommand();
         return false;
     }
     else
@@ -330,6 +381,8 @@ bool Visiteur::checkVarDef(string varName)
         err.push_back(error2);
         symboleManager.deleteTemporalCommand(); //temporalStack = null;
         symboleManager.pushInTemporalCommande(code, err);
+        symboleManager.writeStack(symboleManager.getTemporalCommande());
+        symboleManager.deleteTemporalCommand();
         return false;
     }
     else
