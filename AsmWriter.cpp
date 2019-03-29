@@ -47,29 +47,36 @@ bool AsmWriter::writeOutputFile(matrice resultat) {
         vector<Commande>::iterator itInstr;
         for(itInstr = resultat.begin() ; itInstr != resultat.end() ; ++itInstr)
         {
-            vector<string>::iterator itString;
-            itString = itInstr->elements.begin(); // int
-
-            string nomVar = itString[1];
-
-            stackPtr -= 4;
-            string adresseI = to_string(stackPtr)+"(%rbp)";
-
-            int val;
-            try
+            switch ((*itInstr).type) // {ERR, WARN, VAR_DEC, VAR_DEF, OPER, RET, AFF};
             {
-                val = stoi(itString[2]);
+                case 0 : // ERR
+                    cerr << "in case ERR" << endl;
+                    break;
+                case 1 : // WAR
+                    cerr << "in case WAR" << endl;
+                    break;
+                case 2 : // VAR DECLARATION
+                    cerr << "in case VAR_DEC" << endl;
+                    writeDec((*itInstr));
+                    break;
+                case 3 : // VAR DEFINITION
+                    cerr << "in case VAR_DEF" << endl;
+                    break;
+                case 4 : // OPER
+                    cerr << "in case OPER" << endl;
+                    myfile << writeAdd((*itInstr));
+                    break;
+                case 5 : // RET
+                    cerr << "in case RET" << endl;
+                    myfile << writeReturn((*itInstr));
+                    break;
+                case 6: // AFFECTATION
+                    cerr << "in case AFF" << endl;
+                    myfile << writeAff((*itInstr));
+                    break;
+                default:
+                    break;
             }
-            catch (const invalid_argument& ia)
-            {
-                val = variables.find(itString[2])->second.second;
-            }
-            //cout << "val= " << val << endl;
-            pair<string, int> descrVar (adresseI, val);
-            variables.insert(pair<string, pair<string, int>>(nomVar, descrVar));
-
-            myfile << "\tmovl\t$"<< val << ", " << stackPtr << "(%rbp)"<<endl;
-            myfile << "\tmovl\t"<< stackPtr << "(%rbp), %eax"<<endl;
         }
 
         myfile << "\tpopq	%rbp"<<endl;
@@ -80,4 +87,66 @@ bool AsmWriter::writeOutputFile(matrice resultat) {
         cerr << "Unable to create .s file !"<< endl;
         return 1;
     }
+}
+
+string AsmWriter::writeReturn(Commande returnCmd)
+{
+    string nomVar = returnCmd.elements[0];
+    map<string, string>::iterator it = variables.find(nomVar);
+    string address = it->second;
+    string asmInstr = "\tmovl\t"+address+", %eax\n";
+    return asmInstr;
+}
+
+string AsmWriter::writeAff(Commande affectationCmd)
+{
+    string nomVar = affectationCmd.elements[1];
+    string valVar = affectationCmd.elements[2];
+
+    map<string, string>::iterator it = variables.find(nomVar);
+    string address = it->second;
+    string asmInstr;
+    try // definition
+    {
+        stoi(valVar);
+        asmInstr = "\tmovl\t$"+valVar+", "+address+"\n";
+    }
+    catch (const invalid_argument& ia) // = autre variable
+    {
+        it = variables.find(nomVar);
+        asmInstr = "\tmovl\t"+valVar+", "+address+"\n";
+    }
+    return asmInstr;
+}
+
+void AsmWriter::writeDec(Commande declarationCmd)
+{
+    string varName = declarationCmd.elements[1];
+    int stackPos = (variables.size()+1) * (-4);
+    string varAddress = to_string(stackPos) + "(%rbp)";
+    variables.insert(make_pair(varName, varAddress));
+}
+
+string AsmWriter::writeAdd(Commande additionCmd)
+{
+    map<string, string>::iterator it;
+
+    string varResultat = additionCmd.elements[1];
+    it = variables.find(varResultat);
+    string addressRes = it->second;
+
+    string addition = additionCmd.elements[2];
+    string varOp1 = addition.substr(0, addition.find("+"));
+    it = variables.find(varOp1);
+    string addressOp1 = it->second;
+
+    string varOp2 = addition.substr(varOp1.size()+1, addition.size());
+    it = variables.find(varOp2);
+    string addressOp2 = it->second;
+
+    string asmInstr = "\tmovl\t"+addressOp1+", %edx\n";
+    asmInstr += "\tmovl\t"+addressOp2+", %eax\n";
+    asmInstr += "\taddl\t%edx, %eax\n";
+
+    return asmInstr;
 }
