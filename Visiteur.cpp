@@ -343,8 +343,9 @@ antlrcpp::Any Visiteur::visitLdconst(ExprParser::LdconstContext *ctx)
 
 //------------------------------------------------------------------------
 bool Visiteur::checkVarDec(string varName)
-// Algorithme : renvoi "true" si la variable n'est pas déclarée
-//
+// Algorithme : renvoi "true" si la variable avec le nom 'varName' n'est pas déclarée
+// De plus, si la variable est déjà déclarée, efface la commande temporelle et la remplit avec une erreur
+// Sinon, ajoute la variable dans la pile de la commande
 {
     if (symboleManager.varExist(varName)) //doit verifier que la variable est bien au dessus et pas en dessous
     {                                     //check if the variable exist
@@ -369,8 +370,9 @@ bool Visiteur::checkVarDec(string varName)
 
 //------------------------------------------------------------------------
 bool Visiteur::checkVarDef(string varName)
-// Algorithme :
-//
+// Algorithme : renvoi 'true' si la variable 'varName' est bien défini.
+// De plus, si la variable n'est pas définit, efface la commande temporelle et la remplit avec une erreur
+//Dans le cas contraire, ajoute le nom de la variable dans la pile de la commande
 {
     if (!symboleManager.varDef(varName)) //doit verifier que la variable est bien au dessus et pas en dessous
     {                                     //check if the variable exist

@@ -30,7 +30,7 @@
 
 //------------------------------------------------------------------------
 bool Symbole::varExist(string var)
-// Algorithme :
+// Algorithme : renvoi 'true' si la variable 'var' est déjà déclarée
 //
 {
     for(Commande commande : resp)
@@ -46,7 +46,7 @@ bool Symbole::varExist(string var)
 
 //------------------------------------------------------------------------
 bool Symbole::varDef(string var)
-// Algorithme :
+// Algorithme : renvoi 'true si la variable 'var' possède une valeur à l'issue d'une declaration avec affectation ou juste une affectation
 //
 {
     for(Commande commande : resp)
