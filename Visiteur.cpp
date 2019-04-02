@@ -117,9 +117,9 @@ antlrcpp::Any Visiteur::visitRet(ExprParser::RetContext *ctx)
 // Algorithme :
 //
 {
-    string nameVar = ctx->VAR()->getText();
+    visit(ctx->expr());
 
-    return checkVarDef(nameVar);
+    return true;
 }
 
 
