@@ -101,6 +101,8 @@ public:
     //
 
 
+    antlrcpp::Any visitFacteur(ExprParser::FacteurContext *ctx) ;
+
 
     antlrcpp::Any visitFactPar(ExprParser::FactParContext *ctx);
     // Mode d'emploi :

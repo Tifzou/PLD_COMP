@@ -167,7 +167,10 @@ public:
 
 
 //-------------------------------------------- Constructeurs - destructeur
-    Symbole(){}
+    Symbole()
+    {
+        tmpCounter=0;
+    }
     // Mode d'emploi :
     //
     // Contrat :
@@ -194,8 +197,9 @@ protected:
 private:
 //------------------------------------------------------- Attributs privés
     matrice resp;
+    matrice temporalExpression;
     Commande temporalStackCommande;
-    int SP;
+    int tmpCounter;
 
 //----------------------------------------------------------- Types privés
 

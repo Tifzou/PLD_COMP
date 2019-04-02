@@ -19,10 +19,11 @@ vari: VAR (','VAR)* #decVar
 
 expr: terme ('+' terme)* ';';
 
-terme: facteur ('*' facteur)*
-    ;
+terme: facteur ('*' facteur)* ;
 
-facteur: INT #factInt
+facteur:element;
+
+element: INT #factInt
     | VAR #factVar
     | '(' expr ')' #factPar
     ;

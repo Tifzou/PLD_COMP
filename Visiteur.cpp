@@ -52,7 +52,6 @@ antlrcpp::Any Visiteur::visitCore(ExprParser::CoreContext *ctx)
         visit(cd);
     }
     commandeType code = commandeType ::RET;
-    //symboleManager./****/;
     symboleManager.pushInTemporalCommande(code);
     if((bool)visit(ctx->ret()))
     {
@@ -119,7 +118,6 @@ antlrcpp::Any Visiteur::visitRet(ExprParser::RetContext *ctx)
 {
    visit(ctx->expr());
 
-    //return checkVarDef(nameVar);
     return true;
 }
 
@@ -142,6 +140,7 @@ antlrcpp::Any Visiteur::visitDecVar(ExprParser::DecVarContext *ctx)
         {
             commandeType code = commandeType::VAR_DEC;
             symboleManager.pushInTemporalCommande(code); // Surchage pushTemporalStack(vector<string> commande)
+            symboleManager.pushInTemporalCommande(nameVar);
             symboleManager.writeStack(symboleManager.getTemporalCommande());
             symboleManager.popBackLastElemTmpCommande();
         }
@@ -168,7 +167,7 @@ antlrcpp::Any Visiteur::visitDefVar(ExprParser::DefVarContext *ctx)
     else
     {
         commandeType code = commandeType::VAR_DEF;
-
+        symboleManager.pushInTemporalCommande(nameVar);
         symboleManager.pushInTemporalCommande(code); // Surchage pushTemporalStack(vector<string> commande)
         if(visit(ctx->expr()))
         {
@@ -184,7 +183,16 @@ antlrcpp::Any Visiteur::visitExpr(ExprParser::ExprContext *ctx)
 // Algorithme :
 //
 {
-
+    vector<string> tmpElements;
+    //specifier dans tmpMatrix type Operation "+"
+    for(int i(0); i<ctx->terme().size()-1; i+=2)
+    {
+        visit(ctx->terme(i));
+        //push nomVar dans tmpElement
+        visit(ctx->terme(i+1));
+        //push nomVar2 dans tmpElement
+    }
+    //push tmpElement dans tmpMatrix
 }
 
 
@@ -193,7 +201,16 @@ antlrcpp::Any Visiteur::visitTerme(ExprParser::TermeContext *ctx)
 // Algorithme :
 //
 {
-
+    vector<string> tmpElements;
+    //sppecifier dans tmpMatrix type Operation "*"
+    for(int i(0); i<ctx->facteur().size()-1; i+=2)
+    {
+        visit(ctx->facteur(i));
+        //push nomVar dans tmpElement
+        visit(ctx->facteur(i+1));
+        //push nomVar2 dans tmpElement
+    }
+    //push tmpMatrix
 }
 
 //------------------------------------------------------------------------
@@ -202,6 +219,8 @@ antlrcpp::Any Visiteur::visitFactPar(ExprParser::FactParContext *ctx)
 //
 {
 
+    visit(ctx->expr())
+    return true;
 }
 
 //------------------------------------------------------------------------
@@ -209,7 +228,16 @@ antlrcpp::Any Visiteur::visitFactVar(ExprParser::FactVarContext *ctx)
 // Algorithme :
 //
 {
-
+    string nameVar = ctx->VAR()->getText();
+    if(checkVarDef(nameVar))
+    {
+        //push nameVar dans tmpMatrix
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 
@@ -218,7 +246,8 @@ antlrcpp::Any Visiteur::visitFactInt(ExprParser::FactIntContext *ctx)
 // Algorithme :
 //
 {
-
+    string tmp = ctx->INT()->getText(); //push dans la tmpMatrix
+    return true;
 }
 
 /*
@@ -401,7 +430,6 @@ bool Visiteur::checkVarDec(string varName)
     }
     else
     {
-        symboleManager.pushInTemporalCommande(varName);
         return true;
     }
 }
@@ -428,7 +456,6 @@ bool Visiteur::checkVarDef(string varName)
     }
     else
     {
-        symboleManager.pushInTemporalCommande(varName);
         return true;
     }
 }
