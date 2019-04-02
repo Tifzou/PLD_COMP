@@ -3,11 +3,11 @@ int main()
     int a,b,c;
     b=3;
 
-    c=1;
+    c=4;
 
-    a=b+c;
+    a=6;
 
-    return b;
+    return a;
 }
 /*	.file	"index.c"
 	.text

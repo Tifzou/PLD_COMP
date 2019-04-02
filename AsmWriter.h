@@ -30,7 +30,10 @@ protected:
     string writeAff(Commande affectationCmd);
     void writeDec(Commande declarationCmd);
     string writeDef(Commande definitionCmd);
+    string writeOperation(Commande operationCmd);
     string writeAdd(Commande additionCmd);
+    string writeSub(Commande substractionCmd);
+    string writeMult(Commande multiplicationCmd);
 
 
     string inFile;

@@ -64,7 +64,7 @@ bool AsmWriter::writeOutputFile(matrice resultat) {
                     break;
                 case 4 : // OPER
                     cerr << "in case OPER" << endl;
-                    myfile << writeAdd((*itInstr));
+                    myfile << writeOperation((*itInstr));
                     break;
                 case 5 : // RET
                     cerr << "in case RET" << endl;
@@ -131,28 +131,134 @@ string AsmWriter::writeDef(Commande definitionCmd)
 {
     writeDec(definitionCmd);
     string asmInstr = writeAff(definitionCmd);
+    return asmInstr;
+}
+
+string AsmWriter::writeOperation(Commande operationCmd)
+{
+    return writeSub(operationCmd); // TODO !!! 
 }
 
 string AsmWriter::writeAdd(Commande additionCmd)
 {
     map<string, string>::iterator it;
 
-    string varResultat = additionCmd.elements[1];
+    string varResultat = additionCmd.elements[0];
     it = variables.find(varResultat);
     string addressRes = it->second;
 
-    string addition = additionCmd.elements[2];
+    string addition = additionCmd.elements[1];
     string varOp1 = addition.substr(0, addition.find("+"));
+    string addressOp1;
     it = variables.find(varOp1);
-    string addressOp1 = it->second;
+    if (it != variables.end())
+    {
+        addressOp1 = it->second;
+    }
+    else
+    {
+        addressOp1 = "$"+varOp1;
+    }
 
     string varOp2 = addition.substr(varOp1.size()+1, addition.size());
+    string addressOp2;
     it = variables.find(varOp2);
-    string addressOp2 = it->second;
+    if (it != variables.end())
+    {
+        addressOp2 = it->second;
+    }
+    else
+    {
+        addressOp2 = "$"+varOp2;
+    }
 
     string asmInstr = "\tmovl\t"+addressOp1+", %edx\n";
     asmInstr += "\tmovl\t"+addressOp2+", %eax\n";
     asmInstr += "\taddl\t%edx, %eax\n";
+    asmInstr += "\tmovl\t %eax, "+addressRes+"\n";
+
+    return asmInstr;
+}
+
+string AsmWriter::writeSub(Commande substractionCmd)
+{
+    cout << "yeah for substraction" << endl;
+    map<string, string>::iterator it;
+
+    string varResultat = substractionCmd.elements[0];
+    it = variables.find(varResultat);
+    string addressRes = it->second;
+
+    string substraction = substractionCmd.elements[1];
+    string varOp1 = substraction.substr(0, substraction.find("-"));
+    it = variables.find(varOp1);
+    string addressOp1;
+    if (it != variables.end())
+    {
+        addressOp1 = it->second;
+    }
+    else
+    {
+        addressOp1 = "$"+varOp1;
+    }
+
+    string varOp2 = substraction.substr(varOp1.size()+1, substraction.size());
+    it = variables.find(varOp2);
+    string addressOp2;
+    if (it != variables.end())
+    {
+        addressOp2 = it->second;
+    }
+    else
+    {
+        addressOp2 = "$"+varOp2;
+    }
+
+    string asmInstr = "\tmovl\t"+addressOp1+", %eax\n";
+    asmInstr += "\tmovl\t"+addressOp2+", %edx\n";
+    asmInstr += "\tsubl\t%edx, %eax\n";
+    asmInstr += "\tmovl\t %eax, "+addressRes+"\n";
+
+    return asmInstr;
+}
+
+string AsmWriter::writeMult(Commande multiplicationCmd)
+{
+    map<string, string>::iterator it;
+
+    string varResultat = multiplicationCmd.elements[0];
+    it = variables.find(varResultat);
+    string addressRes = it->second;
+
+    string multiplication = multiplicationCmd.elements[1];
+    string varOp1 = multiplication.substr(0, multiplication.find("*"));
+    it = variables.find(varOp1);
+    string addressOp1;
+    if (it != variables.end())
+    {
+        addressOp1 = it->second;
+    }
+    else
+    {
+        addressOp1 = "$"+varOp1;
+    }
+
+    string varOp2 = multiplication.substr(varOp1.size()+1, multiplication.size());
+    it = variables.find(varOp2);
+    string addressOp2;
+    if (it != variables.end())
+    {
+        addressOp2 = it->second;
+    }
+    else
+    {
+        addressOp2 = "$"+varOp2;
+    }
+
+    string asmInstr = "\tmovl\t"+addressOp1+", %edx\n";
+    asmInstr += "\tmovl\t"+addressOp2+", %eax\n";
+    asmInstr += "\timull\t%edx, %eax\n";
+    asmInstr += "\tmovl\t %eax, "+addressRes+"\n";
 
     return asmInstr;
 }
