@@ -88,43 +88,35 @@ public:
     //
 
 
-    antlrcpp::Any visitPar(ExprParser::ParContext *ctx);
+    antlrcpp::Any visitExpr(ExprParser::ExprContext *ctx);
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-    antlrcpp::Any visitDiv(ExprParser::DivContext *ctx);
+    antlrcpp::Any visitTerme(ExprParser::TermeContext *ctx);
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-    antlrcpp::Any visitAdd(ExprParser::AddContext *ctx);
+
+
+    antlrcpp::Any visitFactPar(ExprParser::FactParContext *ctx);
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-    antlrcpp::Any visitSub(ExprParser::SubContext *ctx);
+
+
+    antlrcpp::Any visitFactVar(ExprParser::FactVarContext *ctx);
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-    antlrcpp::Any visitMult(ExprParser::MultContext *ctx);
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
-    antlrcpp::Any visitVar(ExprParser::VarContext *ctx);
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
-    antlrcpp::Any visitLdconst(ExprParser::LdconstContext *ctx);
+    antlrcpp::Any visitFactInt(ExprParser::FactIntContext *ctx);
     // Mode d'emploi :
     //
     // Contrat :

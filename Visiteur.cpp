@@ -117,9 +117,10 @@ antlrcpp::Any Visiteur::visitRet(ExprParser::RetContext *ctx)
 // Algorithme :
 //
 {
-    string nameVar = ctx->VAR()->getText();
+   visit(ctx->expr());
 
-    return checkVarDef(nameVar);
+    //return checkVarDef(nameVar);
+    return true;
 }
 
 
@@ -179,6 +180,49 @@ antlrcpp::Any Visiteur::visitDefVar(ExprParser::DefVarContext *ctx)
 }
 
 //------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitExpr(ExprParser::ExprContext *ctx)
+// Algorithme :
+//
+{
+
+}
+
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitTerme(ExprParser::TermeContext *ctx)
+// Algorithme :
+//
+{
+
+}
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitFactPar(ExprParser::FactParContext *ctx)
+// Algorithme :
+//
+{
+
+}
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitFactVar(ExprParser::FactVarContext *ctx)
+// Algorithme :
+//
+{
+
+}
+
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitFactInt(ExprParser::FactIntContext *ctx)
+// Algorithme :
+//
+{
+
+}
+
+/*
+//------------------------------------------------------------------------
 antlrcpp::Any Visiteur::visitPar(ExprParser::ParContext *ctx)
 // Algorithme :
 //
@@ -190,20 +234,18 @@ antlrcpp::Any Visiteur::visitPar(ExprParser::ParContext *ctx)
     return true;
 }
 
-
 //------------------------------------------------------------------------
-antlrcpp::Any Visiteur::visitDiv(ExprParser::DivContext *ctx)/****/
+antlrcpp::Any Visiteur::visitDiv(ExprParser::DivContext *ctx)
 // Algorithme :
 //
 {
-    symboleManager.pushInTemporalCommande("(");
     if (visit(ctx->expr(0)))
     {
         string divSymb = "/";
         symboleManager.pushInTemporalCommande(divSymb);
         if (visit(ctx->expr(1)))
         {
-            symboleManager.pushInTemporalCommande(")");
+
             return true;
         }
         else
@@ -273,14 +315,14 @@ antlrcpp::Any Visiteur::visitMult(ExprParser::MultContext *ctx)
 // Algorithme :
 //
 {
-    symboleManager.pushInTemporalCommande("(");
+
     if (visit(ctx->expr(0)))
     {
         string multSymb = "*";
         symboleManager.pushInTemporalCommande(multSymb);
         if (visit(ctx->expr(1)))
         {
-            symboleManager.pushInTemporalCommande(")");
+
             return true;
         }
         else
@@ -293,7 +335,7 @@ antlrcpp::Any Visiteur::visitMult(ExprParser::MultContext *ctx)
         return false;
     }
 }
-
+*/
 //------------------------------------------------------------------------
 antlrcpp::Any Visiteur::visitInt(ExprParser::IntContext *ctx)
 // Algorithme :
@@ -310,10 +352,7 @@ antlrcpp::Any Visiteur::visitChar(ExprParser::CharContext *ctx)
     return ctx->TYPECHAR()->getText();
 }
 
-
-
-
-
+ /*
 //------------------------------------------------------------------------
 antlrcpp::Any Visiteur::visitVar(ExprParser::VarContext *ctx)
 // Algorithme :
@@ -333,7 +372,7 @@ antlrcpp::Any Visiteur::visitLdconst(ExprParser::LdconstContext *ctx)
 
     return true;
 }
-
+*/
 
 //------------------------------------------------------------------ PRIVE
 

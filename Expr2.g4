@@ -1,3 +1,4 @@
+/*
 grammar Expr;
 prog:func;
 func:type  name '('')' '{' expr1+ '}'; 
@@ -19,9 +20,9 @@ INT : [0-9]+ ;
 VAR : [a-zA-Z]+ ;   
 WS : [ |\t|\r|\n]+ -> skip;
 
+*/
 
-
-grammar Expr;
+/*grammar Expr;
 prog:expr;
 
 expr: 'int main' '(' ')'core; 
@@ -31,3 +32,17 @@ code:'return' INT ;
 INT : [0-9]+ ;  
 WS : [ \t\r\n] -> skip;
 
+*/
+
+
+
+/*dernière grammaire
+expr: '(' expr ')' #par
+    | expr '*' expr #mult
+    | expr '/' expr #div
+    | expr '+' expr #add
+    | expr '-' expr #sub
+    |   VAR	    #var
+    |   INT 	#ldconst
+    ;
+*/
