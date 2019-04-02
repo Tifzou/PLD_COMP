@@ -8,7 +8,6 @@
 #include "ExprParser.h"
 #include "ExprBaseVisitor.h"
 #include "Visiteur.h"
-
 #include "AsmWriter.h"
 
 using namespace antlr4;
@@ -77,6 +76,15 @@ int main(int argc, char *argv[])
 
         matrice *stack = resultat.getStack();
 
+        Commande opTest;
+        opTest.type = OPER;
+        vector<string> operation;
+        operation.push_back("a");
+        operation.push_back("25-6");
+        opTest.elements = operation;
+
+        stack->insert(stack->end()-1,opTest);
+
         for(Commande curCommande: *stack)
         {
             cout<<curCommande.type<<" : ";
@@ -86,17 +94,6 @@ int main(int argc, char *argv[])
             }
             cout<<endl;
         }
-        /*
-        cout << "Résultat :" << endl;
-        for (string i : resultat.back())
-        {
-            cout << i << endl;
-        }
-        cout<<resultat.back().size()<<endl;
-        */
-
-        /*vector<vector<string>> resultat = visitor.visit(tree);
-        cout << "resultat size " << resultat.size() << endl;*/
 
         AsmWriter *a = new AsmWriter(argv[1], "resultat.s", tree->toStringTree(&parser));
         a->convert();

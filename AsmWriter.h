@@ -26,10 +26,20 @@ public:
     bool writeOutputFile(matrice resultat);
 
 protected:
+    string writeReturn(Commande returnCmd);
+    string writeAff(Commande affectationCmd);
+    void writeDec(Commande declarationCmd);
+    string writeDef(Commande definitionCmd);
+    string writeOperation(Commande operationCmd);
+    string writeAdd(Commande additionCmd);
+    string writeSub(Commande substractionCmd);
+    string writeMult(Commande multiplicationCmd);
+
+
     string inFile;
     string outFile;
     string arbreAntlr;
-    map<string, pair<string,int>> variables; // nom, <adresse, val>
+    map<string, string> variables; // nom, adresse
 
 };
 
