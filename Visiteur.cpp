@@ -17,9 +17,7 @@
 //------------------------------------------------------ Include personnel
 #include "Visiteur.h"
 
-
 //----------------------------------------------------------- Types privés
-
 
 //----------------------------------------------------------------- PUBLIC
 
@@ -54,14 +52,13 @@ antlrcpp::Any Visiteur::visitCore(ExprParser::CoreContext *ctx)
     commandeType code = commandeType ::RET;
     //symboleManager./****/;
     symboleManager.pushInTemporalCommande(code);
-    if((bool)visit(ctx->ret()))
+    if ((bool)visit(ctx->ret()))
     {
         symboleManager.writeStack(symboleManager.getTemporalCommande());
     }
     symboleManager.deleteTemporalCommand();
     return true;
 }
-
 
 //------------------------------------------------------------------------
 antlrcpp::Any Visiteur::visitDecdef(ExprParser::DecdefContext *ctx)
@@ -76,7 +73,6 @@ antlrcpp::Any Visiteur::visitDecdef(ExprParser::DecdefContext *ctx)
     return true;
 }
 
-
 //------------------------------------------------------------------------
 antlrcpp::Any Visiteur::visitAff(ExprParser::AffContext *ctx)
 // Algorithme :
@@ -87,7 +83,7 @@ antlrcpp::Any Visiteur::visitAff(ExprParser::AffContext *ctx)
     commandeType code = commandeType ::AFF;
     symboleManager.pushInTemporalCommande(code);
 
-    if(symboleManager.varExist(varName))
+    if (symboleManager.varExist(varName))
     {
         symboleManager.pushInTemporalCommande(" ");
         symboleManager.pushInTemporalCommande(varName);
@@ -111,25 +107,23 @@ antlrcpp::Any Visiteur::visitAff(ExprParser::AffContext *ctx)
     return true;
 }
 
-
 //------------------------------------------------------------------------
 antlrcpp::Any Visiteur::visitRet(ExprParser::RetContext *ctx)
 // Algorithme :
 //
 {
-   visit(ctx->expr());
+    visit(ctx->expr());
 
     //return checkVarDef(nameVar);
     return true;
 }
-
 
 //------------------------------------------------------------------------
 antlrcpp::Any Visiteur::visitDecVar(ExprParser::DecVarContext *ctx)
 // Algorithme :
 //
 {
-    for(antlr4::tree::TerminalNode *tmpNode : ctx->VAR())
+    for (antlr4::tree::TerminalNode *tmpNode : ctx->VAR())
     {
         string nameVar = tmpNode->getText();
 
@@ -149,7 +143,6 @@ antlrcpp::Any Visiteur::visitDecVar(ExprParser::DecVarContext *ctx)
     symboleManager.deleteTemporalCommand();
 
     return true;
-
 }
 
 //------------------------------------------------------------------------
@@ -170,11 +163,11 @@ antlrcpp::Any Visiteur::visitDefVar(ExprParser::DefVarContext *ctx)
         commandeType code = commandeType::VAR_DEF;
 
         symboleManager.pushInTemporalCommande(code); // Surchage pushTemporalStack(vector<string> commande)
-        if(visit(ctx->expr()))
+        if (visit(ctx->expr()))
         {
             symboleManager.writeStack(symboleManager.getTemporalCommande());
         }
-        symboleManager.deleteTemporalCommand();                       //deleteTemporalStack() = null;
+        symboleManager.deleteTemporalCommand(); //deleteTemporalStack() = null;
         return true;
     }
 }
@@ -184,16 +177,13 @@ antlrcpp::Any Visiteur::visitExpr(ExprParser::ExprContext *ctx)
 // Algorithme :
 //
 {
-
 }
-
 
 //------------------------------------------------------------------------
 antlrcpp::Any Visiteur::visitTerme(ExprParser::TermeContext *ctx)
 // Algorithme :
 //
 {
-
 }
 
 //------------------------------------------------------------------------
@@ -201,7 +191,7 @@ antlrcpp::Any Visiteur::visitFactPar(ExprParser::FactParContext *ctx)
 // Algorithme :
 //
 {
-
+    return visit(ctx->expr());
 }
 
 //------------------------------------------------------------------------
@@ -209,16 +199,49 @@ antlrcpp::Any Visiteur::visitFactVar(ExprParser::FactVarContext *ctx)
 // Algorithme :
 //
 {
+    vector<string> commande;
+    string var = ctx->VAR()->getText();
 
+    commande.push_back(symboleManager.retrieveVarType(var));
+    string tempVar = "t" + to_string(symboleManager.createTemporalVar());
+    commande.push_back(tempVar);
+
+    if (symboleManager.varDef(var))
+    {
+        commande.push_back(ctx->VAR()->getText());
+        symboleManager.pushTemporalMatriceVari(commande);
+        return true;
+    }
+    else
+    {
+        commandeType code = commandeType::ERR;
+        vector<string> err;
+        string error2 = "variable : '" + var + "' not defined";
+        err.push_back("0322");
+        err.push_back(error2);
+        symboleManager.deleteTemporalMatriceCommand(); //temporalStack = null;
+        symboleManager.deleteTemporalCommand();        //temporalStack = null;
+
+        symboleManager.pushInTemporalCommande(code, err);
+        symboleManager.writeStack(symboleManager.getTemporalCommande());
+        symboleManager.deleteTemporalCommand();
+        return false;
+    }
 }
-
 
 //------------------------------------------------------------------------
 antlrcpp::Any Visiteur::visitFactInt(ExprParser::FactIntContext *ctx)
 // Algorithme :
 //
 {
+    vector<string> commande;
+    commande.push_back("int");
+    commande.push_back(to_string(symboleManager.createTemporalVar()));
+    commande.push_back(ctx->INT()->getText());
 
+    symboleManager.pushTemporalMatriceVari(commande);
+
+    return true;
 }
 
 /*
@@ -352,7 +375,7 @@ antlrcpp::Any Visiteur::visitChar(ExprParser::CharContext *ctx)
     return ctx->TYPECHAR()->getText();
 }
 
- /*
+/*
 //------------------------------------------------------------------------
 antlrcpp::Any Visiteur::visitVar(ExprParser::VarContext *ctx)
 // Algorithme :
@@ -406,7 +429,6 @@ bool Visiteur::checkVarDec(string varName)
     }
 }
 
-
 //------------------------------------------------------------------------
 bool Visiteur::checkVarDef(string varName)
 // Algorithme : renvoi 'true' si la variable 'varName' est bien défini.
@@ -414,7 +436,7 @@ bool Visiteur::checkVarDef(string varName)
 //Dans le cas contraire, ajoute le nom de la variable dans la pile de la commande
 {
     if (!symboleManager.varDef(varName)) //doit verifier que la variable est bien au dessus et pas en dessous
-    {                                     //check if the variable exist
+    {                                    //check if the variable exist
         commandeType code = commandeType::ERR;
         vector<string> err;
         string error2 = "variable : '" + varName + "' not defined";

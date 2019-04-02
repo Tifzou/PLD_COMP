@@ -8,7 +8,7 @@
 *************************************************************************/
 
 //---------- Interface de la classe <Symbole> (fichier Symbole.h) ----------------
-#if ! defined (SYMBOLE_H)
+#if !defined(SYMBOLE_H)
 #define SYMBOLE_H
 
 //--------------------------------------------------- Interfaces utilisées
@@ -25,7 +25,16 @@ using namespace std;
 //enume qui definit les différents type de commandes contenue dans la structure
 // il n'est pas obligatoire d'adopter la même notation sur tout le projet
 //mais peut être pratique pour la claireté
-enum commandeType {ERR, WARN, VAR_DEC, VAR_DEF, OPER, RET, AFF};
+enum commandeType
+{
+    ERR,
+    WARN,
+    VAR_DEC,
+    VAR_DEF,
+    OPER,
+    RET,
+    AFF
+};
 
 //structure contenant une commande correspondant à un type definit par 1 enum particulier
 //dont les elements de la commandes sont contenues dans un vecteur de string
@@ -46,23 +55,21 @@ typedef vector<Commande> matrice;
 
 class Symbole
 {
-//----------------------------------------------------------------- PUBLIC
+    //----------------------------------------------------------------- PUBLIC
 
-public:
-//----------------------------------------------------- Méthodes publiques
+  public:
+    //----------------------------------------------------- Méthodes publiques
     bool varExist(string var);
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-
     bool varDef(string var);
     // Mode d'emploi :
     //
     // Contrat :
     //
-
 
     void writeStack(Commande curCommande)
     // Mode d'emploi :
@@ -73,7 +80,6 @@ public:
         resp.push_back(curCommande);
     }
 
-
     void writeStack(commandeType code, vector<string> commande)
     // Mode d'emploi :
     //
@@ -81,11 +87,10 @@ public:
     //
     {
         Commande curCommande;
-        curCommande.type=code;
+        curCommande.type = code;
         curCommande.elements = commande;
         resp.push_back(curCommande);
     }
-
 
     void pushInTemporalCommande(commandeType code, vector<string> commande)
     // Mode d'emploi :
@@ -103,7 +108,7 @@ public:
     // Contrat :
     //
     {
-        temporalStackCommande.elements=commande;
+        temporalStackCommande.elements = commande;
     }
 
     void pushInTemporalCommande(commandeType code)
@@ -112,7 +117,7 @@ public:
     // Contrat :
     //
     {
-        temporalStackCommande.type=code;
+        temporalStackCommande.type = code;
     }
 
     void pushInTemporalCommande(string element)
@@ -139,12 +144,39 @@ public:
     // Contrat :
     //
     {
-        temporalStackCommande.type=ERR;
+        temporalStackCommande.type = ERR;
         temporalStackCommande.elements.clear();
     }
 
+    void pushTemporalMatriceVari(vector<string> element)
+    {
+        Commande line;
+        line.type = OPER;
+        line.elements = element;
+        temporalExpression.push_back(line);
+    }
 
-//----------------------------------------------------- Getter et Setter
+    int createTemporalVar()
+    {
+        return SP++;
+    }
+
+    string retrieveVarType(string var)
+    {
+        for (Commande vs : resp)
+        {
+            if ((vs.type == commandeType::VAR_DEF || vs.type == commandeType::AFF)  && vs.elements[1] == var)
+            {
+                return vs.elements[0];
+            }
+        }
+        return nullptr;
+    }
+
+    void deleteTemporalMatriceCommand(){
+        temporalExpression.clear();
+    }
+    //----------------------------------------------------- Getter et Setter
 
     Commande getTemporalCommande()
     // Mode d'emploi :
@@ -155,8 +187,7 @@ public:
         return temporalStackCommande;
     }
 
-
-    matrice* getStack()
+    matrice *getStack()
     // Mode d'emploi :
     //
     // Contrat :
@@ -165,40 +196,38 @@ public:
         return &resp;
     }
 
-
-//-------------------------------------------- Constructeurs - destructeur
-    Symbole(){}
+    //-------------------------------------------- Constructeurs - destructeur
+    Symbole() {}
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-    virtual ~Symbole(){}
+    virtual ~Symbole() {}
     // Mode d'emploi :
     //
     // Contrat :
     //
 
+    //------------------------------------------------------------------ PRIVE
 
-//------------------------------------------------------------------ PRIVE
+  protected:
+    //----------------------------------------------------- Méthodes protégées
 
-protected:
-//----------------------------------------------------- Méthodes protégées
+  private:
+    //------------------------------------------------------- Méthodes privées
 
-private:
-//------------------------------------------------------- Méthodes privées
+  protected:
+    //----------------------------------------------------- Attributs protégés
 
-protected:
-//----------------------------------------------------- Attributs protégés
-
-private:
-//------------------------------------------------------- Attributs privés
+  private:
+    //------------------------------------------------------- Attributs privés
     matrice resp;
+    matrice temporalExpression;
     Commande temporalStackCommande;
     int SP;
 
-//----------------------------------------------------------- Types privés
-
+    //----------------------------------------------------------- Types privés
 };
 
 #endif // SYMBOLE_H
