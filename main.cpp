@@ -73,17 +73,8 @@ int main(int argc, char *argv[])
 
         //vector<vector<string>> resultat = visitor.visit(tree);
         Symbole resultat = visitor.visit(tree);
-
         matrice *stack = resultat.getStack();
 
-        Commande opTest;
-        opTest.type = OPER;
-        vector<string> operation;
-        operation.push_back("a");
-        operation.push_back("25-6");
-        opTest.elements = operation;
-
-        stack->insert(stack->end()-1,opTest);
 
         for(Commande curCommande: *stack)
         {

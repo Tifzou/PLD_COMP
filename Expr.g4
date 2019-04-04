@@ -17,13 +17,11 @@ vari: VAR (','VAR)* #decVar
     | VAR '=' expr #defVar
     ;
 
-expr: terme ('+' terme)* ';';
+expr: terme ('+' terme)* ;
 
 terme: facteur ('*' facteur)* ;
 
-facteur:element;
-
-element: INT #factInt
+facteur: INT #factInt
     | VAR #factVar
     | '(' expr ')' #factPar
     ;
@@ -31,14 +29,12 @@ element: INT #factInt
 
 
 
-typevar : TYPEINT #int
-    |TYPECHAR #char
+typevar: TYPEINT #int
+    | TYPECHAR #char
     ;
 
-TYPEINT : 'int';
-TYPECHAR :'char';
-INT : [0-9]+ ; 
-
-
-VAR : [a-zA-Z]+ ; 
-WS : [ \t\r\n] -> skip;
+TYPEINT: 'int';
+TYPECHAR:'char';
+INT: [0-9]+ ;
+VAR: [a-zA-Z]+ ;
+WS: [ \t\r\n] -> skip;
