@@ -87,7 +87,7 @@ antlrcpp::Any Visiteur::visitAff(ExprParser::AffContext *ctx)
     commandeType code = commandeType ::AFF;
     symboleManager.pushInTemporalCommande(code);
 
-    if(symboleManager.varExist(varName))
+    if(!symboleManager.varExist(varName))
     {
         symboleManager.pushInTemporalCommande(" ");
         symboleManager.pushInTemporalCommande(varName);
@@ -117,9 +117,9 @@ antlrcpp::Any Visiteur::visitRet(ExprParser::RetContext *ctx)
 // Algorithme :
 //
 {
-    string nameVar = ctx->VAR()->getText();
+    visit(ctx->expr());
 
-    return checkVarDef(nameVar);
+    return true;
 }
 
 

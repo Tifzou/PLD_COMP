@@ -76,14 +76,14 @@ int main(int argc, char *argv[])
 
         matrice *stack = resultat.getStack();
 
-        Commande opTest;
+        /*Commande opTest;
         opTest.type = OPER;
         vector<string> operation;
         operation.push_back("a");
         operation.push_back("25-6");
         opTest.elements = operation;
 
-        stack->insert(stack->end()-1,opTest);
+        stack->insert(stack->end()-1,opTest);*/
 
         for(Commande curCommande: *stack)
         {

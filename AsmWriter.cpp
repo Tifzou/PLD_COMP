@@ -61,6 +61,7 @@ bool AsmWriter::writeOutputFile(matrice resultat) {
                     break;
                 case 3 : // VAR DEFINITION
                     cerr << "in case VAR_DEF" << endl;
+                    myfile << writeDef((*itInstr));
                     break;
                 case 4 : // OPER
                     cerr << "in case OPER" << endl;
@@ -93,7 +94,15 @@ string AsmWriter::writeReturn(Commande returnCmd)
 {
     string nomVar = returnCmd.elements[0];
     map<string, string>::iterator it = variables.find(nomVar);
-    string address = it->second;
+    string address;
+    if (it != variables.end())
+    {
+        address = it->second;
+    }
+    else
+    {
+        address = "$"+nomVar;
+    }
     string asmInstr = "\tmovl\t"+address+", %eax\n";
     return asmInstr;
 }
@@ -105,17 +114,22 @@ string AsmWriter::writeAff(Commande affectationCmd)
 
     map<string, string>::iterator it = variables.find(nomVar);
     string address = it->second;
+
+    it = variables.find(valVar);
     string asmInstr;
-    try // definition
+    if (it != variables.end())
     {
-        stoi(valVar);
-        asmInstr = "\tmovl\t$"+valVar+", "+address+"\n";
+        valVar = it->second;
+        asmInstr = "\tmovl\t"+valVar+", %eax\n";
+        asmInstr += "\tmovl\t%eax, "+address+"\n";
     }
-    catch (const invalid_argument& ia) // = autre variable
+    else
     {
-        it = variables.find(nomVar);
+        valVar = "$"+valVar;
         asmInstr = "\tmovl\t"+valVar+", "+address+"\n";
     }
+
+
     return asmInstr;
 }
 
@@ -136,7 +150,7 @@ string AsmWriter::writeDef(Commande definitionCmd)
 
 string AsmWriter::writeOperation(Commande operationCmd)
 {
-    return writeSub(operationCmd); // TODO !!! 
+    return writeSub(operationCmd); // TODO !!!
 }
 
 string AsmWriter::writeAdd(Commande additionCmd)

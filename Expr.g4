@@ -12,7 +12,7 @@ code: typevar vari ';' #decdef
     ;
 
 
-ret: 'return' VAR ';' ;
+ret: 'return' expr ';' ;
 vari: VAR (','VAR)* #decVar
     | VAR '=' expr #defVar
     ;
