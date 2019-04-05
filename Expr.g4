@@ -1,18 +1,40 @@
 grammar Expr;
-prog:expr;
+prog:base;
 
-expr: 'int main' '(' ')'core;
-core: '{' code ret ';' '}';
-code: typevar vari ';';
-ret: 'return' VAR;
-vari: VAR  #dec
-    | VAR '=' INT #aff
+
+
+base: 'int main' '(' ')'core;
+
+core: '{' code* ret '}';
+
+code: typevar vari ';' #decdef
+    | VAR '=' expr ';' #aff
     ;
-typevar : TYPEINT #int
-    |TYPECHAR #char
+
+
+ret: 'return' expr ';' ;
+vari: VAR (','VAR)* #decVar
+    | VAR '=' expr #defVar
     ;
-TYPEINT : 'int';
-TYPECHAR :'char';
-INT : [0-9]+ ;
-VAR : [a-zA-Z]+ ;
-WS : [ \t\r\n] -> skip;
+
+expr: terme ('+' terme)* ;
+
+terme: facteur ('*' facteur)* ;
+
+facteur: INT #factInt
+    | VAR #factVar
+    | '(' expr ')' #factPar
+    ;
+
+
+
+
+typevar: TYPEINT #int
+    | TYPECHAR #char
+    ;
+
+TYPEINT: 'int';
+TYPECHAR:'char';
+INT: [0-9]+ ;
+VAR: [a-zA-Z]+ ;
+WS: [ \t\r\n] -> skip;

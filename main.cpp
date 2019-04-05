@@ -32,16 +32,16 @@ ostream & debug (ostream & os){
 // Algorithme :
 //      Change les paramètres du ostream pour qu'il écrive en rouge.
 ostream & erreur (ostream & os){
-	os.write(ROUGE, sizeof(ROUGE));
-	return os;
+    os.write(ROUGE, sizeof(ROUGE));
+    return os;
 }//----- Fin de erreur
 
 // ostream & attention( ostream & os )
 // Algorithme :
 //      Change les paramètres du ostream pour qu'il écrive en jaune.
 ostream & attention (ostream & os){
-	os.write(JAUNE, sizeof(JAUNE));
-	return os;
+    os.write(JAUNE, sizeof(JAUNE));
+    return os;
 }//----- Fin de attention
 
 // ostream & debug ( ostream & os )
@@ -49,39 +49,52 @@ ostream & attention (ostream & os){
 //      Change les paramètres du ostream pour qu'il reprenne ses
 //      paramètres initiaux.
 ostream & raz (ostream & os){
-	os.write(RESET, sizeof(RESET));
-	return os;
+    os.write(RESET, sizeof(RESET));
+    return os;
 }//----- Fin de debug
 
 int main(int argc, char *argv[])
 {
-	if (argc > 1)
-	{
-		ifstream file;
-		file.open(argv[1]);
-		ANTLRInputStream input(file);
-		ExprLexer lexer(&input);
-		CommonTokenStream tokens(&lexer);
-		file.close();
+    if (argc > 1)
+    {
+        ifstream file;
+        file.open(argv[1]);
+        ANTLRInputStream input(file);
+        ExprLexer lexer(&input);
+        CommonTokenStream tokens(&lexer);
+        file.close();
 
-		ExprParser parser(&tokens);
-		tree::ParseTree *tree = parser.prog();
+        ExprParser parser(&tokens);
+        tree::ParseTree *tree = parser.prog();
 
-		cout << tree->toStringTree(&parser) << endl;
+        cout << tree->toStringTree(&parser) << endl;
 
         Visiteur visitor;
-        vector<vector<string>> resultat = visitor.visit(tree);
-        cout << "resultat size " << resultat.size() << endl;
 
-		AsmWriter *a = new AsmWriter(argv[1], "resultat.s", tree->toStringTree(&parser));
-		a->convert();
-        a->writeOutputFile(resultat);
+        //vector<vector<string>> resultat = visitor.visit(tree);
+        Symbole resultat = visitor.visit(tree);
+        matrice *stack = resultat.getStack();
 
-		return 0;
-	}
-	else
-	{
-		cerr << "USAGE: " << argv[0] << "<FILENAME.c>" << endl;
-		return -1;
-	}
+
+        for(Commande curCommande: *stack)
+        {
+            cout<<curCommande.type<<" : ";
+            for(string s : curCommande.elements)
+            {
+                cout<<s<<" ";
+            }
+            cout<<endl;
+        }
+
+        AsmWriter *a = new AsmWriter(argv[1], "resultat.s", tree->toStringTree(&parser));
+        a->convert();
+        a->writeOutputFile(*stack);
+
+        return 0;
+    }
+    else
+    {
+        cerr << "USAGE: " << argv[0] << "<FILENAME.c>" << endl;
+        return -1;
+    }
 }

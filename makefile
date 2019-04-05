@@ -8,18 +8,18 @@ EXEC     = exec
 CXX       = clang++
 
 CXXFLAGS   = -g -std=c++11 -I
-LDFLAGS  = 
+LDFLAGS  =
 
 SRC      = $(wildcard *.cpp)
 OBJ      = $(SRC:.cpp=.o)
 
 all: antlr $(EXEC)
 
-antlr : 
+antlr:
 	@echo --------- Génération avec antlr ----------------
 	$(ANTLR) -visitor -no-listener -Dlanguage=Cpp Expr.g4
 
-$(EXEC) :
+$(EXEC):
 	@echo --------- Compilation des sources --------------
 	$(CXX) $(CXXFLAGS) $(ANTLRRUNTIME)/antlr4-runtime/ -o $(EXEC) *.cpp $(ANTLRRUNTIME)/lib/libantlr4-runtime.a
 

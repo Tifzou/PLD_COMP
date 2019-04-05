@@ -12,23 +12,35 @@
 #include <utility> // pair
 #include <vector>
 #include <stdio.h>
+#include "Symbole.h"
 
 using namespace std;
 
 class AsmWriter {
-    public:
-        AsmWriter(string const nom, string const outName, string const arbre)
+public:
+    AsmWriter(string const nom, string const outName, string const arbre)
             : inFile(nom), outFile(outName), arbreAntlr(arbre) {}
-        void setNomFichierInput(string nomFichier);
-        void setNomFichierOutput(string nomFichier);
-        bool convert();
-        bool writeOutputFile(vector<vector<string>> resultat);
+    void setNomFichierInput(string nomFichier);
+    void setNomFichierOutput(string nomFichier);
+    bool convert();
+    bool writeOutputFile(matrice resultat);
+    void printVariableMap();
 
-    protected:
-        string inFile;
-        string outFile;
-        string arbreAntlr;
-        map<string, pair<string,int>> variables; // nom, <adresse, val>
+protected:
+    string writeReturn(Commande returnCmd);
+    string writeAff(Commande affectationCmd);
+    void writeDec(Commande declarationCmd);
+    string writeDef(Commande definitionCmd);
+    string writeOperation(Commande operationCmd);
+    string writeAdd(Commande additionCmd);
+    string writeSub(Commande substractionCmd);
+    string writeMult(Commande multiplicationCmd);
+
+
+    string inFile;
+    string outFile;
+    string arbreAntlr;
+    map<string, string> variables; // nom, adresse
 
 };
 

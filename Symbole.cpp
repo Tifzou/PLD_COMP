@@ -35,7 +35,7 @@ bool Symbole::varExist(string var)
 {
     for(Commande commande : resp)
     {
-        if(commande.type == commandeType::VAR_DEC && commande.elements[1] == var)
+        if((commande.type == commandeType::VAR_DEC || commande.type == commandeType::VAR_DEF) && commande.elements[1] == var)
         {
             return true;
         }
@@ -58,6 +58,8 @@ bool Symbole::varDef(string var)
     }
     return false;
 }
+
+
 
 
 //------------------------------------------------------------------ PRIVE

@@ -52,16 +52,14 @@ antlrcpp::Any Visiteur::visitCore(ExprParser::CoreContext *ctx)
         visit(cd);
     }
     commandeType code = commandeType ::RET;
-    //symboleManager./****/;
     symboleManager.pushInTemporalCommande(code);
-    if((bool)visit(ctx->ret()))
+    if ((bool)visit(ctx->ret()))
     {
         symboleManager.writeStack(symboleManager.getTemporalCommande());
     }
     symboleManager.deleteTemporalCommand();
     return true;
 }
-
 
 //------------------------------------------------------------------------
 antlrcpp::Any Visiteur::visitDecdef(ExprParser::DecdefContext *ctx)
@@ -76,7 +74,6 @@ antlrcpp::Any Visiteur::visitDecdef(ExprParser::DecdefContext *ctx)
     return true;
 }
 
-
 //------------------------------------------------------------------------
 antlrcpp::Any Visiteur::visitAff(ExprParser::AffContext *ctx)
 // Algorithme :
@@ -89,9 +86,15 @@ antlrcpp::Any Visiteur::visitAff(ExprParser::AffContext *ctx)
 
     if(symboleManager.varExist(varName))
     {
-        symboleManager.pushInTemporalCommande(" ");
+        symboleManager.pushInTemporalCommande(symboleManager.retrieveVarType(varName));
         symboleManager.pushInTemporalCommande(varName);
-        visit(ctx->expr());
+        if(!visit(ctx->expr()))
+        {
+            return false;
+        }
+        symboleManager.pushInTemporalCommande(symboleManager.getTemporalExpression()->back().elements[1]);
+        symboleManager.writeStack(*symboleManager.getTemporalExpression());
+        symboleManager.deleteTemporalExpression();
         symboleManager.writeStack(symboleManager.getTemporalCommande());
         symboleManager.deleteTemporalCommand();
     }
@@ -106,6 +109,7 @@ antlrcpp::Any Visiteur::visitAff(ExprParser::AffContext *ctx)
         symboleManager.pushInTemporalCommande(code, err);
         symboleManager.writeStack(symboleManager.getTemporalCommande());
         symboleManager.deleteTemporalCommand();
+        symboleManager.deleteTemporalExpression();
     }
 
     return true;
@@ -117,9 +121,14 @@ antlrcpp::Any Visiteur::visitRet(ExprParser::RetContext *ctx)
 // Algorithme :
 //
 {
-    visit(ctx->expr());
-
-    return true;
+    if(visit(ctx->expr()))
+    {
+        symboleManager.pushInTemporalCommande(symboleManager.getTemporalExpression()->back().elements[1]);
+        symboleManager.writeStack(*symboleManager.getTemporalExpression());
+        symboleManager.deleteTemporalExpression();
+        return true;
+    }
+    return false;
 }
 
 
@@ -128,7 +137,7 @@ antlrcpp::Any Visiteur::visitDecVar(ExprParser::DecVarContext *ctx)
 // Algorithme :
 //
 {
-    for(antlr4::tree::TerminalNode *tmpNode : ctx->VAR())
+    for (antlr4::tree::TerminalNode *tmpNode : ctx->VAR())
     {
         string nameVar = tmpNode->getText();
 
@@ -141,6 +150,7 @@ antlrcpp::Any Visiteur::visitDecVar(ExprParser::DecVarContext *ctx)
         {
             commandeType code = commandeType::VAR_DEC;
             symboleManager.pushInTemporalCommande(code); // Surchage pushTemporalStack(vector<string> commande)
+            symboleManager.pushInTemporalCommande(nameVar);
             symboleManager.writeStack(symboleManager.getTemporalCommande());
             symboleManager.popBackLastElemTmpCommande();
         }
@@ -161,137 +171,206 @@ antlrcpp::Any Visiteur::visitDefVar(ExprParser::DefVarContext *ctx)
     //Si nameVar et typeVariable existe dans la table des symboles
     if (!checkVarDec(nameVar))
     {
+        symboleManager.deleteTemporalExpression();
         return false;
+
     }
     //Si nameVar et typeVariable n'existe pas dans la table des symboles
     else
     {
         commandeType code = commandeType::VAR_DEF;
-
+        symboleManager.pushInTemporalCommande(nameVar);
         symboleManager.pushInTemporalCommande(code); // Surchage pushTemporalStack(vector<string> commande)
         if(visit(ctx->expr()))
         {
+            symboleManager.pushInTemporalCommande(symboleManager.getTemporalExpression()->back().elements[1]);
+            symboleManager.writeStack(*symboleManager.getTemporalExpression());
+            symboleManager.deleteTemporalExpression();
             symboleManager.writeStack(symboleManager.getTemporalCommande());
+            symboleManager.deleteTemporalCommand();
+            return true;
         }
-        symboleManager.deleteTemporalCommand();                       //deleteTemporalStack() = null;
-        return true;
+        return false;
     }
 }
 
 //------------------------------------------------------------------------
-antlrcpp::Any Visiteur::visitPar(ExprParser::ParContext *ctx)
+antlrcpp::Any Visiteur::visitExpr(ExprParser::ExprContext *ctx)
 // Algorithme :
 //
 {
-    symboleManager.pushInTemporalCommande("(");
-    visit(ctx->expr());
-    symboleManager.pushInTemporalCommande(")"); //Surcharge
+    for(int i(1); i<ctx->terme().size(); i+=2)
+    {
+        vector<string> commande;
+
+        if(!visit(ctx->terme(i-1)))
+        {
+            return false;
+        }
+        string nomVar1=symboleManager.getTemporalExpression()->back().elements[1];
+        if(!visit(ctx->terme(i)))
+        {
+            return false;
+        }
+        string nomVar2=symboleManager.getTemporalExpression()->back().elements[1];
+        string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
+
+        commande.push_back(symboleManager.retrieveVarType(nomVar1));
+        commande.push_back(tempVar);
+        commande.push_back(nomVar1);
+        commande.push_back("+");
+        commande.push_back(nomVar2);
+
+        symboleManager.pushTemporalMatriceVari(commande);
+    }
+
+    if(ctx->terme().size()%2==1)
+    {
+
+        if(ctx->terme().size()>1)
+        {
+            vector<string> commande;
+            string nomVar1=symboleManager.getTemporalExpression()->back().elements[1];
+            if(!visit(ctx->terme(ctx->terme().size()-1)))
+            {
+                return false;
+            }
+            string nomVar2=symboleManager.getTemporalExpression()->back().elements[1];
+            string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
+
+            commande.push_back(symboleManager.retrieveVarType(nomVar1));
+            commande.push_back(tempVar);
+            commande.push_back(nomVar1);
+            commande.push_back("+");
+            commande.push_back(nomVar2);
+
+            symboleManager.pushTemporalMatriceVari(commande);
+        }
+        else
+        {
+            return visit(ctx->terme(ctx->terme().size()-1));
+        }
+    }
 
     return true;
 }
 
 
 //------------------------------------------------------------------------
-antlrcpp::Any Visiteur::visitDiv(ExprParser::DivContext *ctx)/****/
+antlrcpp::Any Visiteur::visitTerme(ExprParser::TermeContext *ctx)
 // Algorithme :
 //
 {
-    symboleManager.pushInTemporalCommande("(");
-    if (visit(ctx->expr(0)))
+
+    for(int i(1); i<ctx->facteur().size(); i+=2)
     {
-        string divSymb = "/";
-        symboleManager.pushInTemporalCommande(divSymb);
-        if (visit(ctx->expr(1)))
-        {
-            symboleManager.pushInTemporalCommande(")");
-            return true;
-        }
-        else
+        vector<string> commande;
+        if(!visit(ctx->facteur(i-1)))
         {
             return false;
         }
+        string nomVar1=symboleManager.getTemporalExpression()->back().elements[1];
+        if(!visit(ctx->facteur(i)))
+        {
+            return false;
+        }
+        string nomVar2=symboleManager.getTemporalExpression()->back().elements[1];
+        string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
+
+        commande.push_back(symboleManager.retrieveVarType(nomVar1));
+        commande.push_back(tempVar);
+        commande.push_back(nomVar1);
+        commande.push_back("*");
+        commande.push_back(nomVar2);
+
+        symboleManager.pushTemporalMatriceVari(commande);
+    }
+
+    if(ctx->facteur().size()%2==1)
+    {
+
+        if(ctx->facteur().size()>1)
+        {
+            vector<string> commande;
+            string nomVar1=symboleManager.getTemporalExpression()->back().elements[1];
+            if(!visit(ctx->facteur(ctx->facteur().size()-1)))
+            {
+                return false;
+            }
+            string nomVar2=symboleManager.getTemporalExpression()->back().elements[1];
+            string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
+
+            commande.push_back(symboleManager.retrieveVarType(nomVar1));
+            commande.push_back(tempVar);
+            commande.push_back(nomVar1);
+            commande.push_back("*");
+            commande.push_back(nomVar2);
+
+            symboleManager.pushTemporalMatriceVari(commande);
+        }
+        else
+        {
+            return visit(ctx->facteur(ctx->facteur().size()-1));
+        }
+    }
+
+    return true;
+}
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitFactPar(ExprParser::FactParContext *ctx)
+// Algorithme :
+//
+{
+    return visit(ctx->expr());
+}
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitFactVar(ExprParser::FactVarContext *ctx)
+// Algorithme :
+//
+{
+    vector<string> commande;
+    string var = ctx->VAR()->getText();
+
+    if (symboleManager.varDef(var))
+    {
+        commande.push_back(symboleManager.retrieveVarType(var));
+        string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
+        commande.push_back(tempVar);
+        commande.push_back(ctx->VAR()->getText());
+        //symboleManager.pushTemporalMatriceVari(commandeType::VAR_DEF,commande);
+        symboleManager.pushTemporalMatriceVari(commande);
+        return true;
     }
     else
     {
+        commandeType code = commandeType::ERR;
+        vector<string> err;
+        string error2 = "variable : '" + var + "' not defined";
+        err.push_back("0322");
+        err.push_back(error2);
+        symboleManager.deleteTemporalExpression(); //temporalStack = null;
+
+        symboleManager.pushInTemporalCommande(code, err);
+        symboleManager.writeStack(symboleManager.getTemporalCommande());
+        symboleManager.deleteTemporalCommand();
         return false;
     }
 }
 
-
 //------------------------------------------------------------------------
-antlrcpp::Any Visiteur::visitAdd(ExprParser::AddContext *ctx)
+antlrcpp::Any Visiteur::visitFactInt(ExprParser::FactIntContext *ctx)
 // Algorithme :
 //
 {
-    if (visit(ctx->expr(0)))
-    {
-        string addSymb = "+";
-        symboleManager.pushInTemporalCommande(addSymb);
-        if (visit(ctx->expr(1)))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    else
-    {
-        return false;
-    }
-}
-
-
-//------------------------------------------------------------------------
-antlrcpp::Any Visiteur::visitSub(ExprParser::SubContext *ctx)
-// Algorithme :
-//
-{
-    if (visit(ctx->expr(0)))
-    {
-        string subSymb = "-";
-        symboleManager.pushInTemporalCommande(subSymb);
-        if (visit(ctx->expr(1)))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    else
-    {
-        return false;
-    }
-}
-
-
-//------------------------------------------------------------------------
-antlrcpp::Any Visiteur::visitMult(ExprParser::MultContext *ctx)
-// Algorithme :
-//
-{
-    symboleManager.pushInTemporalCommande("(");
-    if (visit(ctx->expr(0)))
-    {
-        string multSymb = "*";
-        symboleManager.pushInTemporalCommande(multSymb);
-        if (visit(ctx->expr(1)))
-        {
-            symboleManager.pushInTemporalCommande(")");
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    else
-    {
-        return false;
-    }
+    vector<string> commande;
+    commande.push_back("int");
+    commande.push_back("!t"+to_string(symboleManager.createTemporalVar()));
+    commande.push_back(ctx->INT()->getText());
+    //symboleManager.pushTemporalMatriceVari(commandeType::VAR_DEF,commande);
+    symboleManager.pushTemporalMatriceVari(commande);
+    return true;
 }
 
 //------------------------------------------------------------------------
@@ -310,10 +389,7 @@ antlrcpp::Any Visiteur::visitChar(ExprParser::CharContext *ctx)
     return ctx->TYPECHAR()->getText();
 }
 
-
-
-
-
+ /*
 //------------------------------------------------------------------------
 antlrcpp::Any Visiteur::visitVar(ExprParser::VarContext *ctx)
 // Algorithme :
@@ -333,7 +409,7 @@ antlrcpp::Any Visiteur::visitLdconst(ExprParser::LdconstContext *ctx)
 
     return true;
 }
-
+*/
 
 //------------------------------------------------------------------ PRIVE
 
@@ -362,7 +438,6 @@ bool Visiteur::checkVarDec(string varName)
     }
     else
     {
-        symboleManager.pushInTemporalCommande(varName);
         return true;
     }
 }
@@ -389,7 +464,6 @@ bool Visiteur::checkVarDef(string varName)
     }
     else
     {
-        symboleManager.pushInTemporalCommande(varName);
         return true;
     }
 }

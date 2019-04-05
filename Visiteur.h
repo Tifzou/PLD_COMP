@@ -1,100 +1,187 @@
-#pragma once
+/*************************************************************************
+                           PLD_COMP  -  description
+                             -------------------
+    début                : 05/03/2019
+    copyright            : (C) 2019 par HALUNKA Matthieu, COQUIO-LEBRESNE Clémentine,
+                            FLOCH Tifenn, GASIUK Anatolii, HIRT Christophe, PAUGOIS Alan
+    e-mail               : matthieu.halunka@insa-lyon.fr (chef de projet)
+*************************************************************************/
+
+//---------- Interface de la classe <Visiteur> (fichier Visiteur.h) ----------------
+#if ! defined ( VISITEUR_H )
+#define VISITEUR_H
+
+//--------------------------------------------------- Interfaces utilisées
 
 #include "antlr4-runtime.h"
 #include "ExprBaseVisitor.h"
-
+#include "Symbole.h"
 #include <string>
-#include <iostream>
 
-using namespace std;
+
+//------------------------------------------------------------- Constantes
+
+//------------------------------------------------------------------ Types
+
+//------------------------------------------------------------------------
+// Rôle de la classe <Visiteur>
+//
+//
+//------------------------------------------------------------------------
 
 class Visiteur : public ExprBaseVisitor
 {
+//----------------------------------------------------------------- PUBLIC
+
 public:
-	antlrcpp::Any visitCore(ExprParser::CoreContext *ctx) override
-	{
+//----------------------------------------------------- Méthodes publiques
+    antlrcpp::Any visitProg(ExprParser::ProgContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
 
-		string temp = visit(ctx->code());
-		string retName = visit(ctx->ret());
-		vector<vector<string>> resp;
-		vector<string> commande;
-		cout << temp << endl;
-		int pos = temp.find(";");
-		while (pos != -1)
-		{
-			commande.push_back(temp.substr(0, pos));
-			temp.erase(0, pos + 1);
-			pos = temp.find(";");
-		}
-		commande.push_back(temp);
-		resp.push_back(commande);
 
-		return resp;
-	}
+    antlrcpp::Any visitBase(ExprParser::BaseContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
 
-	antlrcpp::Any visitProg(ExprParser::ProgContext *ctx) override
-	{
-		return visit(ctx->expr());
-	}
+    antlrcpp::Any visitCore(ExprParser::CoreContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
 
-	antlrcpp::Any visitExpr(ExprParser::ExprContext *ctx) override
-	{
-		return visit(ctx->core());
-	}
 
-	antlrcpp::Any visitCode(ExprParser::CodeContext *ctx) override
-	{
-		string type = visit(ctx->typevar());
-		string variable = visit(ctx->vari());
-		string ret = type + ";" + variable;
-		return ret;
-	}
+    antlrcpp::Any visitDecdef(ExprParser::DecdefContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
 
-	antlrcpp::Any visitRet(ExprParser::RetContext *ctx) override
-	{
-		return ctx->VAR()->getText();
-	}
 
-	antlrcpp::Any visitAff(ExprParser::AffContext *ctx) override
-	{
-		string nom = ctx->VAR()->getText();
-		string value = ctx->INT()->getText();
-		string ret = nom + ";" + value;
-		return ret;
-	}
+    antlrcpp::Any visitAff(ExprParser::AffContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
 
-	antlrcpp::Any visitInt(ExprParser::IntContext *ctx) override
-	{
-		return ctx->TYPEINT()->getText();
-	}
 
-	antlrcpp::Any visitChar(ExprParser::CharContext *ctx) override
-	{
-		return ctx->TYPECHAR()->getText();
-	}
+    antlrcpp::Any visitRet(ExprParser::RetContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
 
-	/*
-    antlrcpp::Any visitFunc(ExprParser::FuncContext *ctx) override
-	{
-		return (int)visit(ctx->expr(0));
-	}
-	antlrcpp::Any visitExpr1(ExprParser::Expr1Context *ctx) override
-	{
-		return (int)visit(ctx->expr());
-	}
-	antlrcpp::Any visitAdd(ExprParser::AddContext *ctx) override
-	{
-		return (int)visit(ctx->expr(0)) +
-			  (int)visit(ctx->expr(1));
-	}
-	antlrcpp::Any visitMult(ExprParser::MultContext *ctx) override
-	{
-		return (int)visit(ctx->expr(0)) *
-			  (int)visit(ctx->expr(1));
-	}
-	virtual antlrcpp::Any visitLdconst(ExprParser::LdconstContext *ctx) override
-	{
-		return (int)stoi(ctx->INT()->getText());
-	}
-	*/
+    antlrcpp::Any visitDecVar(ExprParser::DecVarContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitDefVar(ExprParser::DefVarContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+
+    antlrcpp::Any visitExpr(ExprParser::ExprContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitTerme(ExprParser::TermeContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+
+    antlrcpp::Any visitFacteur(ExprParser::FacteurContext *ctx) ;
+
+
+    antlrcpp::Any visitFactPar(ExprParser::FactParContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+
+
+    antlrcpp::Any visitFactVar(ExprParser::FactVarContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitFactInt(ExprParser::FactIntContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitInt(ExprParser::IntContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitChar(ExprParser::CharContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+
+//-------------------------------------------- Constructeurs - destructeur
+    Visiteur (){}
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    virtual ~Visiteur(){}
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+//------------------------------------------------------------------ PRIVE
+
+protected:
+//----------------------------------------------------- Méthodes protégées
+
+private:
+//------------------------------------------------------- Méthodes privées
+
+    bool checkVarDec(string varName);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+
+    bool checkVarDef(string varName);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+
+protected:
+//----------------------------------------------------- Attributs protégés
+
+private:
+//------------------------------------------------------- Attributs privés
+    Symbole symboleManager;
+
+//----------------------------------------------------------- Types privés
+
 };
+
+
+#endif // VISITEUR_H
