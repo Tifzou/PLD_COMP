@@ -15,6 +15,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 using namespace std;
 
@@ -43,6 +44,7 @@ typedef struct Commande
     commandeType type;
     vector<string> elements;
 } Commande;
+
 
 //la liste des commandes
 typedef vector<Commande> matrice;
@@ -216,11 +218,17 @@ public:
                 return vs.elements[0];
             }
         }
-
+        return nullptr;
     }
+
     void createVar(string varName){
         pair<string,int> p(varName,index++);
         tablesDesSymboles.insert(p);
+    }
+
+    void pushIntoFlowControl(){
+        flowControl.push_back(resp);
+        resp.clear();
     }
 
     void deleteTemporalExpression()
@@ -295,6 +303,7 @@ private:
     matrice temporalExpression;
     Commande temporalStackCommande;
     map<string,int> tablesDesSymboles;
+    vector<matrice> flowControl;
     int tmpCounter;
     int index;
 

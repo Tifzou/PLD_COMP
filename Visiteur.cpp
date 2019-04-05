@@ -127,8 +127,10 @@ antlrcpp::Any Visiteur::visitRet(ExprParser::RetContext *ctx)
         symboleManager.pushInTemporalCommande(symboleManager.getTemporalExpression()->back().elements[1]);
         symboleManager.writeStack(*symboleManager.getTemporalExpression());
         symboleManager.deleteTemporalExpression();
+        symboleManager.pushIntoFlowControl();
         return true;
     }
+    symboleManager.pushIntoFlowControl();
     return false;
 }
 
@@ -180,11 +182,13 @@ antlrcpp::Any Visiteur::visitDefVar(ExprParser::DefVarContext *ctx)
     //Si nameVar et typeVariable n'existe pas dans la table des symboles
     else
     {
+        
         commandeType code = commandeType::VAR_DEF;
         symboleManager.pushInTemporalCommande(nameVar);
         symboleManager.pushInTemporalCommande(code); // Surchage pushTemporalStack(vector<string> commande)
         if(visit(ctx->expr()))
         {
+            symboleManager.createVar(nameVar);
             symboleManager.pushInTemporalCommande(symboleManager.getTemporalExpression()->back().elements[1]);
             symboleManager.writeStack(*symboleManager.getTemporalExpression());
             symboleManager.deleteTemporalExpression();
