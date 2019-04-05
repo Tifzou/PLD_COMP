@@ -3,7 +3,7 @@ prog:base;
 
 
 
-base: 'int main' '(' ')'core; 
+base: 'int main' '(' ')'core;
 
 core: '{' code* ret '}';
 

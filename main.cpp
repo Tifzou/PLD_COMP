@@ -89,7 +89,6 @@ int main(int argc, char *argv[])
         AsmWriter *a = new AsmWriter(argv[1], "resultat.s", tree->toStringTree(&parser));
         a->convert();
         a->writeOutputFile(*stack);
-        a->printVariableMap();
 
         return 0;
     }

@@ -1,7 +1,7 @@
 int main()
 {
-    int a=3;
+    int a=42;
     int b=2;
-    a=a-b;
+    a=a/b;
     return a;
 }
