@@ -35,7 +35,7 @@ bool AsmWriter::convert(){
     return 1;
 }
 
-bool AsmWriter::writeOutputFile(vector<vector<string>> resultat) {
+bool AsmWriter::writeOutputFile(matrice resultat) {
     ofstream myfile (outFile);
     if (myfile.is_open()){
         myfile << ".text\n";
@@ -44,32 +44,47 @@ bool AsmWriter::writeOutputFile(vector<vector<string>> resultat) {
         myfile << "\tpushq\t%rbp"<<endl;
         myfile << "\tmovq\t%rsp, %rbp"<<endl;
         int stackPtr = 0;
-        vector<vector<string>>::iterator itInstr;
+        vector<Commande>::iterator itInstr;
         for(itInstr = resultat.begin() ; itInstr != resultat.end() ; ++itInstr)
         {
-            vector<string>::iterator itString;
-            itString = itInstr->begin(); // int
-
-            string nomVar = itString[1];
-
-            stackPtr -= 4;
-            string adresseI = to_string(stackPtr)+"(%rbp)";
-
-            int val;
-            try
+            switch ((*itInstr).type) // {ERR, WARN, VAR_DEC, VAR_DEF, OPER, RET, AFF};
             {
-                val = stoi(itString[2]);
+                case 0 : // ERR
+                    cerr << "in case ERR" << endl;
+                    break;
+                case 1 : // WAR
+                    cerr << "in case WAR" << endl;
+                    break;
+                case 2 : // VAR DECLARATION
+                    cerr << "in case VAR_DEC" << endl;
+                    writeDec((*itInstr));
+                    break;
+                case 3 : // VAR DEFINITION
+                    cerr << "in case VAR_DEF" << endl;
+                    myfile << writeDef((*itInstr));
+                    break;
+                case 4 : // OPER
+                    cerr << "in case OPER" << endl;
+                    if((*itInstr).elements.size() == 3)
+                    {
+                        myfile << writeDef((*itInstr));
+                    }
+                    else if((*itInstr).elements.size() == 5)
+                    {
+                        myfile << writeOperation((*itInstr));
+                    }
+                    break;
+                case 5 : // RET
+                    cerr << "in case RET" << endl;
+                    myfile << writeReturn((*itInstr));
+                    break;
+                case 6: // AFFECTATION
+                    cerr << "in case AFF" << endl;
+                    myfile << writeAff((*itInstr));
+                    break;
+                default:
+                    break;
             }
-            catch (const invalid_argument& ia)
-            {
-                val = variables.find(itString[2])->second.second;
-            }
-            //cout << "val= " << val << endl;
-            pair<string, int> descrVar (adresseI, val);
-            variables.insert(pair<string, pair<string, int>>(nomVar, descrVar));
-
-            myfile << "\tmovl\t$"<< val << ", " << stackPtr << "(%rbp)"<<endl;
-            myfile << "\tmovl\t"<< stackPtr << "(%rbp), %eax"<<endl;
         }
 
         myfile << "\tpopq	%rbp"<<endl;
@@ -79,5 +94,238 @@ bool AsmWriter::writeOutputFile(vector<vector<string>> resultat) {
     }else{
         cerr << "Unable to create .s file !"<< endl;
         return 1;
+    }
+}
+
+string AsmWriter::writeReturn(Commande returnCmd)
+{
+    string nomVar = returnCmd.elements[0];
+    map<string, string>::iterator it = variables.find(nomVar);
+    string address;
+    if (it != variables.end())
+    {
+        address = it->second;
+    }
+    else
+    {
+        address = "$"+nomVar;
+    }
+    string asmInstr = "\tmovl\t"+address+", %eax\n";
+    return asmInstr;
+}
+
+string AsmWriter::writeAff(Commande affectationCmd)
+{
+    string nomVar = affectationCmd.elements[1];
+    string valVar = affectationCmd.elements[2];
+
+    map<string, string>::iterator it = variables.find(nomVar);
+    string address = it->second;
+
+    it = variables.find(valVar);
+    string asmInstr;
+    if (it != variables.end())
+    {
+        valVar = it->second;
+        asmInstr = "\tmovl\t"+valVar+", %eax\n";
+        asmInstr += "\tmovl\t%eax, "+address+"\n";
+    }
+    else
+    {
+        valVar = "$"+valVar;
+        asmInstr = "\tmovl\t"+valVar+", "+address+"\n";
+    }
+
+
+    return asmInstr;
+}
+
+void AsmWriter::writeDec(Commande declarationCmd)
+{
+    string varName = declarationCmd.elements[1];
+    int stackPos = (variables.size()+1) * (-4);
+    string varAddress = to_string(stackPos) + "(%rbp)";
+    variables.insert(make_pair(varName, varAddress));
+}
+
+string AsmWriter::writeDef(Commande definitionCmd)
+{
+    writeDec(definitionCmd);
+    string asmInstr = writeAff(definitionCmd);
+    return asmInstr;
+}
+
+string AsmWriter::writeOperation(Commande operationCmd)
+{
+    if (operationCmd.elements[3] == "*")
+    {
+        return writeMult(operationCmd);
+    }
+    else if(operationCmd.elements[3] == "+") {
+        return writeAdd(operationCmd);
+    }
+    else if(operationCmd.elements[3] == "-") {
+        return writeSub(operationCmd);
+    }
+    else
+    {
+        return "unknown operation"; // TODO: appeler une erreur
+    }
+}
+
+string AsmWriter::writeAdd(Commande additionCmd)
+{
+    map<string, string>::iterator it;
+
+    string varResultat = additionCmd.elements[1];
+    it = variables.find(varResultat);
+    if (it == variables.end())
+    {
+        Commande dec;
+        dec.type = commandeType::VAR_DEC;
+        dec.elements.push_back("int");
+        dec.elements.push_back(varResultat);
+        writeDec(dec);
+        it = variables.find(varResultat);
+    }
+    string addressRes = it->second;
+
+    string varOp1 = additionCmd.elements[2];
+    string addressOp1;
+    it = variables.find(varOp1);
+    if (it != variables.end())
+    {
+        addressOp1 = it->second;
+    }
+    else
+    {
+        addressOp1 = "$"+varOp1;
+    }
+
+    string varOp2 = additionCmd.elements[4];
+    string addressOp2;
+    it = variables.find(varOp2);
+    if (it != variables.end())
+    {
+        addressOp2 = it->second;
+    }
+    else
+    {
+        addressOp2 = "$"+varOp2;
+    }
+
+    string asmInstr = "\tmovl\t"+addressOp1+", %edx\n";
+    asmInstr += "\tmovl\t"+addressOp2+", %eax\n";
+    asmInstr += "\taddl\t%edx, %eax\n";
+    asmInstr += "\tmovl\t %eax, "+addressRes+"\n";
+
+    return asmInstr;
+}
+
+string AsmWriter::writeSub(Commande substractionCmd)
+{
+    cout << "yeah for substraction" << endl;
+    map<string, string>::iterator it;
+
+    string varResultat = substractionCmd.elements[1];
+    it = variables.find(varResultat);
+    if (it == variables.end())
+    {
+        Commande dec;
+        dec.type = commandeType::VAR_DEC;
+        dec.elements.push_back("int");
+        dec.elements.push_back(varResultat);
+        writeDec(dec);
+        it = variables.find(varResultat);
+    }
+    string addressRes = it->second;
+
+    string varOp1 = substractionCmd.elements[2];
+    it = variables.find(varOp1);
+    string addressOp1;
+    if (it != variables.end())
+    {
+        addressOp1 = it->second;
+    }
+    else
+    {
+        addressOp1 = "$"+varOp1;
+    }
+
+    string varOp2 = substractionCmd.elements[4];
+    it = variables.find(varOp2);
+    string addressOp2;
+    if (it != variables.end())
+    {
+        addressOp2 = it->second;
+    }
+    else
+    {
+        addressOp2 = "$"+varOp2;
+    }
+
+    string asmInstr = "\tmovl\t"+addressOp1+", %eax\n";
+    asmInstr += "\tmovl\t"+addressOp2+", %edx\n";
+    asmInstr += "\tsubl\t%edx, %eax\n";
+    asmInstr += "\tmovl\t %eax, "+addressRes+"\n";
+
+    return asmInstr;
+}
+
+string AsmWriter::writeMult(Commande multiplicationCmd)
+{
+    map<string, string>::iterator it;
+
+    string varResultat = multiplicationCmd.elements[1];
+    it = variables.find(varResultat);
+    if (it == variables.end())
+    {
+        Commande dec;
+        dec.type = commandeType::VAR_DEC;
+        dec.elements.push_back("int");
+        dec.elements.push_back(varResultat);
+        writeDec(dec);
+        it = variables.find(varResultat);
+    }
+    string addressRes = it->second;
+
+    string varOp1 = multiplicationCmd.elements[2];
+    it = variables.find(varOp1);
+    string addressOp1;
+    if (it != variables.end())
+    {
+        addressOp1 = it->second;
+    }
+    else
+    {
+        addressOp1 = "$"+varOp1;
+    }
+
+    string varOp2 = multiplicationCmd.elements[4];
+    it = variables.find(varOp2);
+    string addressOp2;
+    if (it != variables.end())
+    {
+        addressOp2 = it->second;
+    }
+    else
+    {
+        addressOp2 = "$"+varOp2;
+    }
+
+    string asmInstr = "\tmovl\t"+addressOp1+", %edx\n";
+    asmInstr += "\tmovl\t"+addressOp2+", %eax\n";
+    asmInstr += "\timull\t%edx, %eax\n";
+    asmInstr += "\tmovl\t %eax, "+addressRes+"\n";
+
+    return asmInstr;
+}
+
+void AsmWriter::printVariableMap()
+{
+    map<string, string>::iterator it;
+    for (it = variables.begin() ; it != variables.end() ; ++it)
+    {
+        cout << it->first << " @" << it->second << endl;
     }
 }
