@@ -217,9 +217,11 @@ public:
             }
         }
 
-        return nullptr;
     }
-
+    void createVar(string varName){
+        pair<string,int> p(varName,index++);
+        tablesDesSymboles.insert(p);
+    }
 
     void deleteTemporalExpression()
     // Mode d'emploi :
@@ -263,6 +265,7 @@ public:
     Symbole()
     {
         tmpCounter=0;
+        index = 0 ;
     }
     // Mode d'emploi :
     //
@@ -291,7 +294,9 @@ private:
     matrice resp;
     matrice temporalExpression;
     Commande temporalStackCommande;
+    map<string,int> tablesDesSymboles;
     int tmpCounter;
+    int index;
 
 //----------------------------------------------------------- Types privés
 

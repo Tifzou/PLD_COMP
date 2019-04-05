@@ -66,6 +66,7 @@ antlrcpp::Any Visiteur::visitDecdef(ExprParser::DecdefContext *ctx)
 // Algorithme :
 //
 {
+    
     string typeVar = ctx->typevar()->getText();
 
     symboleManager.pushInTemporalCommande(typeVar);
@@ -148,6 +149,7 @@ antlrcpp::Any Visiteur::visitDecVar(ExprParser::DecVarContext *ctx)
 
         else
         {
+            symboleManager.createVar(nameVar);
             commandeType code = commandeType::VAR_DEC;
             symboleManager.pushInTemporalCommande(code); // Surchage pushTemporalStack(vector<string> commande)
             symboleManager.pushInTemporalCommande(nameVar);
