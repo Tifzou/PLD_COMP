@@ -43,7 +43,7 @@ bool AsmWriter::writeOutputFile(matrice resultat) {
         myfile << "main:\n";
         myfile << "\tpushq\t%rbp"<<endl;
         myfile << "\tmovq\t%rsp, %rbp"<<endl;
-        int stackPtr = 0;
+
         vector<Commande>::iterator itInstr;
         for(itInstr = resultat.begin() ; itInstr != resultat.end() ; ++itInstr)
         {
