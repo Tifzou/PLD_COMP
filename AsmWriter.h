@@ -24,6 +24,7 @@ public:
     void setNomFichierOutput(string nomFichier);
     bool convert();
     bool writeOutputFile(matrice resultat);
+    void printVariableMap();
 
 protected:
     string writeReturn(Commande returnCmd);

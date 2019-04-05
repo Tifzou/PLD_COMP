@@ -17,24 +17,24 @@ vari: VAR (','VAR)* #decVar
     | VAR '=' expr #defVar
     ;
 
-expr: expr '*' expr #mult
-    | expr '/' expr #div
-    | expr '+' expr #add
-    | expr '-' expr #sub
-    |   VAR	    #var
-    |   INT 	#ldconst
-    |  '(' expr ')' #par
+expr: terme ('+' terme)* ;
+
+terme: facteur ('*' facteur)* ;
+
+facteur: INT #factInt
+    | VAR #factVar
+    | '(' expr ')' #factPar
     ;
 
 
-typevar : TYPEINT #int
-    |TYPECHAR #char
+
+
+typevar: TYPEINT #int
+    | TYPECHAR #char
     ;
 
-TYPEINT : 'int';
-TYPECHAR :'char';
-INT : [0-9]+ ; 
-
-
-VAR : [a-zA-Z]+ ; 
-WS : [ \t\r\n] -> skip;
+TYPEINT: 'int';
+TYPECHAR:'char';
+INT: [0-9]+ ;
+VAR: [a-zA-Z]+ ;
+WS: [ \t\r\n] -> skip;

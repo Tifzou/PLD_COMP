@@ -65,7 +65,14 @@ bool AsmWriter::writeOutputFile(matrice resultat) {
                     break;
                 case 4 : // OPER
                     cerr << "in case OPER" << endl;
-                    myfile << writeOperation((*itInstr));
+                    if((*itInstr).elements.size() == 3)
+                    {
+                        myfile << writeDef((*itInstr));
+                    }
+                    else if((*itInstr).elements.size() == 5)
+                    {
+                        myfile << writeOperation((*itInstr));
+                    }
                     break;
                 case 5 : // RET
                     cerr << "in case RET" << endl;
@@ -150,19 +157,40 @@ string AsmWriter::writeDef(Commande definitionCmd)
 
 string AsmWriter::writeOperation(Commande operationCmd)
 {
-    return writeSub(operationCmd); // TODO !!!
+    if (operationCmd.elements[3] == "*")
+    {
+        return writeMult(operationCmd);
+    }
+    else if(operationCmd.elements[3] == "+") {
+        return writeAdd(operationCmd);
+    }
+    else if(operationCmd.elements[3] == "-") {
+        return writeSub(operationCmd);
+    }
+    else
+    {
+        return "unknown operation"; // TODO: appeler une erreur
+    }
 }
 
 string AsmWriter::writeAdd(Commande additionCmd)
 {
     map<string, string>::iterator it;
 
-    string varResultat = additionCmd.elements[0];
+    string varResultat = additionCmd.elements[1];
     it = variables.find(varResultat);
+    if (it == variables.end())
+    {
+        Commande dec;
+        dec.type = commandeType::VAR_DEC;
+        dec.elements.push_back("int");
+        dec.elements.push_back(varResultat);
+        writeDec(dec);
+        it = variables.find(varResultat);
+    }
     string addressRes = it->second;
 
-    string addition = additionCmd.elements[1];
-    string varOp1 = addition.substr(0, addition.find("+"));
+    string varOp1 = additionCmd.elements[2];
     string addressOp1;
     it = variables.find(varOp1);
     if (it != variables.end())
@@ -174,7 +202,7 @@ string AsmWriter::writeAdd(Commande additionCmd)
         addressOp1 = "$"+varOp1;
     }
 
-    string varOp2 = addition.substr(varOp1.size()+1, addition.size());
+    string varOp2 = additionCmd.elements[4];
     string addressOp2;
     it = variables.find(varOp2);
     if (it != variables.end())
@@ -199,12 +227,20 @@ string AsmWriter::writeSub(Commande substractionCmd)
     cout << "yeah for substraction" << endl;
     map<string, string>::iterator it;
 
-    string varResultat = substractionCmd.elements[0];
+    string varResultat = substractionCmd.elements[1];
     it = variables.find(varResultat);
+    if (it == variables.end())
+    {
+        Commande dec;
+        dec.type = commandeType::VAR_DEC;
+        dec.elements.push_back("int");
+        dec.elements.push_back(varResultat);
+        writeDec(dec);
+        it = variables.find(varResultat);
+    }
     string addressRes = it->second;
 
-    string substraction = substractionCmd.elements[1];
-    string varOp1 = substraction.substr(0, substraction.find("-"));
+    string varOp1 = substractionCmd.elements[2];
     it = variables.find(varOp1);
     string addressOp1;
     if (it != variables.end())
@@ -216,7 +252,7 @@ string AsmWriter::writeSub(Commande substractionCmd)
         addressOp1 = "$"+varOp1;
     }
 
-    string varOp2 = substraction.substr(varOp1.size()+1, substraction.size());
+    string varOp2 = substractionCmd.elements[4];
     it = variables.find(varOp2);
     string addressOp2;
     if (it != variables.end())
@@ -240,12 +276,20 @@ string AsmWriter::writeMult(Commande multiplicationCmd)
 {
     map<string, string>::iterator it;
 
-    string varResultat = multiplicationCmd.elements[0];
+    string varResultat = multiplicationCmd.elements[1];
     it = variables.find(varResultat);
+    if (it == variables.end())
+    {
+        Commande dec;
+        dec.type = commandeType::VAR_DEC;
+        dec.elements.push_back("int");
+        dec.elements.push_back(varResultat);
+        writeDec(dec);
+        it = variables.find(varResultat);
+    }
     string addressRes = it->second;
 
-    string multiplication = multiplicationCmd.elements[1];
-    string varOp1 = multiplication.substr(0, multiplication.find("*"));
+    string varOp1 = multiplicationCmd.elements[2];
     it = variables.find(varOp1);
     string addressOp1;
     if (it != variables.end())
@@ -257,7 +301,7 @@ string AsmWriter::writeMult(Commande multiplicationCmd)
         addressOp1 = "$"+varOp1;
     }
 
-    string varOp2 = multiplication.substr(varOp1.size()+1, multiplication.size());
+    string varOp2 = multiplicationCmd.elements[4];
     it = variables.find(varOp2);
     string addressOp2;
     if (it != variables.end())
@@ -275,4 +319,13 @@ string AsmWriter::writeMult(Commande multiplicationCmd)
     asmInstr += "\tmovl\t %eax, "+addressRes+"\n";
 
     return asmInstr;
+}
+
+void AsmWriter::printVariableMap()
+{
+    map<string, string>::iterator it;
+    for (it = variables.begin() ; it != variables.end() ; ++it)
+    {
+        cout << it->first << " @" << it->second << endl;
+    }
 }
