@@ -9,18 +9,23 @@ core: '{' code* ret '}';
 
 code: typevar vari ';' #decdef
     | VAR '=' expr ';' #aff
-    | condition; #condif
+    | condition #condif
     ;
 
-condition: 'if('preficat'){'code*'}else{'code*'}' #ifElse
-    |'if('preficat'){'code*'}' #simpleIf
+condition: 'if' '('predicat')' '{'ifCore'}' 'else' '{'ifCore'}' #ifElse
+    |'if' '('predicat')' '{'ifCore'}' #simpleIf
+    ;
+
+ifCore:code* #ifCommande
+    | ret #ifRet
+    ;
 
 predicat:expr '==' expr #egal
     |expr '>=' expr # ge
-    |expr '>' expr # g
+    |expr '>' expr # gt
     |expr '<=' expr # le
-    |expr '<' expr # l
-  
+    |expr '<' expr # lt
+    ;
 
 ret: 'return' expr ';' ;
 vari: VAR (','VAR)* #decVar

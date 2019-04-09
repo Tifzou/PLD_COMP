@@ -395,6 +395,70 @@ antlrcpp::Any Visiteur::visitChar(ExprParser::CharContext *ctx)
     return ctx->TYPECHAR()->getText();
 }
 
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitCondif(ExprParser::CondifContext *ctx)
+// Algorithme :
+//
+{
+
+    return true;
+}
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitIfElse(ExprParser::IfElseContext *ctx)
+// Algorithme :
+//
+{
+
+    return true;
+}
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitGe(ExprParser::GeContext *ctx)
+// Algorithme :
+//
+{
+
+    return true;
+}
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitGt(ExprParser::GtContext *ctx)
+// Algorithme :
+//
+{
+
+    return true;
+}
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitLe(ExprParser::LeContext *ctx)
+// Algorithme :
+//
+{
+
+    return true;
+}
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitLt(ExprParser::LtContext *ctx)
+// Algorithme :
+//
+{
+
+    return true;
+}
+
+antlrcpp::Any Visiteur::visitSimpleIf(ExprParser::SimpleIfContext *ctx){
+    return nullptr;
+}
+
+
+
+antlrcpp::Any Visiteur::visitEgal(ExprParser::EgalContext *ctx){
+    return nullptr;
+}
+
  /*
 //------------------------------------------------------------------------
 antlrcpp::Any Visiteur::visitVar(ExprParser::VarContext *ctx)

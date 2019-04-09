@@ -102,6 +102,10 @@ public:
 
 
     antlrcpp::Any visitFacteur(ExprParser::FacteurContext *ctx) ;
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
 
 
     antlrcpp::Any visitFactPar(ExprParser::FactParContext *ctx);
@@ -109,7 +113,6 @@ public:
     //
     // Contrat :
     //
-
 
 
     antlrcpp::Any visitFactVar(ExprParser::FactVarContext *ctx);
@@ -136,6 +139,59 @@ public:
     // Contrat :
     //
 
+    antlrcpp::Any visitCondif(ExprParser::CondifContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitIfElse(ExprParser::IfElseContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitSimpleIf(ExprParser::SimpleIfContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitIfCore(ExprParser::IfCoreContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitEgal(ExprParser::EgalContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitGe(ExprParser::GeContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitGt(ExprParser::GtContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitLe(ExprParser::LeContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitLt(ExprParser::LtContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
 
 //-------------------------------------------- Constructeurs - destructeur
     Visiteur (){}

@@ -45,9 +45,21 @@ typedef struct Commande
     vector<string> elements;
 } Commande;
 
-
 //la liste des commandes
 typedef vector<Commande> matrice;
+
+typedef struct Cell
+{
+    matrice data;
+    Cell *suivant1;
+    Cell *suivant2;
+} Cell;
+
+typedef struct ListC
+{
+    Cell *first;
+    Cell *last;
+} ListC;
 
 //------------------------------------------------------------------------
 // Rôle de la classe <Symbole>
@@ -57,10 +69,10 @@ typedef vector<Commande> matrice;
 
 class Symbole
 {
-//----------------------------------------------------------------- PUBLIC
+    //----------------------------------------------------------------- PUBLIC
 
-public:
-//----------------------------------------------------- Méthodes publiques
+  public:
+    //----------------------------------------------------- Méthodes publiques
     bool varExist(string var);
     // Mode d'emploi :
     //
@@ -100,7 +112,7 @@ public:
     // Contrat :
     //
     {
-        for(Commande curCommande: commandes)
+        for (Commande curCommande : commandes)
         {
             resp.push_back(curCommande);
         }
@@ -186,7 +198,6 @@ public:
         temporalExpression.push_back(line);
     }
 
-
     int createTemporalVar()
     // Mode d'emploi :
     //
@@ -195,7 +206,6 @@ public:
     {
         return tmpCounter++;
     }
-
 
     string retrieveVarType(string var)
     // Mode d'emploi :
@@ -213,7 +223,7 @@ public:
 
         for (Commande vs : temporalExpression)
         {
-            if ((vs.type == commandeType::OPER)  && vs.elements[1] == var)
+            if ((vs.type == commandeType::OPER) && vs.elements[1] == var)
             {
                 return vs.elements[0];
             }
@@ -221,13 +231,56 @@ public:
         return nullptr;
     }
 
-    void createVar(string varName){
-        pair<string,int> p(varName,index++);
+    void createVar(string varName)
+    {
+        pair<string, int> p(varName, index++);
         tablesDesSymboles.insert(p);
     }
 
-    void pushIntoFlowControl(){
-        flowControl.push_back(resp);
+    void pushIntoFlowControl()
+    {
+        cout << "OK" << endl;
+        if (flowControl->first == nullptr )
+        {
+            Cell *bloc = new Cell();
+            flowControl->first = bloc;
+            flowControl->last = flowControl->first;
+        }
+        else
+        {
+
+            Cell *bloc = new Cell();
+            bloc->data = resp;
+            flowControl->last->suivant1 = bloc;
+            flowControl->last = flowControl->last->suivant1;
+        }
+
+        resp.clear();
+    }
+
+    void pushIfIntoFlowControl(int index)
+    {
+        Cell *bloc = new Cell();
+        bloc->data = resp;
+
+        switch (index)
+        {
+        case 1:
+            if (flowControl->last->suivant1 == nullptr)
+            {
+                flowControl->last->suivant1 = bloc;
+            }
+            else
+            {
+                flowControl->last->suivant2 = bloc;
+            }
+            break;
+        case 2:
+            flowControl->last->suivant1->suivant1 = bloc;
+            flowControl->last->suivant2->suivant1 = bloc;
+            flowControl->last = flowControl->last->suivant1->suivant1;
+            break;
+        }
         resp.clear();
     }
 
@@ -259,6 +312,15 @@ public:
         return &resp;
     }
 
+    ListC *getFlowControl()
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+    {
+        return &*flowControl;
+    }
+
     matrice *getTemporalExpression()
     // Mode d'emploi :
     //
@@ -268,19 +330,25 @@ public:
         return &temporalExpression;
     }
 
-
-//-------------------------------------------- Constructeurs - destructeur
+    //-------------------------------------------- Constructeurs - destructeur
     Symbole()
     {
-        tmpCounter=0;
-        index = 0 ;
+        tmpCounter = 0;
+        index = 0;
+        flowControl = new ListC();
     }
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-    virtual ~Symbole() {}
+    virtual ~Symbole()
+    {
+        /*Cell *ptrBloc=flowControl->first;
+        while (ptrBloc->)
+        {
+        }*/
+    }
     // Mode d'emploi :
     //
     // Contrat :
@@ -288,27 +356,26 @@ public:
 
     //------------------------------------------------------------------ PRIVE
 
-protected:
-//----------------------------------------------------- Méthodes protégées
+  protected:
+    //----------------------------------------------------- Méthodes protégées
 
-private:
-//------------------------------------------------------- Méthodes privées
+  private:
+    //------------------------------------------------------- Méthodes privées
 
-protected:
-//----------------------------------------------------- Attributs protégés
+  protected:
+    //----------------------------------------------------- Attributs protégés
 
-private:
-//------------------------------------------------------- Attributs privés
+  private:
+    //------------------------------------------------------- Attributs privés
     matrice resp;
     matrice temporalExpression;
+    ListC *flowControl;
     Commande temporalStackCommande;
-    map<string,int> tablesDesSymboles;
-    vector<matrice> flowControl;
+    map<string, int> tablesDesSymboles;
     int tmpCounter;
     int index;
 
-//----------------------------------------------------------- Types privés
-
+    //----------------------------------------------------------- Types privés
 };
 
 #endif // SYMBOLE_H

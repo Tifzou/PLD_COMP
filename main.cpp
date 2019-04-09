@@ -73,9 +73,10 @@ int main(int argc, char *argv[])
 
         //vector<vector<string>> resultat = visitor.visit(tree);
         Symbole resultat = visitor.visit(tree);
-        matrice *stack = resultat.getStack();
 
-
+        ListC *stack = resultat.getFlowControl();
+        
+        /*
         for(Commande curCommande: *stack)
         {
             cout<<curCommande.type<<" : ";
@@ -89,7 +90,7 @@ int main(int argc, char *argv[])
         AsmWriter *a = new AsmWriter(argv[1], "resultat.s", tree->toStringTree(&parser));
         a->convert();
         a->writeOutputFile(*stack);
-
+        */
         return 0;
     }
     else
