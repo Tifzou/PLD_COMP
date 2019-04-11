@@ -42,14 +42,64 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
     string lastFlag;
 
     //On gère le type de flag en fonction du type de block (pour block while c'est ici qu'on fera un jump en boucle)
-    if(block->suivant1!= nullptr )
+    switch(typeCurBlock)
     {
-        if()
-        lastFlag="else"+to_string(curFlagCounter);
-    }
-    else if(typeCurBlock==ELSE_BLOCK)
-    {
-        lastFlag="endif"+to_string(curFlagCounter);
+        case IF_BLOCK:
+            flagCounter++;
+            if(block->suivant2->data.size()==0)
+            {
+                lastFlag="endif"+to_string(flagCounter);
+            }
+            else
+            {
+                lastFlag="else"+to_string(flagCounter);
+            }
+            break;
+
+        case ELSE_BLOCK:
+        {
+            string elseFlag = "";
+            for (int i(0); i < curFlagCounter; i++) {
+                elseFlag += "\t";
+            }
+            elseFlag += "else" + to_string(curFlagCounter) + ":\n";
+            myfile << elseFlag;
+            break;
+        }
+
+        case PREC_IF_BLOCK_LEFT:
+
+            break;
+
+        case PREC_IF_BLOCK_RIGHT:
+        {
+            string elseFlag = "";
+            for (int i(0); i < curFlagCounter; i++) {
+                elseFlag += "\t";
+            }
+            elseFlag += "else" + to_string(curFlagCounter) + ":\n";
+            myfile << elseFlag;
+
+            flagCounter++;
+            if(block->suivant2->data.size()==0)
+            {
+                lastFlag="endif"+to_string(flagCounter);
+            }
+            else
+            {
+                lastFlag="else"+to_string(flagCounter);
+            }
+
+            break;
+        }
+
+        case SIMPLE_BLOCK:
+            myfile<<"endif"+to_string(flagCounter);
+            break;
+
+        default:
+            break;
+
     }
     for(itInstr = resultat.begin() ; itInstr != resultat.end() ; ++itInstr)
     {
@@ -137,19 +187,20 @@ void AsmWriter::browseGraph(Cell *block, ofstream &myfile, typeBlock typeCurBloc
     browseBlock(block, myfile, typeCurBlock, this->flagCounter);
 
 
+
     if(block->data.back().type==commandeType::CONDITION)
     {
-        if(block->suivant1->data.back().type==commandeType::CONDITION)
+        if(block->suivant1!= nullptr && block->suivant1->data.back().type==commandeType::CONDITION)
         {
             browseGraph(block->suivant1, myfile, PREC_IF_BLOCK_LEFT, flagCounter);
         }
         else
         {
             browseGraph(block->suivant1, myfile, IF_BLOCK, flagCounter);
+
         }
 
-
-        if(block->suivant2->data.back().type==commandeType::CONDITION)
+        if(block->suivant2!= nullptr && block->suivant2->data.size()!=0 && block->suivant2->data.back().type==commandeType::CONDITION )
         {
             browseGraph(block->suivant2, myfile, PREC_IF_BLOCK_RIGHT, flagCounter);
         }
@@ -168,7 +219,7 @@ void AsmWriter::browseGraph(Cell *block, ofstream &myfile, typeBlock typeCurBloc
 }
 
 
-bool AsmWriter::writeOutputFile(matrice resultat) {
+bool AsmWriter::writeOutputFile(Cell *firstBlock) {
     ofstream myfile (outFile);
     if (myfile.is_open()){
         myfile << ".text\n";
@@ -178,6 +229,16 @@ bool AsmWriter::writeOutputFile(matrice resultat) {
         myfile << "\tmovq\t%rsp, %rbp"<<endl;
         int stackPtr = 0;
         //for loop was here
+
+        if(firstBlock->data.back().type==commandeType::CONDITION)
+        {
+            browseGraph(firstBlock, myfile, PREC_IF_BLOCK_LEFT, flagCounter);
+        }
+        else
+        {
+            browseGraph(firstBlock, myfile, FIRST_BLOCK, flagCounter);
+        }
+        browseGraph(firstBlock, myfile, SIMPLE_BLOCK, flagCounter);
         myfile << "\tmovq\t%rbp, %rsp" << endl;
         myfile << "\tpopq\t%rbp"<<endl;
         myfile << "\tret"<<endl;
@@ -461,6 +522,8 @@ string AsmWriter::generateIfLine(Commande curCommande)
     string asmInstr = "\tmovl\t"+addVar1+", %edx\n";
     asmInstr += "\tmovl\t"+addVar2+", %eax\n";
     asmInstr += "\tcmpl\t%edx, %eax\n";
+
+    return asmInstr;
 }
 
 string AsmWriter::writePredicat(Commande ifCondition, string nextFlag)

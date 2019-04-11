@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
         }
 
             cout<<"block IF"<<endl;
-        for (Commande curCommande: curCell->suivant1->data) {
+        /*for (Commande curCommande: curCell->suivant1->data) {
             cout << curCommande.type << " : ";
             for (string s : curCommande.elements) {
                 cout << s << " ";
@@ -109,13 +109,13 @@ int main(int argc, char *argv[])
                 cout << s << " ";
             }
             cout << endl;
-        }
+        }*/
 
 
 
         AsmWriter *a = new AsmWriter(argv[1], "resultat.s", tree->toStringTree(&parser));
         a->convert();
-        a->writeOutputFile(stack->first->data);
+        a->writeOutputFile(stack->first);
 
         return 0;
     }

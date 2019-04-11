@@ -25,6 +25,7 @@ enum Flag
 
 enum typeBlock
     {
+        FIRST_BLOCK,
         SIMPLE_BLOCK,
         PREC_IF_BLOCK_RIGHT,
         PREC_IF_BLOCK_LEFT,
@@ -40,7 +41,7 @@ public:
     void setNomFichierInput(string nomFichier);
     void setNomFichierOutput(string nomFichier);
     bool convert();
-    bool writeOutputFile(matrice resultat);
+    bool writeOutputFile(Cell *firstBlock);
     void printVariableMap();
 
 protected:
