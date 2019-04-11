@@ -53,7 +53,7 @@ protected:
     string writeAdd(Commande additionCmd);
     string writeSub(Commande substractionCmd);
     string writeMult(Commande multiplicationCmd);
-    string writeIf(Commande multiplicationCmd);
+    string writeIf();
     string generateIfLine(Commande curCommande);
     string writePredicat(Commande returnCmd, string nextFlag);
     void browseGraph(Cell *block, ofstream &myfile, typeBlock typeCurBlock, int curFlagCounter);

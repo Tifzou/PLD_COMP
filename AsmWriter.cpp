@@ -7,7 +7,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <stdio.h>
+//#include <stdio.h>
 
 void AsmWriter::setNomFichierInput(string nom){
     inFile=nom;
@@ -29,10 +29,10 @@ bool AsmWriter::convert(){
             inFile.replace(inFile.end()-2,inFile.end(),".s");
         }else{
             cerr<<"Le fichier d'entrée n'a pas la bonne extension !\n";
-            return 0;
+            return false;
         }
     }
-    return 1;
+    return true;
 }
 
 void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBlock, int curFlagCounter)
@@ -45,8 +45,7 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
     switch(typeCurBlock)
     {
         case IF_BLOCK:
-            flagCounter++;
-            if(block->suivant2->data.size()==0)
+            if(block->suivant2->data.empty())
             {
                 lastFlag="endif"+to_string(flagCounter);
             }
@@ -58,7 +57,7 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
 
         case ELSE_BLOCK:
         {
-            string elseFlag = "";
+            string elseFlag;
             for (int i(0); i < curFlagCounter; i++) {
                 elseFlag += "\t";
             }
@@ -68,20 +67,26 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
         }
 
         case PREC_IF_BLOCK_LEFT:
-
+            if(block->suivant2->data.empty())
+            {
+                lastFlag="endif"+to_string(flagCounter);
+            }
+            else
+            {
+                lastFlag="else"+to_string(flagCounter);
+            }
             break;
 
         case PREC_IF_BLOCK_RIGHT:
         {
-            string elseFlag = "";
+            string elseFlag;
             for (int i(0); i < curFlagCounter; i++) {
                 elseFlag += "\t";
             }
             elseFlag += "else" + to_string(curFlagCounter) + ":\n";
             myfile << elseFlag;
 
-            flagCounter++;
-            if(block->suivant2->data.size()==0)
+            if(block->suivant2->data.empty())
             {
                 lastFlag="endif"+to_string(flagCounter);
             }
@@ -93,8 +98,9 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
             break;
         }
 
-        case SIMPLE_BLOCK:
-            myfile<<"endif"+to_string(flagCounter);
+        case SIMPLE_BLOCK: //à changer pour if multiples
+
+            myfile<<"endif"+to_string(flagCounter)+":\n";
             break;
 
         default:
@@ -174,12 +180,17 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
                 break;
         }
     }
+    //changer pour plusieurs if
+    if(typeCurBlock==IF_BLOCK)
+    {
+        myfile << "\tjmp endif" + to_string(flagCounter) + "\n";
+    }
 }
 
 void AsmWriter::browseGraph(Cell *block, ofstream &myfile, typeBlock typeCurBlock, int flagCounter)
 {
 
-    if(block==nullptr || block->data.size()==0)
+    if(block==nullptr || block->data.empty())
     {
         return;
     }
@@ -196,11 +207,11 @@ void AsmWriter::browseGraph(Cell *block, ofstream &myfile, typeBlock typeCurBloc
         }
         else
         {
-            browseGraph(block->suivant1, myfile, IF_BLOCK, flagCounter);
+            browseBlock(block->suivant1, myfile, IF_BLOCK, flagCounter);
 
         }
 
-        if(block->suivant2!= nullptr && block->suivant2->data.size()!=0 && block->suivant2->data.back().type==commandeType::CONDITION )
+        if(block->suivant2!= nullptr && block->suivant2->data.empty() && block->suivant2->data.back().type==commandeType::CONDITION )
         {
             browseGraph(block->suivant2, myfile, PREC_IF_BLOCK_RIGHT, flagCounter);
         }
@@ -238,15 +249,15 @@ bool AsmWriter::writeOutputFile(Cell *firstBlock) {
         {
             browseGraph(firstBlock, myfile, FIRST_BLOCK, flagCounter);
         }
-        browseGraph(firstBlock, myfile, SIMPLE_BLOCK, flagCounter);
+
         myfile << "\tmovq\t%rbp, %rsp" << endl;
         myfile << "\tpopq\t%rbp"<<endl;
         myfile << "\tret"<<endl;
         myfile.close();
-        return 0;
+        return true;
     }else{
         cerr << "Unable to create .s file !"<< endl;
-        return 1;
+        return false;
     }
 }
 
@@ -475,7 +486,7 @@ string AsmWriter::writeMult(Commande multiplicationCmd)
 }
 
 
-string AsmWriter::writeIf(Commande ifCmd)
+string AsmWriter::writeIf()
 {
     string flagIf = "if"+std::to_string(flagCounter);
     namespaceFlags.push_back(flagIf);
