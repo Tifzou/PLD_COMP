@@ -164,6 +164,7 @@ antlrcpp::Any Visiteur::visitCore(ExprParser::CoreContext *ctx)
     symboleManager.pushInTemporalCommande(code);
     if ((bool)visit(ctx->ret()))
     {
+
         symboleManager.writeStack(symboleManager.getTemporalCommande());
     }
     symboleManager.deleteTemporalCommand();
@@ -228,9 +229,13 @@ antlrcpp::Any Visiteur::visitAff(ExprParser::AffContext *ctx)
 antlrcpp::Any Visiteur::visitRet(ExprParser::RetContext *ctx)
 // Algorithme :
 //
+
+
 {
     if(visit(ctx->expr()))
     {
+        cout<<"ICI"<<endl;
+
         symboleManager.pushInTemporalCommande(symboleManager.getTemporalExpression()->back().elements[1]);
         symboleManager.writeStack(*symboleManager.getTemporalExpression());
         symboleManager.deleteTemporalExpression();
@@ -326,9 +331,8 @@ antlrcpp::Any Visiteur::visitExpr(ExprParser::ExprContext *ctx)
         commande.push_back(symboleManager.retrieveVarType(nomVar1));
         commande.push_back(tempVar);
         commande.push_back(nomVar1);
-        commande.push_back("+");
+        commande.push_back(ctx->operatorAddSub(i-1)->getText());
         commande.push_back(nomVar2);
-
         symboleManager.pushTemporalMatriceVari(commande);
     }
 
@@ -349,9 +353,8 @@ antlrcpp::Any Visiteur::visitExpr(ExprParser::ExprContext *ctx)
             commande.push_back(symboleManager.retrieveVarType(nomVar1));
             commande.push_back(tempVar);
             commande.push_back(nomVar1);
-            commande.push_back("+");
+            commande.push_back(ctx->operatorAddSub(ctx->terme().size()-1)->getText());
             commande.push_back(nomVar2);
-
             symboleManager.pushTemporalMatriceVari(commande);
         }
         else
@@ -440,15 +443,17 @@ antlrcpp::Any Visiteur::visitFactVar(ExprParser::FactVarContext *ctx)
 {
     vector<string> commande;
     string var = ctx->VAR()->getText();
-
     if (symboleManager.varDef(var))
     {
+
         commande.push_back(symboleManager.retrieveVarType(var));
+
         string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
         commande.push_back(tempVar);
         commande.push_back(ctx->VAR()->getText());
         //symboleManager.pushTemporalMatriceVari(commandeType::VAR_DEF,commande);
         symboleManager.pushTemporalMatriceVari(commande);
+
         return true;
     }
     else

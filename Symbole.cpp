@@ -83,6 +83,30 @@ bool Symbole::functExist(string funct)
     }
 }
 
+
+//------------------------------------------------------------------------
+bool Symbole::browsBlocks(Cell *block, string &type, string var)
+// Algorithme : renvoi 'true' si la variable 'var' est déjà déclarée en affectant à type le type de la variable
+//
+{
+    if(block==nullptr)
+    {
+        return false;
+    }
+
+    for(Commande curCom: block->data)
+    {
+        if (curCom.elements[1] == var)
+        {
+            type = curCom.elements[0];
+            return true;
+        }
+    }
+
+    bool test = browsBlocks(block->suivant1, type, var) || browsBlocks(block->suivant2, type, var);
+    return test;
+}
+
 //------------------------------------------------------------------ PRIVE
 
 //----------------------------------------------------- Méthodes protégées

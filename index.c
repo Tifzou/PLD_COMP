@@ -1,1 +1,1 @@
-int main(){    int a =5;    return a;}
+int sum(){    return 42;}int main(){    int a =5;    sum();    return a;}
