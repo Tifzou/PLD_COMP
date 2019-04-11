@@ -1,7 +1,8 @@
 int main()
 {
-    int a=3;
-    int b=2;
-    a=a-b;
+    int a = 5;
+    while(a == 5){
+        a = 7;
+    }
     return a;
 }
