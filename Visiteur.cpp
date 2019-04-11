@@ -42,6 +42,7 @@ antlrcpp::Any Visiteur::visitFunction(ExprParser::FunctionContext *ctx)
     //Si functName n'existe pas dans la table des fonctions
     else
     {
+        symboleManager.createFunction(functName);
         commandeType code = commandeType::FUNC;
         symboleManager.pushInTemporalCommande(functName);
         symboleManager.pushInTemporalCommande(code); // Surchage pushTemporalStack(vector<string> commande)
@@ -85,9 +86,9 @@ antlrcpp::Any Visiteur::visitAfffunc(ExprParser::AfffuncContext *ctx)
 // De plus, si la variable est déjà déclarée, efface la commande temporelle et la remplit avec une erreur
 // Sinon, ajoute la variable dans la pile de la commande
 {
-    string funcName = ctx->VAR()->getText();
+    string funcName = ctx->VAR()[1]->getText();
     commandeType code = commandeType::FUNC_AFF;
-    string retVar = ctx->VAR()->getText();
+    string retVar = ctx->VAR()[0]->getText();
     if(symboleManager.functExist(funcName))
     {
         symboleManager.pushInTemporalCommande(code);

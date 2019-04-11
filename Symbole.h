@@ -97,6 +97,12 @@ public:
     // Contrat :
     //
 
+    void addFunct(string funct);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
     void writeStack(Commande curCommande)
     // Mode d'emploi :
     //
