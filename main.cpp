@@ -71,9 +71,10 @@ int main(int argc, char *argv[])
 
         Visiteur visitor;
 
-        //vector<vector<string>> resultat = visitor.visit(tree);
         Symbole resultat = visitor.visit(tree);
+        cout << "visit tree ok" << endl;
         matrice *stack = resultat.getStack();
+        cout << "tree visit " << stack->size() << endl;
 
 
         for(Commande curCommande: *stack)

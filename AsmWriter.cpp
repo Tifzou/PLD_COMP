@@ -43,6 +43,8 @@ bool AsmWriter::writeOutputFile(matrice resultat) {
 
         int stackPtr = 0;
         vector<Commande>::iterator itInstr;
+        myfile << "nb lignes a traduire : " << endl;
+        //myfile << resultat.size() << endl;
         for(itInstr = resultat.begin() ; itInstr != resultat.end() ; ++itInstr)
         {
             switch ((*itInstr).type) // {ERR, WARN, VAR_DEC, VAR_DEF, OPER, RET, AFF, FUNC, MAIN};
@@ -354,8 +356,22 @@ string AsmWriter::writeFuncCall(Commande functionCmd)
 string AsmWriter::writeFuncAff(Commande functionCmd)
 {
     string funcName = functionCmd.elements[0];
-    string asmInstr = "\tcall " + funcName + "\n";
-    asmInstr += "\tmovl %eax, " + functionCmd.elements[1] + "\n";
+    string retVar = functionCmd.elements[1];
+    map<string, string>::iterator it = variables.find(retVar);
+    string asmInstr = "";
+    if(it == variables.end())
+    {
+        cout << retVar << " variable not declared" << endl;
+    }
+    else
+    {
+
+        cout << "FuncAff for " << funcName << " with return variable : " << retVar << endl;
+        string retAddress = it->second;
+        asmInstr += "\tcall " + funcName + "\n";
+        asmInstr += "\tmovl %eax, " +  retAddress + "\n";
+    }
+
     return asmInstr;
 }
 

@@ -35,7 +35,7 @@ antlrcpp::Any Visiteur::visitFunction(ExprParser::FunctionContext *ctx)
 /* Algorithme : */
 {
     string functName = ctx->VAR()->getText();
-    if (!checkFunctDec(functName))
+    if (!checkFunctDec(functName)) // si function existe deja
     {
         return false;
     }
@@ -89,8 +89,10 @@ antlrcpp::Any Visiteur::visitAfffunc(ExprParser::AfffuncContext *ctx)
     string funcName = ctx->VAR()[1]->getText();
     commandeType code = commandeType::FUNC_AFF;
     string retVar = ctx->VAR()[0]->getText();
+    cout << "ret value dans visiteur : " << retVar << endl;
     if(symboleManager.functExist(funcName))
     {
+        cout << "la fonction existe" << endl;
         symboleManager.pushInTemporalCommande(code);
         symboleManager.pushInTemporalCommande(funcName);
         symboleManager.pushInTemporalCommande(retVar);
@@ -186,12 +188,15 @@ antlrcpp::Any Visiteur::visitAff(ExprParser::AffContext *ctx)
 {
 
     string varName = ctx->VAR()->getText();
+    cout << "visit Aff : varName = " << varName << endl;
     commandeType code = commandeType ::AFF;
     symboleManager.pushInTemporalCommande(code);
 
     if(symboleManager.varExist(varName))
     {
-        symboleManager.pushInTemporalCommande(symboleManager.retrieveVarType(varName));
+        string varType = symboleManager.retrieveVarType(varName);
+        cout << "visit Aff : varType = " << varType << endl;
+        symboleManager.pushInTemporalCommande(varType);
         symboleManager.pushInTemporalCommande(varName);
         if(!visit(ctx->expr()))
         {
@@ -227,6 +232,7 @@ antlrcpp::Any Visiteur::visitRet(ExprParser::RetContext *ctx)
 {
     if(visit(ctx->expr()))
     {
+        cout << "in visit of ret : " << symboleManager.getTemporalExpression()->back().elements[1] << endl;
         symboleManager.pushInTemporalCommande(symboleManager.getTemporalExpression()->back().elements[1]);
         symboleManager.writeStack(*symboleManager.getTemporalExpression());
         symboleManager.deleteTemporalExpression();
@@ -843,8 +849,8 @@ bool Visiteur::checkFunctDec(string functName)
 // De plus, si la variable est déjà déclarée, efface la commande temporelle et la remplit avec une erreur
 // Sinon, ajoute la variable dans la pile de la commande
 {
-    if (symboleManager.functExist(functName)) //doit verifier que la variable est bien au dessus et pas en dessous
-    {                                     //check if the variable exist
+    if (symboleManager.functExist(functName)) //doit verifier que la fonction est bien au dessus et pas en dessous
+    {                                     //check if the function exists
         commandeType code = commandeType::ERR;
         vector<string> err;
         string error1 = "name of function '" + functName + "' already assigned";

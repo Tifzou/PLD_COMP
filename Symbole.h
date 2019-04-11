@@ -97,12 +97,6 @@ public:
     // Contrat :
     //
 
-    void addFunct(string funct);
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
     void writeStack(Commande curCommande)
     // Mode d'emploi :
     //
@@ -235,7 +229,12 @@ public:
     {
         for (Commande vs : resp)
         {
-            if (vs.elements[1] == var)
+            if(vs == nullptr)
+                cout << "symbole.h --> retrieve Var type ==> vs null" << endl;
+            else
+                cout << "vs.elements.size not empty" << endl;
+
+            if (vs.elements[1] == var) // PB
             {
                 return vs.elements[0];
             }

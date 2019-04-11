@@ -14,6 +14,7 @@ core: '{' code* ret '}';
 
 code: typevar vari ';' #decdef
     | VAR '=' expr ';' #aff
+    | typevar VAR '=' VAR'(' param* ')' ';' #decfunc
     | VAR '=' VAR'(' param* ')' ';' #afffunc
     | VAR'(' param* ')' ';'#callfunc
     ;
