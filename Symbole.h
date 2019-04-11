@@ -34,7 +34,9 @@ enum commandeType
     VAR_DEF,
     OPER,
     RET,
-    AFF
+    AFF,
+    IF,
+    CONDITION
 };
 
 //structure contenant une commande correspondant à un type definit par 1 enum particulier
@@ -58,7 +60,7 @@ typedef struct Cell
 typedef struct ListC
 {
     Cell *first;
-    Cell *last;
+    Cell *last; //penser à garder les traces pour tous les ifs en stockant un vector des pointeurs
 } ListC;
 
 //------------------------------------------------------------------------
@@ -85,38 +87,26 @@ class Symbole
     // Contrat :
     //
 
-    void writeStack(Commande curCommande)
+    void writeStack(Commande curCommande);
     // Mode d'emploi :
     //
     // Contrat :
     //
-    {
-        resp.push_back(curCommande);
-    }
 
-    void writeStack(commandeType code, vector<string> commande)
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-    {
-        Commande curCommande;
-        curCommande.type = code;
-        curCommande.elements = commande;
-        resp.push_back(curCommande);
-    }
 
-    void writeStack(matrice commandes)
+    void writeStack(commandeType code, vector<string> commande);
     // Mode d'emploi :
     //
     // Contrat :
     //
-    {
-        for (Commande curCommande : commandes)
-        {
-            resp.push_back(curCommande);
-        }
-    }
+
+
+    void writeStack(matrice commandes);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
 
     void pushInTemporalCommande(commandeType code, vector<string> commande)
     // Mode d'emploi :
@@ -174,29 +164,19 @@ class Symbole
         temporalStackCommande.elements.clear();
     }
 
-    void pushTemporalMatriceVari(vector<string> element)
+    void pushTemporalMatriceVari(vector<string> element);
     // Mode d'emploi :
     //
     // Contrat :
     //
-    {
-        Commande line;
-        line.type = OPER;
-        line.elements = element;
-        temporalExpression.push_back(line);
-    }
 
-    void pushTemporalMatriceVari(commandeType code, vector<string> element)
+
+    void pushTemporalMatriceVari(commandeType code, vector<string> element);
     // Mode d'emploi :
     //
     // Contrat :
     //
-    {
-        Commande line;
-        line.type = code;
-        line.elements = element;
-        temporalExpression.push_back(line);
-    }
+
 
     int createTemporalVar()
     // Mode d'emploi :
@@ -207,82 +187,36 @@ class Symbole
         return tmpCounter++;
     }
 
-    string retrieveVarType(string var)
+    string retrieveVarType(string var);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+
+    void createVar(string varName)
     // Mode d'emploi :
     //
     // Contrat :
     //
     {
-        for (Commande vs : resp)
-        {
-            if (vs.elements[1] == var)
-            {
-                return vs.elements[0];
-            }
-        }
-
-        for (Commande vs : temporalExpression)
-        {
-            if ((vs.type == commandeType::OPER) && vs.elements[1] == var)
-            {
-                return vs.elements[0];
-            }
-        }
-        return nullptr;
-    }
-
-    void createVar(string varName)
-    {
         pair<string, int> p(varName, index++);
         tablesDesSymboles.insert(p);
     }
 
-    void pushIntoFlowControl()
-    {
-        cout << "OK" << endl;
-        if (flowControl->first == nullptr )
-        {
-            Cell *bloc = new Cell();
-            flowControl->first = bloc;
-            flowControl->last = flowControl->first;
-        }
-        else
-        {
+    void pushIntoFlowControl();
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
 
-            Cell *bloc = new Cell();
-            bloc->data = resp;
-            flowControl->last->suivant1 = bloc;
-            flowControl->last = flowControl->last->suivant1;
-        }
 
-        resp.clear();
-    }
+    void pushIfIntoFlowControl(int index);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
 
-    void pushIfIntoFlowControl(int index)
-    {
-        Cell *bloc = new Cell();
-        bloc->data = resp;
-
-        switch (index)
-        {
-        case 1:
-            if (flowControl->last->suivant1 == nullptr)
-            {
-                flowControl->last->suivant1 = bloc;
-            }
-            else
-            {
-                flowControl->last->suivant2 = bloc;
-            }
-            break;
-        case 2:
-            flowControl->last->suivant1->suivant1 = bloc;
-            flowControl->last->suivant2->suivant1 = bloc;
-            flowControl->last = flowControl->last->suivant1->suivant1;
-            break;
-        }
-        resp.clear();
-    }
 
     void deleteTemporalExpression()
     // Mode d'emploi :
@@ -292,6 +226,20 @@ class Symbole
     {
         temporalExpression.clear();
     }
+
+
+    bool browsBlocks(Cell *block, string var);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    bool browsBlocks(Cell *block, string &type, string var);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
     //----------------------------------------------------- Getter et Setter
 
     Commande getTemporalCommande()

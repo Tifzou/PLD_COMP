@@ -75,22 +75,48 @@ int main(int argc, char *argv[])
         Symbole resultat = visitor.visit(tree);
 
         ListC *stack = resultat.getFlowControl();
-        
-        /*
-        for(Commande curCommande: *stack)
-        {
-            cout<<curCommande.type<<" : ";
-            for(string s : curCommande.elements)
-            {
-                cout<<s<<" ";
+        Cell * curCell = stack->first;
+
+        for (Commande curCommande: curCell->data) {
+            cout << curCommande.type << " : ";
+            for (string s : curCommande.elements) {
+                cout << s << " ";
             }
-            cout<<endl;
+            cout << endl;
         }
+
+            cout<<"block IF"<<endl;
+        for (Commande curCommande: curCell->suivant1->data) {
+            cout << curCommande.type << " : ";
+            for (string s : curCommande.elements) {
+                cout << s << " ";
+            }
+            cout << endl;
+        }
+        cout<<"block ELSE"<<endl;
+        for (Commande curCommande: curCell->suivant2->data) {
+            cout << curCommande.type << " : ";
+            for (string s : curCommande.elements) {
+                cout << s << " ";
+            }
+            cout << endl;
+        }
+
+        cout<<"block FIN"<<endl;
+        for (Commande curCommande: curCell->suivant1->suivant1->data) {
+            cout << curCommande.type << " : ";
+            for (string s : curCommande.elements) {
+                cout << s << " ";
+            }
+            cout << endl;
+        }
+
+
 
         AsmWriter *a = new AsmWriter(argv[1], "resultat.s", tree->toStringTree(&parser));
         a->convert();
-        a->writeOutputFile(*stack);
-        */
+        a->writeOutputFile(stack->first->data);
+
         return 0;
     }
     else

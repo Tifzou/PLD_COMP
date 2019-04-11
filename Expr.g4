@@ -12,13 +12,18 @@ code: typevar vari ';' #decdef
     | condition #condif
     ;
 
-condition: 'if' '('predicat')' '{'ifCore'}' 'else' '{'ifCore'}' #ifElse
-    |'if' '('predicat')' '{'ifCore'}' #simpleIf
+condition: 'if' '('boolExpression')' '{'condIf'}' 'else' '{'condElse'}' #ifElse
+    |'if' '('boolExpression')' '{'condIf'}' #simpleIf
     ;
 
+condIf:ifCore;
+condElse:ifCore;
+
 ifCore:code* #ifCommande
-    | ret #ifRet
+    | code* ret #ifRet
     ;
+
+boolExpression:predicat;
 
 predicat:expr '==' expr #egal
     |expr '>=' expr # ge

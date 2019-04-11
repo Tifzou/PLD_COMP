@@ -3,6 +3,15 @@
 main:
 	pushq	%rbp
 	movq	%rsp, %rbp
-	movl	$!t9, %eax
+	movl	$3, -4(%rbp)
+	movl	-4(%rbp), %eax
+	movl	%eax, -8(%rbp)
+	movl	$5, -12(%rbp)
+	movl	-12(%rbp), %eax
+	movl	%eax, -16(%rbp)
+	movl	-8(%rbp), %eax
+	movl	%eax, -20(%rbp)
+	movl	-16(%rbp), %eax
+	movl	%eax, -24(%rbp)
 	popq	%rbp
 	ret
