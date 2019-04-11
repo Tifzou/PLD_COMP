@@ -145,6 +145,12 @@ public:
     // Contrat :
     //
 
+    antlrcpp::Any visitWhileLoop(ExprParser::WhileLoopContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
     antlrcpp::Any visitIfElse(ExprParser::IfElseContext *ctx);
     // Mode d'emploi :
     //
@@ -192,6 +198,11 @@ public:
     //
     // Contrat :
     //
+
+    antlrcpp::Any visitBoolExpressionWhile(ExprParser::BoolExpressionWhileContext *ctx);
+
+    antlrcpp::Any visitBoolExpression(ExprParser::BoolExpressionContext *ctx);
+
 
 //-------------------------------------------- Constructeurs - destructeur
     Visiteur (){}
