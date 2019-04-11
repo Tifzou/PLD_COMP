@@ -2,7 +2,6 @@ grammar Expr;
 prog:base;
 
 
-
 base: 'int main' '(' ')'core;
 
 core: '{' code* ret '}';
