@@ -2,13 +2,20 @@ grammar Expr;
 prog:base;
 
 
+base: (function)* mainFunction;
 
-base: 'int main' '(' ')'core;
+function : typevar VAR'(' param* ')'core ;
+
+mainFunction : 'int main' '(' ')'core ;
+
+param : typevar vari ;
 
 core: '{' code* ret '}';
 
 code: typevar vari ';' #decdef
     | VAR '=' expr ';' #aff
+    | VAR '=' VAR'(' param* ')' ';' #afffunc
+    | VAR'(' param* ')' ';'#callfunc
     ;
 
 
@@ -25,9 +32,6 @@ facteur: INT #factInt
     | VAR #factVar
     | '(' expr ')' #factPar
     ;
-
-
-
 
 typevar: TYPEINT #int
     | TYPECHAR #char

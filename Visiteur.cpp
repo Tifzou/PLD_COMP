@@ -7,39 +7,97 @@
     e-mail               : matthieu.halunka@insa-lyon.fr (chef de projet)
 *************************************************************************/
 
-//---------- Réalisation de la classe <Visiteur> (fichier Visiteur.cpp.cpp) ------------
-
-//---------------------------------------------------------------- INCLUDE
-
-//-------------------------------------------------------- Include système
+/*---------- Réalisation de la classe <Visiteur> (fichier Visiteur.cpp.cpp) ------------*/
+/*---------------------------------------------------------------- INCLUDE*/
+/*-------------------------------------------------------- Include système*/
 #include <iostream>
 
-//------------------------------------------------------ Include personnel
+/*------------------------------------------------------ Include personnel*/
 #include "Visiteur.h"
-
-
-//----------------------------------------------------------- Types privés
-
-
-//----------------------------------------------------------------- PUBLIC
-
-//----------------------------------------------------- Méthodes publiques
-
-//------------------------------------------------------------------------
+/*----------------------------------------------------------- Types privés*/
+/*----------------------------------------------------------------- PUBLIC*/
+/*----------------------------------------------------- Méthodes publiques*/
+/*------------------------------------------------------------------------*/
 antlrcpp::Any Visiteur::visitProg(ExprParser::ProgContext *ctx)
-// Algorithme :
-//
+/* Algorithme : */
 {
     visitChildren(ctx);
     return symboleManager;
 }
+/*------------------------------------------------------------------------*/
+antlrcpp::Any Visiteur::visitBase(ExprParser::BaseContext *ctx)
+/* Algorithme : */
+{
+    return visitChildren(ctx);
+}
+/*------------------------------------------------------------------------*/
+antlrcpp::Any Visiteur::visitFunction(ExprParser::FunctionContext *ctx)
+/* Algorithme : */
+{
+    visit(ctx->core());
+    return true;
+}
 
 //------------------------------------------------------------------------
-antlrcpp::Any Visiteur::visitBase(ExprParser::BaseContext *ctx)
+antlrcpp::Any Visiteur::visitMainFunction(ExprParser::MainFunctionContext *ctx)
 // Algorithme :
 //
 {
-    return visitChildren(ctx);
+    visit(ctx->core());
+    return true;
+}
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitParam(ExprParser::ParamContext *ctx)
+// Algorithme :
+//
+{//
+    string typeVar = ctx->typevar()->getText();
+
+    symboleManager.pushInTemporalCommande(typeVar);
+    visit(ctx->vari());
+
+    return true;
+}
+
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitDecfunc(ExprParser::AfffuncContext *ctx)
+// Algorithme : renvoi "true" si la variable avec le nom 'varName' n'est pas déclarée
+// De plus, si la variable est déjà déclarée, efface la commande temporelle et la remplit avec une erreur
+// Sinon, ajoute la variable dans la pile de la commande
+{
+    string functName = ctx->VAR()->getText();
+    if (!checkFunctDec(functName))
+    {
+        symboleManager.deleteTemporalExpression();
+        return false;
+
+    }
+        //Si nameVar et typeVariable n'existe pas dans la table des symboles
+    else
+    {
+        commandeType code = commandeType::FUNCT;
+        symboleManager.pushInTemporalCommande(functName);
+        symboleManager.pushInTemporalCommande(code); // Surchage pushTemporalStack(vector<string> commande)
+        if(visit(ctx->param()))
+        {
+            symboleManager.pushInTemporalCommande(symboleManager.getTemporalExpression()->back().elements[1]);
+            symboleManager.writeStack(*symboleManager.getTemporalExpression());
+            symboleManager.deleteTemporalExpression();
+            symboleManager.writeStack(symboleManager.getTemporalCommande());
+            symboleManager.deleteTemporalCommand();
+            return true;
+        }
+        return false;
+    }
+}
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitCallfunc(ExprParser::CallfuncContext *ctx)
+// Algorithme :
+//
+{
+
 }
 
 //------------------------------------------------------------------------
@@ -51,7 +109,7 @@ antlrcpp::Any Visiteur::visitCore(ExprParser::CoreContext *ctx)
     {
         visit(cd);
     }
-    commandeType code = commandeType ::RET;
+    commandeType code = commandeType::RET;
     symboleManager.pushInTemporalCommande(code);
     if ((bool)visit(ctx->ret()))
     {
@@ -114,7 +172,6 @@ antlrcpp::Any Visiteur::visitAff(ExprParser::AffContext *ctx)
 
     return true;
 }
-
 
 //------------------------------------------------------------------------
 antlrcpp::Any Visiteur::visitRet(ExprParser::RetContext *ctx)
@@ -456,6 +513,31 @@ bool Visiteur::checkVarDef(string varName)
         string error2 = "variable : '" + varName + "' not defined";
         err.push_back("0322");
         err.push_back(error2);
+        symboleManager.deleteTemporalCommand(); //temporalStack = null;
+        symboleManager.pushInTemporalCommande(code, err);
+        symboleManager.writeStack(symboleManager.getTemporalCommande());
+        symboleManager.deleteTemporalCommand();
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+//------------------------------------------------------------------------
+bool Visiteur::checkFunctDec(string functName)
+// Algorithme : renvoi "true" si la variable avec le nom 'varName' n'est pas déclarée
+// De plus, si la variable est déjà déclarée, efface la commande temporelle et la remplit avec une erreur
+// Sinon, ajoute la variable dans la pile de la commande
+{
+    if (symboleManager.functExist(functName)) //doit verifier que la variable est bien au dessus et pas en dessous
+    {                                     //check if the variable exist
+        commandeType code = commandeType::ERR;
+        vector<string> err;
+        string error1 = "name of function '" + functName + "' already assigned";
+        err.push_back("0666");
+        err.push_back(error1);
         symboleManager.deleteTemporalCommand(); //temporalStack = null;
         symboleManager.pushInTemporalCommande(code, err);
         symboleManager.writeStack(symboleManager.getTemporalCommande());

@@ -39,15 +39,13 @@ bool AsmWriter::writeOutputFile(matrice resultat) {
     ofstream myfile (outFile);
     if (myfile.is_open()){
         myfile << ".text\n";
-        myfile << ".global main\n";
-        myfile << "main:\n";
-        myfile << "\tpushq\t%rbp"<<endl;
-        myfile << "\tmovq\t%rsp, %rbp"<<endl;
+
+
         int stackPtr = 0;
         vector<Commande>::iterator itInstr;
         for(itInstr = resultat.begin() ; itInstr != resultat.end() ; ++itInstr)
         {
-            switch ((*itInstr).type) // {ERR, WARN, VAR_DEC, VAR_DEF, OPER, RET, AFF};
+            switch ((*itInstr).type) // {ERR, WARN, VAR_DEC, VAR_DEF, OPER, RET, AFF, FUNC, MAIN};
             {
                 case 0 : // ERR
                     cerr << "in case ERR" << endl;
@@ -82,12 +80,30 @@ bool AsmWriter::writeOutputFile(matrice resultat) {
                     cerr << "in case AFF" << endl;
                     myfile << writeAff((*itInstr));
                     break;
+                case 7: // FUNCTION
+                    cerr << "in case FUNCTION" << endl;
+                    myfile << ".global main\n";
+                    myfile << "main:\n";
+                    myfile << "\tpushq\t%rbp"<<endl;
+                    myfile << "\tmovq\t%rsp, %rbp"<<endl;
+                    myfile << "\tsubq\t$16, %rsp" << endl;
+
+                    break;
+                case 8: //MAIN
+                    cerr << "in case MAIN" << endl;
+                    myfile << ".global main\n";
+                    myfile << "main:\n";
+                    myfile << "\tpushq\t%rbp"<<endl;
+                    myfile << "\tmovq\t%rsp, %rbp"<<endl;
+                    myfile << "\tsubq\t$16, %rsp" << endl;
+
+                    break;
                 default:
                     break;
             }
         }
-
-        myfile << "\tpopq	%rbp"<<endl;
+        myfile << "\tmovq\t%rbp, %rsp" << endl;
+        myfile << "\tpopq\t%rbp"<<endl;
         myfile << "\tret"<<endl;
         myfile.close();
         return 0;

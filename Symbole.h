@@ -33,7 +33,9 @@ enum commandeType
     VAR_DEF,
     OPER,
     RET,
-    AFF
+    AFF,
+    FUNC,
+    MAIN
 };
 
 //structure contenant une commande correspondant à un type definit par 1 enum particulier
@@ -46,6 +48,19 @@ typedef struct Commande
 
 //la liste des commandes
 typedef vector<Commande> matrice;
+
+typedef struct Cell
+{
+    matrice data;
+    Cell *suivant1;
+    Cell *suivant2;
+} Cell;
+
+typedef struct ListC
+{
+    Cell *first;
+    Cell *last;
+} ListC;
 
 //------------------------------------------------------------------------
 // Rôle de la classe <Symbole>
@@ -66,6 +81,12 @@ public:
     //
 
     bool varDef(string var);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    bool functExist(string funct);
     // Mode d'emploi :
     //
     // Contrat :
@@ -220,6 +241,58 @@ public:
         return nullptr;
     }
 
+    void createVar(string varName)
+    {
+        pair<string, int> p(varName, index++);
+        tablesDesSymboles.insert(p);
+    }
+
+    void pushIntoFlowControl()
+    {
+        cout << "OK" << endl;
+        if (flowControl->first == nullptr )
+        {
+            Cell *bloc = new Cell();
+            flowControl->first = bloc;
+            flowControl->last = flowControl->first;
+        }
+        else
+        {
+
+            Cell *bloc = new Cell();
+            bloc->data = resp;
+            flowControl->last->suivant1 = bloc;
+            flowControl->last = flowControl->last->suivant1;
+        }
+
+        resp.clear();
+    }
+
+    void pushIfIntoFlowControl(int index)
+    {
+        Cell *bloc = new Cell();
+        bloc->data = resp;
+
+        switch (index)
+        {
+            case 1:
+                if (flowControl->last->suivant1 == nullptr)
+                {
+                    flowControl->last->suivant1 = bloc;
+                }
+                else
+                {
+                    flowControl->last->suivant2 = bloc;
+                }
+                break;
+            case 2:
+                flowControl->last->suivant1->suivant1 = bloc;
+                flowControl->last->suivant2->suivant1 = bloc;
+                flowControl->last = flowControl->last->suivant1->suivant1;
+                break;
+        }
+        resp.clear();
+    }
 
     void deleteTemporalExpression()
     // Mode d'emploi :
@@ -228,6 +301,12 @@ public:
     //
     {
         temporalExpression.clear();
+    }
+
+    void createFunction(string funcName)
+    {
+        pair<string, int> p(funcName, indexFunction++);
+        tablesDesFonctions.insert(p);
     }
     //----------------------------------------------------- Getter et Setter
 
@@ -249,6 +328,15 @@ public:
         return &resp;
     }
 
+    ListC *getFlowControl()
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+    {
+        return &*flowControl;
+    }
+
     matrice *getTemporalExpression()
     // Mode d'emploi :
     //
@@ -262,7 +350,10 @@ public:
 //-------------------------------------------- Constructeurs - destructeur
     Symbole()
     {
-        tmpCounter=0;
+        tmpCounter = 0;
+        index = 0;
+        indexFunction = 0;
+        flowControl = new ListC();
     }
     // Mode d'emploi :
     //
@@ -290,8 +381,13 @@ private:
 //------------------------------------------------------- Attributs privés
     matrice resp;
     matrice temporalExpression;
+    ListC *flowControl;
     Commande temporalStackCommande;
+    map<string, int> tablesDesSymboles;
+    map<string, int> tablesDesFonctions;
     int tmpCounter;
+    int index;
+    int indexFunction;
 
 //----------------------------------------------------------- Types privés
 

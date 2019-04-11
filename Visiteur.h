@@ -48,6 +48,36 @@ public:
     // Contrat :
     //
 
+    antlrcpp::Any visitFunction(ExprParser::FunctionContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitMainFunction(ExprParser::MainFunctionContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitParam(ExprParser::ParamContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitAfffunc(ExprParser::AfffuncContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitCallfunc(ExprParser::CallfuncContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
     antlrcpp::Any visitCore(ExprParser::CoreContext *ctx);
     // Mode d'emploi :
     //
@@ -111,7 +141,6 @@ public:
     //
 
 
-
     antlrcpp::Any visitFactVar(ExprParser::FactVarContext *ctx);
     // Mode d'emploi :
     //
@@ -131,6 +160,60 @@ public:
     //
 
     antlrcpp::Any visitChar(ExprParser::CharContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitCondif(ExprParser::CondifContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitIfElse(ExprParser::IfElseContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitSimpleIf(ExprParser::SimpleIfContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitIfCore(ExprParser::IfCoreContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitEgal(ExprParser::EgalContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitGe(ExprParser::GeContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitGt(ExprParser::GtContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitLe(ExprParser::LeContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitLt(ExprParser::LtContext *ctx);
     // Mode d'emploi :
     //
     // Contrat :
@@ -171,6 +254,11 @@ private:
     // Contrat :
     //
 
+    bool checkFunctDec(string functName);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
 
 protected:
 //----------------------------------------------------- Attributs protégés

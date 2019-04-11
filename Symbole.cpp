@@ -59,6 +59,21 @@ bool Symbole::varDef(string var)
     return false;
 }
 
+//------------------------------------------------------------------------
+bool Symbole::functExist(string funct)
+// Algorithme : renvoi 'true' si la variable 'var' est déjà déclarée
+//
+{
+    for(Commande commande : resp)
+    {
+        if((commande.type == commandeType::FUNC) && commande.elements[1] == funct)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 
 
 
