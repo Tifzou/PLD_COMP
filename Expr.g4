@@ -14,6 +14,7 @@ code: typevar vari ';' #decdef
 
 condition: 'if' '('boolExpression')' '{'condIf'}' 'else' '{'condElse'}' #ifElse
     |'if' '('boolExpression')' '{'condIf'}' #simpleIf
+    |'while' '('boolExpressionWhile')' '{'condIf'}' #whileLoop
     ;
 
 condIf:ifCore;
@@ -22,8 +23,8 @@ condElse:ifCore;
 ifCore:code* #ifCommande
     | code* ret #ifRet
     ;
-
-boolExpression:predicat;
+boolExpressionWhile:predicat;
+boolExpression:predicat; 
 
 predicat:expr '==' expr #egal
     |expr '>=' expr # ge
