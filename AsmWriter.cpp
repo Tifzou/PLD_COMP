@@ -82,6 +82,17 @@ bool AsmWriter::writeOutputFile(matrice resultat) {
                     cerr << "in case AFF" << endl;
                     myfile << writeAff((*itInstr));
                     break;
+                case 7: // IF
+                    cerr << "in case IF" << endl;
+                    myfile << writeIf((*itInstr));
+                    break;
+                case 8: //Predicat (bloc)
+                    cerr << "in case Predicat" << endl;
+
+                    for(string s : writePredicat((*itInstr))){
+                        myfile << s;
+                    }
+                    break;
                 default:
                     break;
             }
@@ -321,6 +332,16 @@ string AsmWriter::writeMult(Commande multiplicationCmd)
     return asmInstr;
 }
 
+
+string AsmWriter::writeIf(Commande ifCmd)
+{
+    string flagIf = "if"+std::to_string(flagCounter);
+    namespaceFlags.push_back(flagIf);
+    flagIf+=":\n";
+    return flagIf;
+
+}
+
 void AsmWriter::printVariableMap()
 {
     map<string, string>::iterator it;
@@ -328,4 +349,52 @@ void AsmWriter::printVariableMap()
     {
         cout << it->first << " @" << it->second << endl;
     }
+}
+
+vector<string> AsmWriter::writePredicat(Commande returnCmd)
+{
+    map<string, string>::iterator it;
+    vector<string> cmp;
+    if (returnCmd.elements[3] == "==")
+    {
+        it = variables.find(returnCmd.elements[2]);
+        //TODO test si variable existe ==> it=variables.end()
+        string addVar1 = it->second;
+
+        it = variables.find(returnCmd.elements[4]);
+        string addVar2 = it->second;
+
+        string asmInstr = "\tmovl\t"+addVar1+", %edx\n";
+        asmInstr += "\tmovl\t"+addVar2+", %eax\n";
+        asmInstr += "\tcmpl\t%edx, %eax\n";
+        cmp.push_back(asmInstr);
+        //cmp.push_back("\tjne else\n");
+    }
+    else if (returnCmd.elements[3] == ">=")
+    {
+        cmp.push_back("cmpl\t" + returnCmd.elements[2] + " " + returnCmd.elements[4]);
+        cmp.push_back("jb else");
+    }
+    else if (returnCmd.elements[3] == ">")
+    {
+        cmp.push_back("cmpl " + returnCmd.elements[2] + " " + returnCmd.elements[4]);
+        cmp.push_back("jbe else");
+    }
+    else if (returnCmd.elements[3] == "<=")
+    {
+        cmp.push_back("cmpl " + returnCmd.elements[2] + " " + returnCmd.elements[4]);
+        cmp.push_back("ja else");
+    }
+    else if (returnCmd.elements[3] == "<")
+    {
+        cmp.push_back("cmpl " + returnCmd.elements[2] + " " + returnCmd.elements[4]);
+        cmp.push_back("jae else");
+    }
+    else if (returnCmd.elements[3] == "!=")
+    {
+        cmp.push_back("cmpl " + returnCmd.elements[2] + " " + returnCmd.elements[4]);
+        cmp.push_back("je else");
+    }
+
+    return cmp;
 }

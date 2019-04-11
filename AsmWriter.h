@@ -19,7 +19,8 @@ using namespace std;
 class AsmWriter {
 public:
     AsmWriter(string const nom, string const outName, string const arbre)
-            : inFile(nom), outFile(outName), arbreAntlr(arbre) {}
+            : inFile(nom), outFile(outName), arbreAntlr(arbre) {flagCounter=0;}
+    AsmWriter(){flagCounter=0;}
     void setNomFichierInput(string nomFichier);
     void setNomFichierOutput(string nomFichier);
     bool convert();
@@ -35,12 +36,17 @@ protected:
     string writeAdd(Commande additionCmd);
     string writeSub(Commande substractionCmd);
     string writeMult(Commande multiplicationCmd);
+    string writeIf(Commande multiplicationCmd);
+    vector<string> writePredicat(Commande returnCmd);
+
 
 
     string inFile;
     string outFile;
     string arbreAntlr;
     map<string, string> variables; // nom, adresse
+    vector<string> namespaceFlags;
+    int flagCounter;
 
 };
 

@@ -1,12 +1,9 @@
 int main()
 {
-    if(7==8)
+    int a = 5;
+    if(a==5)
     {
-       a=2;
-       c=3;
-       d=4;
+        a = 3;
     }
-
-    int k = 0;
-    return k;
+    return a;
 }
