@@ -37,11 +37,13 @@ antlrcpp::Any Visiteur::visitFunction(ExprParser::FunctionContext *ctx)
     string functName = ctx->VAR()->getText();
     if (!checkFunctDec(functName))
     {
+        cout << "function exists" << endl;
         return false;
     }
     //Si functName n'existe pas dans la table des fonctions
     else
     {
+        cout << "function doesn't exist, let's create it" << endl;
         symboleManager.createFunction(functName);
         commandeType code = commandeType::FUNC;
         symboleManager.pushInTemporalCommande(functName);
@@ -123,6 +125,7 @@ antlrcpp::Any Visiteur::visitCallfunc(ExprParser::CallfuncContext *ctx)
 
     if(symboleManager.functExist(funcName))
     {
+        cout << "the function exists so we can call it" << endl;
         commandeType code = commandeType::FUNC_CALL;
         symboleManager.pushInTemporalCommande(code);
         symboleManager.pushInTemporalCommande(funcName);
@@ -130,6 +133,7 @@ antlrcpp::Any Visiteur::visitCallfunc(ExprParser::CallfuncContext *ctx)
         symboleManager.deleteTemporalCommand();
     }
     else{
+        cout << "the function doesn't exist, how do you want me to call it..." << endl;
         commandeType code = commandeType::ERR;
         vector<string> err;
         string error1 = "name of function '" + funcName + "' already assigned";

@@ -83,15 +83,17 @@ bool AsmWriter::writeOutputFile(matrice resultat) {
                 case 9: // FUNCTION
                     cerr << "in case FUNCTION" << endl;
                     myfile << ".global " << (*itInstr).elements[0] << "\n";
+                    myfile << "\t.type\t"+ (*itInstr).elements[0] +", @function\n";
                     myfile << (*itInstr).elements[0] << ":\n";
                     myfile << "\tpushq\t%rbp"<<endl;
                     myfile << "\tmovq\t%rsp, %rbp"<<endl;
-                    myfile << "\tsubq\t$16, %rsp" << endl;
+                    //myfile << "\tsubq\t$16, %rsp" << endl;
 
                     break;
                 case 10: //MAIN
                     cerr << "in case MAIN" << endl;
                     myfile << ".global main\n";
+                    myfile << "\t.type\t main, @function\n";
                     myfile << "main:\n";
                     myfile << "\tpushq\t%rbp"<<endl;
                     myfile << "\tmovq\t%rsp, %rbp"<<endl;

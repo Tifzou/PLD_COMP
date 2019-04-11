@@ -4,7 +4,7 @@ prog:base;
 
 base: (function)* mainFunction;
 
-function : typevar VAR'(' param* ')'core ;
+function : typevar VAR '(' param* ')' core ;
 
 mainFunction : 'int main' '(' ')'core ;
 
@@ -14,8 +14,8 @@ core: '{' code* ret '}';
 
 code: typevar vari ';' #decdef
     | VAR '=' expr ';' #aff
-    | VAR '=' VAR'(' param* ')' ';' #afffunc
-    | VAR'(' param* ')' ';'#callfunc
+    | VAR '=' VAR '(' param* ')' ';' #afffunc
+    | VAR '(' param* ')' ';'#callfunc
     ;
 
 condition: 'if' '('boolExpression')' '{'condIf'}' 'else' '{'condElse'}' #ifElse
@@ -39,6 +39,7 @@ predicat:expr '==' expr #egal
 ;
 
 ret: 'return' expr ';' ;
+
 vari: VAR (','VAR)* #decVar
     | VAR '=' expr #defVar
     ;
