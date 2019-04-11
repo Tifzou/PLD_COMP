@@ -42,26 +42,27 @@ fi
 
 # stdin has been specified
 if [ -r "std.in" ]
-then 
+then
   sRun="$sRun <std.in"
-fi
-
-# stdout has been specified
-if [ -r "std.out" ]
-then 
-  sRun="$sRun >temp.txt"
 fi
 
 # stderr has been specified
 if [ -r "stderr.out" ]
-then 
+then
   sRun="$sRun 2>temperr.txt"
 fi
 
 echo $sRun
 # execute the command line
 eval $sRun
+
 returnCode=$?
+
+# stdout has been specified
+if [ -r "std.out" ]
+then
+  echo "$returnCode" > "temp.txt"
+fi
 
 resultGlobal=1
 
@@ -173,6 +174,11 @@ then
     echo "$Directory;$resultRC;$resultOut;$resultErr;$resultFiles;$resultGlobal" >>$2
   fi
 fi
+
+#delete all generated files created by compilation
+find . -maxdepth 2 -name "*.o" -type f -delete
+#find . -maxdepth 2 -name "*.s" -type f -delete
+find . -maxdepth 2 -name "*.exe" -type f -delete
 
 exit $resultGlobal
 

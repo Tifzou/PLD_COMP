@@ -13,9 +13,6 @@ LDFLAGS  =
 SRC      = $(wildcard *.cpp)
 OBJ      = $(SRC:.cpp=.o)
 
-REP_TEST = test/
-EXEC_TEST = ./mktest.sh
-
 all: antlr $(EXEC)
 
 antlr:
@@ -43,8 +40,3 @@ ExprVisitor.o: ExprVisitor.h ExprParser.h
 ExprParser.o: ExprVisitor.h ExprParser.h
 ExprLexer.o: ExprLexer.h
 ExprBaseVisitor.o: ExprBaseVisitor.h ExprVisitor.h ExprParser.h
-
-test:
-	$(MAKE)
-	@echo "Lancement du script de test : \n"
-	@(cd $(REP_TEST) && bash $(EXEC_TEST) )

@@ -1,7 +1,33 @@
 int main()
 {
-    int a=3;
-    int b=2;
-    a=(a+b)*(a+b);
-    return a;
+    int a,b,c;
+    b=3;
+
+    c=1;
+
+    a=b+c;
+
+    return b;
 }
+/*	.file	"index.c"
+	.text
+	.globl	main
+	.type	main, @function
+main:
+	pushq	%rbp
+	movq	%rsp, %rbp
+
+	movl	$3, -12(%rbp) #b<-3
+	movl	$1, -8(%rbp) #c<-1
+
+	movl	-12(%rbp), %edx # btemp<-b
+	movl	-8(%rbp), %eax # ctemp<-c
+	addl	%edx, %eax # ctemp<-btemp + ctemp
+	movl	%eax, -4(%rbp) # a<-ctemp
+
+	movl	-4(%rbp), %eax # return a
+
+	popq	%rbp
+
+	ret
+ */
