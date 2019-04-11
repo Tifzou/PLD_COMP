@@ -35,6 +35,139 @@ bool AsmWriter::convert(){
     return 1;
 }
 
+void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBlock, int curFlagCounter)
+{
+    vector<Commande> resultat= block->data;
+    vector<Commande>::iterator itInstr;
+    string lastFlag;
+
+    //On gère le type de flag en fonction du type de block (pour block while c'est ici qu'on fera un jump en boucle)
+    if(block->suivant1!= nullptr )
+    {
+        if()
+        lastFlag="else"+to_string(curFlagCounter);
+    }
+    else if(typeCurBlock==ELSE_BLOCK)
+    {
+        lastFlag="endif"+to_string(curFlagCounter);
+    }
+    for(itInstr = resultat.begin() ; itInstr != resultat.end() ; ++itInstr)
+    {
+        switch ((*itInstr).type) // {ERR, WARN, VAR_DEC, VAR_DEF, OPER, RET, AFF};
+        {
+            case 0 : // ERR
+                cerr << "in case ERR" << endl;
+                break;
+            case 1 : // WAR
+                cerr << "in case WAR" << endl;
+                break;
+            case 2 : // VAR DECLARATION
+                cerr << "in case VAR_DEC" << endl;
+                writeDec((*itInstr));
+                break;
+            case 3 : // VAR DEFINITION
+                cerr << "in case VAR_DEF" << endl;
+                myfile << writeDef((*itInstr));
+                break;
+            case 4 : // OPER
+                cerr << "in case OPER" << endl;
+                if((*itInstr).elements.size() == 3)
+                {
+                    myfile << writeDef((*itInstr));
+                }
+                else if((*itInstr).elements.size() == 5)
+                {
+                    myfile << writeOperation((*itInstr));
+                }
+                break;
+            case 5 : // RET
+                cerr << "in case RET" << endl;
+                myfile << writeReturn((*itInstr));
+                break;
+            case 6: // AFFECTATION
+                cerr << "in case AFF" << endl;
+                myfile << writeAff((*itInstr));
+                break;
+            case 7: // IF
+                cerr << "in case IF" << endl;
+                myfile << writeIf((*itInstr));
+                break;
+            case 8: //Predicat (bloc)
+                cerr << "in case Predicat" << endl;
+                myfile << writePredicat(*itInstr, lastFlag);
+                break;
+            case 9: // FUNCTION
+                cerr << "in case FUNCTION" << endl;
+                myfile << ".global " << (*itInstr).elements[0] << "\n";
+                myfile << (*itInstr).elements[0] << ":\n";
+                myfile << "\tpushq\t%rbp"<<endl;
+                myfile << "\tmovq\t%rsp, %rbp"<<endl;
+                myfile << "\tsubq\t$16, %rsp" << endl;
+                break;
+            case 10: //MAIN
+                cerr << "in case MAIN" << endl;
+                myfile << ".global main\n";
+                myfile << "main:\n";
+                myfile << "\tpushq\t%rbp"<<endl;
+                myfile << "\tmovq\t%rsp, %rbp"<<endl;
+                myfile << "\tsubq\t$16, %rsp" << endl;
+                break;
+            case 11: // FUNC_CALL
+                cerr << "in case FUNCTION CALL" << endl;
+                myfile << writeFuncCall((*itInstr));
+                break;
+            case 12: // FUNC_AFF
+                cerr << "in case FUNCTION AFF" << endl;
+                myfile << writeFuncAff((*itInstr));
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+void AsmWriter::browseGraph(Cell *block, ofstream &myfile, typeBlock typeCurBlock, int flagCounter)
+{
+
+    if(block==nullptr || block->data.size()==0)
+    {
+        return;
+    }
+
+    browseBlock(block, myfile, typeCurBlock, this->flagCounter);
+
+
+    if(block->data.back().type==commandeType::CONDITION)
+    {
+        if(block->suivant1->data.back().type==commandeType::CONDITION)
+        {
+            browseGraph(block->suivant1, myfile, PREC_IF_BLOCK_LEFT, flagCounter);
+        }
+        else
+        {
+            browseGraph(block->suivant1, myfile, IF_BLOCK, flagCounter);
+        }
+
+
+        if(block->suivant2->data.back().type==commandeType::CONDITION)
+        {
+            browseGraph(block->suivant2, myfile, PREC_IF_BLOCK_RIGHT, flagCounter);
+        }
+        else
+        {
+            browseGraph(block->suivant2, myfile, ELSE_BLOCK, flagCounter);
+        }
+
+    }
+    else
+    {
+        browseGraph(block->suivant1, myfile, SIMPLE_BLOCK, flagCounter);
+    }
+
+
+}
+
+
 bool AsmWriter::writeOutputFile(matrice resultat) {
     ofstream myfile (outFile);
     if (myfile.is_open()){
@@ -44,61 +177,9 @@ bool AsmWriter::writeOutputFile(matrice resultat) {
         myfile << "\tpushq\t%rbp"<<endl;
         myfile << "\tmovq\t%rsp, %rbp"<<endl;
         int stackPtr = 0;
-        vector<Commande>::iterator itInstr;
-        for(itInstr = resultat.begin() ; itInstr != resultat.end() ; ++itInstr)
-        {
-            switch ((*itInstr).type) // {ERR, WARN, VAR_DEC, VAR_DEF, OPER, RET, AFF};
-            {
-                case 0 : // ERR
-                    cerr << "in case ERR" << endl;
-                    break;
-                case 1 : // WAR
-                    cerr << "in case WAR" << endl;
-                    break;
-                case 2 : // VAR DECLARATION
-                    cerr << "in case VAR_DEC" << endl;
-                    writeDec((*itInstr));
-                    break;
-                case 3 : // VAR DEFINITION
-                    cerr << "in case VAR_DEF" << endl;
-                    myfile << writeDef((*itInstr));
-                    break;
-                case 4 : // OPER
-                    cerr << "in case OPER" << endl;
-                    if((*itInstr).elements.size() == 3)
-                    {
-                        myfile << writeDef((*itInstr));
-                    }
-                    else if((*itInstr).elements.size() == 5)
-                    {
-                        myfile << writeOperation((*itInstr));
-                    }
-                    break;
-                case 5 : // RET
-                    cerr << "in case RET" << endl;
-                    myfile << writeReturn((*itInstr));
-                    break;
-                case 6: // AFFECTATION
-                    cerr << "in case AFF" << endl;
-                    myfile << writeAff((*itInstr));
-                    break;
-                case 7: // IF
-                    cerr << "in case IF" << endl;
-                    myfile << writeIf((*itInstr));
-                    break;
-                case 8: //Predicat (bloc)
-                    cerr << "in case Predicat" << endl;
-
-                    for(string s : writePredicat((*itInstr))){
-                        myfile << s;
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        myfile << "\tpopq	%rbp"<<endl;
+        //for loop was here
+        myfile << "\tmovq\t%rbp, %rsp" << endl;
+        myfile << "\tpopq\t%rbp"<<endl;
         myfile << "\tret"<<endl;
         myfile.close();
         return 0;
@@ -351,50 +432,81 @@ void AsmWriter::printVariableMap()
     }
 }
 
-vector<string> AsmWriter::writePredicat(Commande returnCmd)
+string AsmWriter::generateIfLine(Commande curCommande)
 {
     map<string, string>::iterator it;
-    vector<string> cmp;
-    if (returnCmd.elements[3] == "==")
+    string addVar1;
+    string addVar2;
+    it = variables.find(curCommande.elements[2]);
+    if(it!=variables.end())
     {
-        it = variables.find(returnCmd.elements[2]);
-        //TODO test si variable existe ==> it=variables.end()
-        string addVar1 = it->second;
-
-        it = variables.find(returnCmd.elements[4]);
-        string addVar2 = it->second;
-
-        string asmInstr = "\tmovl\t"+addVar1+", %edx\n";
-        asmInstr += "\tmovl\t"+addVar2+", %eax\n";
-        asmInstr += "\tcmpl\t%edx, %eax\n";
-        cmp.push_back(asmInstr);
-        //cmp.push_back("\tjne else\n");
+        addVar1 = it->second;
     }
-    else if (returnCmd.elements[3] == ">=")
+    else
     {
-        cmp.push_back("cmpl\t" + returnCmd.elements[2] + " " + returnCmd.elements[4]);
-        cmp.push_back("jb else");
-    }
-    else if (returnCmd.elements[3] == ">")
-    {
-        cmp.push_back("cmpl " + returnCmd.elements[2] + " " + returnCmd.elements[4]);
-        cmp.push_back("jbe else");
-    }
-    else if (returnCmd.elements[3] == "<=")
-    {
-        cmp.push_back("cmpl " + returnCmd.elements[2] + " " + returnCmd.elements[4]);
-        cmp.push_back("ja else");
-    }
-    else if (returnCmd.elements[3] == "<")
-    {
-        cmp.push_back("cmpl " + returnCmd.elements[2] + " " + returnCmd.elements[4]);
-        cmp.push_back("jae else");
-    }
-    else if (returnCmd.elements[3] == "!=")
-    {
-        cmp.push_back("cmpl " + returnCmd.elements[2] + " " + returnCmd.elements[4]);
-        cmp.push_back("je else");
+        addVar1 = curCommande.elements[2];
     }
 
-    return cmp;
+
+    it = variables.find(curCommande.elements[4]);
+    if(it!=variables.end())
+    {
+        addVar2 = it->second;
+    }
+    else
+    {
+        addVar2 = curCommande.elements[2];
+    }
+
+    string asmInstr = "\tmovl\t"+addVar1+", %edx\n";
+    asmInstr += "\tmovl\t"+addVar2+", %eax\n";
+    asmInstr += "\tcmpl\t%edx, %eax\n";
+}
+
+string AsmWriter::writePredicat(Commande ifCondition, string nextFlag)
+{
+    string line = generateIfLine(ifCondition);
+    if (ifCondition.elements[3] == "==")
+    {
+        line+="\tjne "+ nextFlag+"\n";
+    }
+    else if (ifCondition.elements[3] == ">=")
+    {
+        line+="\tjb "+ nextFlag+"\n";
+    }
+    else if (ifCondition.elements[3] == ">")
+    {
+        line+="\tjbe "+ nextFlag+"\n";
+
+    }
+    else if (ifCondition.elements[3] == "<=")
+    {
+        line+="\tja "+ nextFlag+"\n";
+    }
+    else if (ifCondition.elements[3] == "<")
+    {
+        line+="\tjae "+ nextFlag+"\n";
+
+    }
+    else if (ifCondition.elements[3] == "!=")
+    {
+        line+="\tje "+ nextFlag+"\n";
+    }
+
+    return line;
+}
+
+string AsmWriter::writeFuncCall(Commande functionCmd)
+{
+    string funcName = functionCmd.elements[0];
+    string asmInstr = "\tcall " + funcName + "\n";
+    return asmInstr;
+}
+
+string AsmWriter::writeFuncAff(Commande functionCmd)
+{
+    string funcName = functionCmd.elements[0];
+    string asmInstr = "\tcall " + funcName + "\n";
+    asmInstr += "\tmovl %eax, " + functionCmd.elements[1] + "\n";
+    return asmInstr;
 }

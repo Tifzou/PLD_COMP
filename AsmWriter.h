@@ -15,6 +15,22 @@
 #include "Symbole.h"
 
 using namespace std;
+enum Flag
+    {
+        IF_FLAG,
+        ELSE_FLAG,
+        WHILE_FLAG,
+
+    };
+
+enum typeBlock
+    {
+        SIMPLE_BLOCK,
+        PREC_IF_BLOCK_RIGHT,
+        PREC_IF_BLOCK_LEFT,
+        IF_BLOCK,
+        ELSE_BLOCK
+    };
 
 class AsmWriter {
 public:
@@ -37,7 +53,12 @@ protected:
     string writeSub(Commande substractionCmd);
     string writeMult(Commande multiplicationCmd);
     string writeIf(Commande multiplicationCmd);
-    vector<string> writePredicat(Commande returnCmd);
+    string generateIfLine(Commande curCommande);
+    string writePredicat(Commande returnCmd, string nextFlag);
+    void browseGraph(Cell *block, ofstream &myfile, typeBlock typeCurBlock, int curFlagCounter);
+    void browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBlock, int curFlagCounter);
+    string writeFuncCall(Commande functionCmd);
+    string writeFuncAff(Commande functionCmd);
 
 
 
