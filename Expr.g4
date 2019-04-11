@@ -9,9 +9,14 @@ core: '{' code* ret '}';
 
 code: typevar vari ';' #decdef
     | VAR '=' expr ';' #aff
-    | VAR '+' expr '=' expr ';' #lvalue
+    | exprl'=' expr ';' #lvalue
     ;
 
+exprl: (expr operatorAll)* VAR (operatorAll expr)*;
+
+operatorAll: OPERATORADD #add_l
+            | OPERATORSUB #sub_l
+            ;
 
 ret: 'return' expr ';' ;
 vari: VAR (','VAR)* #decVar

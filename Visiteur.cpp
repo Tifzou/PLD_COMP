@@ -75,6 +75,46 @@ antlrcpp::Any Visiteur::visitDecdef(ExprParser::DecdefContext *ctx)
 }
 
 //------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitLValue(ExprParser::LvalueContext *ctx)
+// Algorithme :
+//
+{
+    ExprParser::ExprlContext * expr1=ctx->exprl();
+    string varName = expr1->VAR()->getText();
+
+    commandeType code = commandeType ::AFFL;
+    symboleManager.pushInTemporalCommande(code);
+
+    if(symboleManager.varExist(varName)){
+        vector<ExprParser::ExprContext *> listExpr1=expr1->expr();
+        unsigned long size=listExpr1.size();
+        for(int i(0); i<=size; i++)
+        {
+            ExprParser::ExprContext* e=listExpr1[i];
+            if (!visitExpr(e))
+            {
+                return false;
+            }
+        }
+    }
+    else
+    {
+        commandeType code = commandeType::ERR;
+        vector<string> err;
+        string error3 = "name of variable '" + varName + "' not assigned";
+        err.push_back("0323");
+        err.push_back(error3);
+        symboleManager.deleteTemporalCommand(); //temporalStack = null;
+        symboleManager.pushInTemporalCommande(code, err);
+        symboleManager.writeStack(symboleManager.getTemporalCommande());
+        symboleManager.deleteTemporalCommand();
+        symboleManager.deleteTemporalExpression();
+    }
+
+    return true;
+}
+
+//------------------------------------------------------------------------
 antlrcpp::Any Visiteur::visitAff(ExprParser::AffContext *ctx)
 // Algorithme :
 //

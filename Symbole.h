@@ -33,7 +33,8 @@ enum commandeType
     VAR_DEF,
     OPER,
     RET,
-    AFF
+    AFF,
+    AFFL
 };
 
 //structure contenant une commande correspondant à un type definit par 1 enum particulier
@@ -288,8 +289,8 @@ protected:
 
 private:
 //------------------------------------------------------- Attributs privés
-    matrice resp;
-    matrice temporalExpression;
+    matrice resp;                   //Matrice réponse -> block
+    matrice temporalExpression;     //Matrice des cmd issues d'une expression
     Commande temporalStackCommande;
     int tmpCounter;
 

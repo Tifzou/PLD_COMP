@@ -51,7 +51,7 @@ bool Symbole::varDef(string var)
 {
     for(Commande commande : resp)
     {
-        if((commande.type == commandeType::VAR_DEF || commande.type == commandeType::AFF)  && commande.elements[1] == var)
+        if((commande.type == commandeType::VAR_DEF || commande.type == commandeType::AFF || commande.type == commandeType::AFFL)  && commande.elements[1] == var)
         {
             return true;
         }
