@@ -15,6 +15,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 using namespace std;
 
@@ -34,8 +35,12 @@ enum commandeType
     OPER,
     RET,
     AFF,
+    IF,
+    CONDITION,
     FUNC,
-    MAIN
+    MAIN,
+    FUNC_CALL,
+    FUNC_AFF
 };
 
 //structure contenant une commande correspondant à un type definit par 1 enum particulier
@@ -308,6 +313,8 @@ public:
         pair<string, int> p(funcName, indexFunction++);
         tablesDesFonctions.insert(p);
     }
+
+
     //----------------------------------------------------- Getter et Setter
 
     Commande getTemporalCommande()

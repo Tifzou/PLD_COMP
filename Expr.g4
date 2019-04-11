@@ -8,7 +8,7 @@ function : typevar VAR'(' param* ')'core ;
 
 mainFunction : 'int main' '(' ')'core ;
 
-param : typevar vari ;
+param : typevar VAR (',')*;
 
 core: '{' code* ret '}';
 
@@ -18,6 +18,25 @@ code: typevar vari ';' #decdef
     | VAR'(' param* ')' ';'#callfunc
     ;
 
+condition: 'if' '('boolExpression')' '{'condIf'}' 'else' '{'condElse'}' #ifElse
+    |'if' '('boolExpression')' '{'condIf'}' #simpleIf
+    ;
+
+condIf:ifCore;
+condElse:ifCore;
+
+ifCore:code* #ifCommande
+    | code* ret #ifRet
+    ;
+
+boolExpression:predicat;
+
+predicat:expr '==' expr #egal
+    |expr '>=' expr # ge
+    |expr '>' expr # gt
+    |expr '<=' expr # le
+    |expr '<' expr # lt
+;
 
 ret: 'return' expr ';' ;
 vari: VAR (','VAR)* #decVar

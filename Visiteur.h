@@ -132,7 +132,10 @@ public:
 
 
     antlrcpp::Any visitFacteur(ExprParser::FacteurContext *ctx) ;
-
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
 
     antlrcpp::Any visitFactPar(ExprParser::FactParContext *ctx);
     // Mode d'emploi :
@@ -165,7 +168,7 @@ public:
     // Contrat :
     //
 
-    antlrcpp::Any visitCondif(ExprParser::CondifContext *ctx);
+    antlrcpp::Any visitCondif(ExprParser::CondIfContext *ctx);
     // Mode d'emploi :
     //
     // Contrat :

@@ -35,6 +35,8 @@ protected:
     string writeAdd(Commande additionCmd);
     string writeSub(Commande substractionCmd);
     string writeMult(Commande multiplicationCmd);
+    string writeFuncCall(Commande functionCmd);
+    string writeFuncAff(Commande functionCmd);
 
 
     string inFile;

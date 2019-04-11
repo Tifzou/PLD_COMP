@@ -34,8 +34,23 @@ antlrcpp::Any Visiteur::visitBase(ExprParser::BaseContext *ctx)
 antlrcpp::Any Visiteur::visitFunction(ExprParser::FunctionContext *ctx)
 /* Algorithme : */
 {
-    visit(ctx->core());
-    return true;
+    string functName = ctx->VAR()->getText();
+    if (!checkFunctDec(functName))
+    {
+        return false;
+    }
+    //Si functName n'existe pas dans la table des fonctions
+    else
+    {
+        commandeType code = commandeType::FUNC;
+        symboleManager.pushInTemporalCommande(functName);
+        symboleManager.pushInTemporalCommande(code); // Surchage pushTemporalStack(vector<string> commande)
+        // TODO add parameter visit
+        symboleManager.writeStack(symboleManager.getTemporalCommande());
+        symboleManager.deleteTemporalCommand();
+        visit(ctx->core());
+        return true;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -43,53 +58,59 @@ antlrcpp::Any Visiteur::visitMainFunction(ExprParser::MainFunctionContext *ctx)
 // Algorithme :
 //
 {
+    commandeType code = commandeType::MAIN;
+    symboleManager.pushInTemporalCommande(code); // Surchage pushTemporalStack(vector<string> commande)
+    // TODO add parameter visit
+    symboleManager.writeStack(symboleManager.getTemporalCommande());
+    symboleManager.deleteTemporalCommand();
     visit(ctx->core());
     return true;
 }
+
 //------------------------------------------------------------------------
 antlrcpp::Any Visiteur::visitParam(ExprParser::ParamContext *ctx)
 // Algorithme :
 //
 {//
-    string typeVar = ctx->typevar()->getText();
+    string varName = ctx->VAR()->getText();
 
-    symboleManager.pushInTemporalCommande(typeVar);
-    visit(ctx->vari());
+    symboleManager.pushInTemporalCommande(varName);
 
     return true;
 }
 
-
 //------------------------------------------------------------------------
-antlrcpp::Any Visiteur::visitDecfunc(ExprParser::AfffuncContext *ctx)
+antlrcpp::Any Visiteur::visitAfffunc(ExprParser::AfffuncContext *ctx)
 // Algorithme : renvoi "true" si la variable avec le nom 'varName' n'est pas déclarée
 // De plus, si la variable est déjà déclarée, efface la commande temporelle et la remplit avec une erreur
 // Sinon, ajoute la variable dans la pile de la commande
 {
-    string functName = ctx->VAR()->getText();
-    if (!checkFunctDec(functName))
+    string funcName = ctx->VAR()->getText();
+    commandeType code = commandeType::FUNC_AFF;
+    string retVar = ctx->VAR()->getText();
+    if(symboleManager.functExist(funcName))
     {
-        symboleManager.deleteTemporalExpression();
-        return false;
-
+        symboleManager.pushInTemporalCommande(code);
+        symboleManager.pushInTemporalCommande(funcName);
+        symboleManager.pushInTemporalCommande(retVar);
+        // TODO push param
+        symboleManager.writeStack(symboleManager.getTemporalCommande());
+        symboleManager.deleteTemporalCommand();
     }
-        //Si nameVar et typeVariable n'existe pas dans la table des symboles
     else
     {
-        commandeType code = commandeType::FUNCT;
-        symboleManager.pushInTemporalCommande(functName);
-        symboleManager.pushInTemporalCommande(code); // Surchage pushTemporalStack(vector<string> commande)
-        if(visit(ctx->param()))
-        {
-            symboleManager.pushInTemporalCommande(symboleManager.getTemporalExpression()->back().elements[1]);
-            symboleManager.writeStack(*symboleManager.getTemporalExpression());
-            symboleManager.deleteTemporalExpression();
-            symboleManager.writeStack(symboleManager.getTemporalCommande());
-            symboleManager.deleteTemporalCommand();
-            return true;
-        }
-        return false;
+        commandeType code = commandeType::ERR;
+        vector<string> err;
+        string error3 = "name of function '" + funcName + "' not assigned";
+        err.push_back("0323");
+        err.push_back(error3);
+        symboleManager.deleteTemporalCommand(); //temporalStack = null;
+        symboleManager.pushInTemporalCommande(code, err);
+        symboleManager.writeStack(symboleManager.getTemporalCommande());
+        symboleManager.deleteTemporalCommand();
     }
+
+    return true;
 }
 
 //------------------------------------------------------------------------
@@ -97,7 +118,32 @@ antlrcpp::Any Visiteur::visitCallfunc(ExprParser::CallfuncContext *ctx)
 // Algorithme :
 //
 {
+    string funcName = ctx->VAR()->getText();
 
+    if(symboleManager.functExist(funcName))
+    {
+        commandeType code = commandeType::FUNC_CALL;
+        symboleManager.pushInTemporalCommande(code);
+        symboleManager.pushInTemporalCommande(funcName);
+        symboleManager.writeStack(symboleManager.getTemporalCommande());
+        symboleManager.deleteTemporalCommand();
+    }
+    else{
+        commandeType code = commandeType::ERR;
+        vector<string> err;
+        string error1 = "name of function '" + funcName + "' already assigned";
+        err.push_back("0667");
+        err.push_back(error1);
+        symboleManager.deleteTemporalCommand(); //temporalStack = null;
+        symboleManager.pushInTemporalCommande(code, err);
+        symboleManager.writeStack(symboleManager.getTemporalCommande());
+        symboleManager.deleteTemporalCommand();
+        return false;
+
+    }
+
+
+    return true;
 }
 
 //------------------------------------------------------------------------
@@ -444,6 +490,271 @@ antlrcpp::Any Visiteur::visitChar(ExprParser::CharContext *ctx)
 //
 {
     return ctx->TYPECHAR()->getText();
+}
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitCondif(ExprParser::CondIfContext *ctx)
+// Algorithme :
+//
+{
+    //return visit(ctx->condition());
+    return true;
+}
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitIfElse(ExprParser::IfElseContext *ctx)
+// Algorithme :
+//
+{
+
+    commandeType code = commandeType::IF;
+    symboleManager.pushInTemporalCommande(code);
+    symboleManager.writeStack(symboleManager.getTemporalCommande());
+    if(visit(ctx->boolExpression()))
+    {
+        //symboleManager.writeStack(symboleManager.getTemporalCommande());
+        symboleManager.pushIntoFlowControl();
+    }
+    else
+    {
+        return false;
+    }
+
+    //On visite le block "if" qui s'executera si le predicat est verifié
+    if(visit(ctx->condIf()))
+    {
+        //symboleManager.writeStack(symboleManager.getTemporalCommande());
+        symboleManager.pushIfIntoFlowControl(1);
+
+    }
+    else
+    {
+        return false;
+    }
+
+
+    //On visit le block "else" qui s'executera si le predicat est faux
+    if(visit(ctx->condElse()))
+    {
+        //symboleManager.writeStack(symboleManager.getTemporalCommande());
+        symboleManager.pushIfIntoFlowControl(1);
+    }
+    else
+    {
+        return false;
+    }
+    return true;
+}
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitSimpleIf(ExprParser::SimpleIfContext *ctx){
+// Algorithme :
+//
+    commandeType code = commandeType::IF;
+    symboleManager.pushInTemporalCommande(code);
+    symboleManager.writeStack(symboleManager.getTemporalCommande());
+    if(visit(ctx->boolExpression()))
+    {
+        //symboleManager.writeStack(symboleManager.getTemporalCommande());
+        symboleManager.pushIntoFlowControl();
+    }
+    else
+    {
+        return false;
+    }
+
+    //On visite le block "if" qui s'executera si le predicat est verifié
+    if(visit(ctx->condIf()))
+    {
+        //symboleManager.writeStack(symboleManager.getTemporalCommande());
+        symboleManager.pushIfIntoFlowControl(1);
+    }
+    else
+    {
+        return false;
+    }
+    return true;
+}
+
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitGe(ExprParser::GeContext *ctx)
+// Algorithme :
+//
+{
+    cout<<"test predicat"<<endl;
+    string nomVar1;
+    string nomVar2;
+    if(visit(ctx->expr(0)))
+    {
+        nomVar1=symboleManager.getTemporalExpression()->back().elements[1];
+    }
+    else
+    {
+        return false;
+    }
+
+    if(visit(ctx->expr(1)))
+    {
+        nomVar2=symboleManager.getTemporalExpression()->back().elements[1];
+    }
+    else
+    {
+        return false;
+    }
+    string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
+    symboleManager.pushInTemporalCommande(commandeType::CONDITION);
+    symboleManager.pushInTemporalCommande("bool");
+    symboleManager.pushInTemporalCommande(tempVar);
+    symboleManager.pushInTemporalCommande(nomVar1);
+    symboleManager.pushInTemporalCommande(">=");
+    symboleManager.pushInTemporalCommande(nomVar2);
+    symboleManager.writeStack(*symboleManager.getTemporalExpression());
+    symboleManager.writeStack(symboleManager.getTemporalCommande());
+    return true;
+}
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitGt(ExprParser::GtContext *ctx)
+// Algorithme :
+//
+{
+    string nomVar1;
+    string nomVar2;
+    if(visit(ctx->expr(0)))
+    {
+        nomVar1=symboleManager.getTemporalExpression()->back().elements[1];
+    }
+    else
+    {
+        return false;
+    }
+
+    if(visit(ctx->expr(1)))
+    {
+        nomVar2=symboleManager.getTemporalExpression()->back().elements[1];
+    }
+    else
+    {
+        return false;
+    }
+    string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
+    symboleManager.pushInTemporalCommande(commandeType::CONDITION);
+    symboleManager.pushInTemporalCommande("bool");
+    symboleManager.pushInTemporalCommande(tempVar);
+    symboleManager.pushInTemporalCommande(nomVar1);
+    symboleManager.pushInTemporalCommande(">");
+    symboleManager.pushInTemporalCommande(nomVar2);
+    symboleManager.writeStack(*symboleManager.getTemporalExpression());
+    symboleManager.writeStack(symboleManager.getTemporalCommande());
+    return true;
+}
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitLe(ExprParser::LeContext *ctx)
+// Algorithme :
+//
+{
+    string nomVar1;
+    string nomVar2;
+    if(visit(ctx->expr(0)))
+    {
+        nomVar1=symboleManager.getTemporalExpression()->back().elements[1];
+    }
+    else
+    {
+        return false;
+    }
+
+    if(visit(ctx->expr(1)))
+    {
+        nomVar2=symboleManager.getTemporalExpression()->back().elements[1];
+    }
+    else
+    {
+        return false;
+    }
+    string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
+    symboleManager.pushInTemporalCommande(commandeType::CONDITION);
+    symboleManager.pushInTemporalCommande("bool");
+    symboleManager.pushInTemporalCommande(tempVar);
+    symboleManager.pushInTemporalCommande(nomVar1);
+    symboleManager.pushInTemporalCommande("<=");
+    symboleManager.pushInTemporalCommande(nomVar2);
+    symboleManager.writeStack(*symboleManager.getTemporalExpression());
+    symboleManager.writeStack(symboleManager.getTemporalCommande());
+    return true;
+}
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitLt(ExprParser::LtContext *ctx)
+// Algorithme :
+//
+{
+
+    string nomVar1;
+    string nomVar2;
+    if(visit(ctx->expr(0)))
+    {
+        nomVar1=symboleManager.getTemporalExpression()->back().elements[1];
+    }
+    else
+    {
+        return false;
+    }
+
+    if(visit(ctx->expr(1)))
+    {
+        nomVar2=symboleManager.getTemporalExpression()->back().elements[1];
+    }
+    else
+    {
+        return false;
+    }
+    string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
+    symboleManager.pushInTemporalCommande(commandeType::CONDITION);
+    symboleManager.pushInTemporalCommande("bool");
+    symboleManager.pushInTemporalCommande(tempVar);
+    symboleManager.pushInTemporalCommande(nomVar1);
+    symboleManager.pushInTemporalCommande("<");
+    symboleManager.pushInTemporalCommande(nomVar2);
+    symboleManager.writeStack(*symboleManager.getTemporalExpression());
+    symboleManager.writeStack(symboleManager.getTemporalCommande());
+    return true;
+}
+
+
+antlrcpp::Any Visiteur::visitEgal(ExprParser::EgalContext *ctx){
+    cout<<"test predicat"<<endl;
+    string nomVar1;
+    string nomVar2;
+    if(visit(ctx->expr(0)))
+    {
+        nomVar1=symboleManager.getTemporalExpression()->back().elements[1];
+    }
+    else
+    {
+        return false;
+    }
+
+    if(visit(ctx->expr(1)))
+    {
+        nomVar2=symboleManager.getTemporalExpression()->back().elements[1];
+    }
+    else
+    {
+        return false;
+    }
+    string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
+    symboleManager.pushInTemporalCommande(commandeType::CONDITION);
+    symboleManager.pushInTemporalCommande("bool");
+    symboleManager.pushInTemporalCommande(tempVar);
+    symboleManager.pushInTemporalCommande(nomVar1);
+    symboleManager.pushInTemporalCommande("==");
+    symboleManager.pushInTemporalCommande(nomVar2);
+    symboleManager.writeStack(*symboleManager.getTemporalExpression());
+    symboleManager.writeStack(symboleManager.getTemporalCommande());
+    return true;
 }
 
  /*

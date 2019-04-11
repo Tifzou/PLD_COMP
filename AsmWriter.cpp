@@ -80,23 +80,30 @@ bool AsmWriter::writeOutputFile(matrice resultat) {
                     cerr << "in case AFF" << endl;
                     myfile << writeAff((*itInstr));
                     break;
-                case 7: // FUNCTION
+                case 9: // FUNCTION
                     cerr << "in case FUNCTION" << endl;
-                    myfile << ".global main\n";
-                    myfile << "main:\n";
+                    myfile << ".global " << (*itInstr).elements[0] << "\n";
+                    myfile << (*itInstr).elements[0] << ":\n";
                     myfile << "\tpushq\t%rbp"<<endl;
                     myfile << "\tmovq\t%rsp, %rbp"<<endl;
                     myfile << "\tsubq\t$16, %rsp" << endl;
 
                     break;
-                case 8: //MAIN
+                case 10: //MAIN
                     cerr << "in case MAIN" << endl;
                     myfile << ".global main\n";
                     myfile << "main:\n";
                     myfile << "\tpushq\t%rbp"<<endl;
                     myfile << "\tmovq\t%rsp, %rbp"<<endl;
                     myfile << "\tsubq\t$16, %rsp" << endl;
-
+                    break;
+                case 11: // FUNC_CALL
+                    cerr << "in case FUNCTION CALL" << endl;
+                    myfile << writeFuncCall((*itInstr));
+                    break;
+                case 12: // FUNC_AFF
+                    cerr << "in case FUNCTION AFF" << endl;
+                    myfile << writeFuncAff((*itInstr));
                     break;
                 default:
                     break;
@@ -334,6 +341,21 @@ string AsmWriter::writeMult(Commande multiplicationCmd)
     asmInstr += "\timull\t%edx, %eax\n";
     asmInstr += "\tmovl\t %eax, "+addressRes+"\n";
 
+    return asmInstr;
+}
+
+string AsmWriter::writeFuncCall(Commande functionCmd)
+{
+    string funcName = functionCmd.elements[0];
+    string asmInstr = "\tcall " + funcName + "\n";
+    return asmInstr;
+}
+
+string AsmWriter::writeFuncAff(Commande functionCmd)
+{
+    string funcName = functionCmd.elements[0];
+    string asmInstr = "\tcall " + funcName + "\n";
+    asmInstr += "\tmovl %eax, " + functionCmd.elements[1] + "\n";
     return asmInstr;
 }
 
