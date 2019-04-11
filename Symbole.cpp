@@ -106,7 +106,7 @@ string Symbole::retrieveVarType(string var)
 {
     for (Commande vs : resp)
     {
-        if (vs.elements[1] == var)
+        if (vs.elements.size()!=0 && vs.elements[1] == var)
         {
             return vs.elements[0];
         }
@@ -181,8 +181,7 @@ void Symbole::pushIfIntoFlowControl(int index)
             }
             break;
         case 2: //pas une bonne solution, pour les ifs multiples
-            flowControl->last->suivant1->suivant1 = bloc;
-            flowControl->last->suivant2->suivant1 = bloc;
+            browsBlocks(flowControl->first, bloc);
             flowControl->last = flowControl->last->suivant1;
             break;
     }
@@ -236,6 +235,36 @@ bool Symbole::browsBlocks(Cell *block, string &type, string var)
     }
     bool test = browsBlocks(block->suivant1, var) || browsBlocks(block->suivant2, var);
     return test;
+}
+
+
+//------------------------------------------------------------------------
+void Symbole::browsBlocks(Cell *block, Cell *curBlock)
+// Algorithme : parcours le graphe et attache le block courant à chaque block qui a un nullptr
+//
+{
+
+    if(block==curBlock)
+    {
+        return;
+    }
+    Cell *tmpCell = new Cell();
+    tmpCell->suivant1=curBlock;
+    tmpCell->suivant2=curBlock;
+    if(block->suivant1==nullptr)
+    {
+        block->suivant1=curBlock;
+        block->suivant2=curBlock;
+    }
+    else
+    {
+        if(block->suivant2==nullptr)
+        {
+            block->suivant2=tmpCell;
+        }
+    }
+    browsBlocks(block->suivant1, curBlock);
+    browsBlocks(block->suivant2, curBlock);
 }
 
 //------------------------------------------------------------------------

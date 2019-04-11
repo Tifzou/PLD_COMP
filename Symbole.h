@@ -240,6 +240,13 @@ class Symbole
     // Contrat :
     //
 
+    void browsBlocks(Cell *block, Cell *curBlock);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+
     //----------------------------------------------------- Getter et Setter
 
     Commande getTemporalCommande()

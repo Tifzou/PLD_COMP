@@ -49,17 +49,21 @@ antlrcpp::Any Visiteur::visitCore(ExprParser::CoreContext *ctx)
 {
     for (ExprParser::CodeContext *cd : ctx->code())
     {
-        if(!visit(cd))
-        {
-            return false;
-        }
+        visit(cd);
     }
     commandeType code = commandeType ::RET;
     symboleManager.pushInTemporalCommande(code);
     if ((bool)visit(ctx->ret()))
     {
         symboleManager.writeStack(symboleManager.getTemporalCommande());
-        symboleManager.pushIfIntoFlowControl(2);
+        if(symboleManager.getFlowControl()->first== nullptr)
+        {
+            symboleManager.pushIntoFlowControl();
+        }
+        else
+        {
+            symboleManager.pushIfIntoFlowControl(2);
+        }
         symboleManager.deleteTemporalCommand();
         return true;
     }
@@ -72,9 +76,7 @@ antlrcpp::Any Visiteur::visitDecdef(ExprParser::DecdefContext *ctx)
 // Algorithme :
 //
 {
-    
     string typeVar = ctx->typevar()->getText();
-
     symboleManager.pushInTemporalCommande(typeVar);
     visit(ctx->vari());
 
@@ -420,7 +422,6 @@ antlrcpp::Any Visiteur::visitIfElse(ExprParser::IfElseContext *ctx)
     commandeType code = commandeType::IF;
     symboleManager.pushInTemporalCommande(code);
     symboleManager.writeStack(symboleManager.getTemporalCommande());
-    cout<<"test"<<endl;
     if(visit(ctx->boolExpression()))
     {
         //symboleManager.writeStack(symboleManager.getTemporalCommande());
@@ -463,6 +464,7 @@ antlrcpp::Any Visiteur::visitSimpleIf(ExprParser::SimpleIfContext *ctx){
 //
     commandeType code = commandeType::IF;
     symboleManager.pushInTemporalCommande(code);
+    symboleManager.writeStack(symboleManager.getTemporalCommande());
     if(visit(ctx->boolExpression()))
     {
         //symboleManager.writeStack(symboleManager.getTemporalCommande());
