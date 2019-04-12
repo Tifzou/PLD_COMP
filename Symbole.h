@@ -64,7 +64,7 @@ typedef struct Cell
 typedef struct ListC
 {
     Cell *first;
-    Cell *last;
+    Cell *last; //penser à garder les traces pour tous les ifs en stockant un vector des pointeurs
 } ListC;
 
 //------------------------------------------------------------------------
@@ -75,10 +75,10 @@ typedef struct ListC
 
 class Symbole
 {
-//----------------------------------------------------------------- PUBLIC
+    //----------------------------------------------------------------- PUBLIC
 
-public:
-//----------------------------------------------------- Méthodes publiques
+  public:
+    //----------------------------------------------------- Méthodes publiques
     bool varExist(string var);
     // Mode d'emploi :
     //
@@ -97,38 +97,26 @@ public:
     // Contrat :
     //
 
-    void writeStack(Commande curCommande)
+    void writeStack(Commande curCommande);
     // Mode d'emploi :
     //
     // Contrat :
     //
-    {
-        resp.push_back(curCommande);
-    }
 
-    void writeStack(commandeType code, vector<string> commande)
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-    {
-        Commande curCommande;
-        curCommande.type = code;
-        curCommande.elements = commande;
-        resp.push_back(curCommande);
-    }
 
-    void writeStack(matrice commandes)
+    void writeStack(commandeType code, vector<string> commande);
     // Mode d'emploi :
     //
     // Contrat :
     //
-    {
-        for(Commande curCommande: commandes)
-        {
-            resp.push_back(curCommande);
-        }
-    }
+
+
+    void writeStack(matrice commandes);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
 
     void pushInTemporalCommande(commandeType code, vector<string> commande)
     // Mode d'emploi :
@@ -186,29 +174,18 @@ public:
         temporalStackCommande.elements.clear();
     }
 
-    void pushTemporalMatriceVari(vector<string> element)
+    void pushTemporalMatriceVari(vector<string> element);
     // Mode d'emploi :
     //
     // Contrat :
     //
-    {
-        Commande line;
-        line.type = OPER;
-        line.elements = element;
-        temporalExpression.push_back(line);
-    }
 
-    void pushTemporalMatriceVari(commandeType code, vector<string> element)
+
+    void pushTemporalMatriceVari(commandeType code, vector<string> element);
     // Mode d'emploi :
     //
     // Contrat :
     //
-    {
-        Commande line;
-        line.type = code;
-        line.elements = element;
-        temporalExpression.push_back(line);
-    }
 
 
     int createTemporalVar()
@@ -220,17 +197,42 @@ public:
         return tmpCounter++;
     }
 
-
-    string retrieveVarType(string var)
+    string retrieveVarType(string var);
     // Mode d'emploi :
     //
     // Contrat :
     //
-    {
 
+
+
+    //void pushIntoFlowControl();
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+
+    void pushIfIntoFlowControl(Cell* curBlock);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    void pushElseIntoFlowControl(Cell* curBlock);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    void pushLastBlockIntoFlowControl();
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+ /*   {
         for (Commande vs : resp)
         {
-            if (vs.elements.size()!=0 && vs.elements[1] == var) // PB
+            if (vs.elements[1] == var)
             {
                 return vs.elements[0];
             }
@@ -238,24 +240,17 @@ public:
 
         for (Commande vs : temporalExpression)
         {
-            if ((vs.type == commandeType::OPER) && vs.elements[1] == var)
+            if ((vs.type == commandeType::OPER)  && vs.elements[1] == var)
             {
                 return vs.elements[0];
             }
         }
 
-        string typeVar;
-
-        if(browsBlocks(flowControl->first, typeVar, var))
-        {
-            return typeVar;
-        }
-
         return nullptr;
-    }
+    }*/
 
 
-    bool browsBlocks(Cell *block, string &type, string var);
+    //bool browsBlocks(Cell *block, string &type, string var);
 
     void createVar(string varName)
     {
@@ -263,26 +258,8 @@ public:
         tablesDesSymboles.insert(p);
     }
 
-    void pushIntoFlowControl()
-    {
-        cout << "OK" << endl;
-        if (flowControl->first == nullptr )
-        {
-            Cell *bloc = new Cell();
-            flowControl->first = bloc;
-            flowControl->last = flowControl->first;
-        }
-        else
-        {
+    void pushIntoFlowControl();
 
-            Cell *bloc = new Cell();
-            bloc->data = resp;
-            flowControl->last->suivant1 = bloc;
-            flowControl->last = flowControl->last->suivant1;
-        }
-
-        resp.clear();
-    }
 
     void pushIfIntoFlowControl(int index)
     {
@@ -326,6 +303,27 @@ public:
     }
 
 
+
+
+    bool browsBlocks(Cell *block, string var);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    bool browsBlocks(Cell *block, string &type, string var);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    void browsBlocks(Cell *block, Cell *curBlock);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+
     //----------------------------------------------------- Getter et Setter
 
     Commande getTemporalCommande()
@@ -364,8 +362,7 @@ public:
         return &temporalExpression;
     }
 
-
-//-------------------------------------------- Constructeurs - destructeur
+    //-------------------------------------------- Constructeurs - destructeur
     Symbole()
     {
         tmpCounter = 0;
@@ -378,7 +375,17 @@ public:
     // Contrat :
     //
 
-    virtual ~Symbole() {}
+    virtual ~Symbole()
+    {
+
+    }
+
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    void destroyGraph(Cell* block);
     // Mode d'emploi :
     //
     // Contrat :
@@ -386,17 +393,17 @@ public:
 
     //------------------------------------------------------------------ PRIVE
 
-protected:
-//----------------------------------------------------- Méthodes protégées
+  protected:
+    //----------------------------------------------------- Méthodes protégées
 
-private:
-//------------------------------------------------------- Méthodes privées
+  private:
+    //------------------------------------------------------- Méthodes privées
 
-protected:
-//----------------------------------------------------- Attributs protégés
+  protected:
+    //----------------------------------------------------- Attributs protégés
 
-private:
-//------------------------------------------------------- Attributs privés
+  private:
+    //------------------------------------------------------- Attributs privés
     matrice resp;
     matrice temporalExpression;
     ListC *flowControl;
@@ -407,8 +414,7 @@ private:
     int index;
     int indexFunction;
 
-//----------------------------------------------------------- Types privés
-
+    //----------------------------------------------------------- Types privés
 };
 
 #endif // SYMBOLE_H

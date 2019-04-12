@@ -168,9 +168,19 @@ antlrcpp::Any Visiteur::visitCore(ExprParser::CoreContext *ctx)
     {
 
         symboleManager.writeStack(symboleManager.getTemporalCommande());
+        if(symboleManager.getFlowControl()->first== nullptr)
+        {
+            symboleManager.pushIntoFlowControl();
+        }
+        else
+        {
+            symboleManager.pushLastBlockIntoFlowControl();
+        }
+        symboleManager.deleteTemporalCommand();
+        return true;
     }
-    symboleManager.deleteTemporalCommand();
-    return true;
+
+    return false;
 }
 
 //------------------------------------------------------------------------
@@ -179,7 +189,6 @@ antlrcpp::Any Visiteur::visitDecdef(ExprParser::DecdefContext *ctx)
 //
 {
     string typeVar = ctx->typevar()->getText();
-
     symboleManager.pushInTemporalCommande(typeVar);
     visit(ctx->vari());
 
@@ -243,9 +252,13 @@ antlrcpp::Any Visiteur::visitRet(ExprParser::RetContext *ctx)
         symboleManager.pushInTemporalCommande(symboleManager.getTemporalExpression()->back().elements[1]);
         symboleManager.writeStack(*symboleManager.getTemporalExpression());
         symboleManager.deleteTemporalExpression();
-        return true;
     }
-    return false;
+    else
+    {
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -265,6 +278,7 @@ antlrcpp::Any Visiteur::visitDecVar(ExprParser::DecVarContext *ctx)
 
         else
         {
+            symboleManager.createVar(nameVar);
             commandeType code = commandeType::VAR_DEC;
             symboleManager.pushInTemporalCommande(code); // Surchage pushTemporalStack(vector<string> commande)
             symboleManager.pushInTemporalCommande(nameVar);
@@ -295,11 +309,13 @@ antlrcpp::Any Visiteur::visitDefVar(ExprParser::DefVarContext *ctx)
     //Si nameVar et typeVariable n'existe pas dans la table des symboles
     else
     {
+
         commandeType code = commandeType::VAR_DEF;
         symboleManager.pushInTemporalCommande(nameVar);
         symboleManager.pushInTemporalCommande(code); // Surchage pushTemporalStack(vector<string> commande)
         if(visit(ctx->expr()))
         {
+            symboleManager.createVar(nameVar);
             symboleManager.pushInTemporalCommande(symboleManager.getTemporalExpression()->back().elements[1]);
             symboleManager.writeStack(*symboleManager.getTemporalExpression());
             symboleManager.deleteTemporalExpression();
@@ -506,14 +522,6 @@ antlrcpp::Any Visiteur::visitChar(ExprParser::CharContext *ctx)
     return ctx->TYPECHAR()->getText();
 }
 
-//------------------------------------------------------------------------
-antlrcpp::Any Visiteur::visitCondif(ExprParser::CondIfContext *ctx)
-// Algorithme :
-//
-{
-    //return visit(ctx->condition());
-    return true;
-}
 
 //------------------------------------------------------------------------
 antlrcpp::Any Visiteur::visitIfElse(ExprParser::IfElseContext *ctx)
@@ -533,12 +541,12 @@ antlrcpp::Any Visiteur::visitIfElse(ExprParser::IfElseContext *ctx)
     {
         return false;
     }
-
+    Cell* curBlock=symboleManager.getFlowControl()->last;
     //On visite le block "if" qui s'executera si le predicat est verifié
     if(visit(ctx->condIf()))
     {
         //symboleManager.writeStack(symboleManager.getTemporalCommande());
-        symboleManager.pushIfIntoFlowControl(1);
+        symboleManager.pushIfIntoFlowControl(curBlock);
 
     }
     else
@@ -551,7 +559,7 @@ antlrcpp::Any Visiteur::visitIfElse(ExprParser::IfElseContext *ctx)
     if(visit(ctx->condElse()))
     {
         //symboleManager.writeStack(symboleManager.getTemporalCommande());
-        symboleManager.pushIfIntoFlowControl(1);
+        symboleManager.pushElseIntoFlowControl(curBlock);
     }
     else
     {
@@ -564,6 +572,7 @@ antlrcpp::Any Visiteur::visitIfElse(ExprParser::IfElseContext *ctx)
 antlrcpp::Any Visiteur::visitSimpleIf(ExprParser::SimpleIfContext *ctx){
 // Algorithme :
 //
+
     commandeType code = commandeType::IF;
     symboleManager.pushInTemporalCommande(code);
     symboleManager.writeStack(symboleManager.getTemporalCommande());
@@ -578,10 +587,12 @@ antlrcpp::Any Visiteur::visitSimpleIf(ExprParser::SimpleIfContext *ctx){
     }
 
     //On visite le block "if" qui s'executera si le predicat est verifié
+    Cell* curBlock=symboleManager.getFlowControl()->last;
     if(visit(ctx->condIf()))
     {
         //symboleManager.writeStack(symboleManager.getTemporalCommande());
-        symboleManager.pushIfIntoFlowControl(1);
+        symboleManager.pushIfIntoFlowControl(curBlock);
+        symboleManager.pushElseIntoFlowControl(curBlock);
     }
     else
     {

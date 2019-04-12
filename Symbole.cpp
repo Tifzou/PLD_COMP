@@ -28,21 +28,238 @@
 
 //----------------------------------------------------- Méthodes publiques
 
+
 //------------------------------------------------------------------------
 bool Symbole::varExist(string var)
 // Algorithme : renvoi 'true' si la variable 'var' est déjà déclarée
 //
 {
-    for(Commande commande : resp)
+    if(tablesDesSymboles.find(var)!=tablesDesSymboles.end())
     {
-        if((commande.type == commandeType::VAR_DEC || commande.type == commandeType::VAR_DEF) && commande.elements[1] == var)
+        return true;
+    }
+
+    return false;
+}
+
+
+//------------------------------------------------------------------------
+void Symbole::writeStack(Commande curCommande)
+// Algorithme :
+//
+{
+    resp.push_back(curCommande);
+}
+
+
+//------------------------------------------------------------------------
+void Symbole::writeStack(commandeType code, vector<string> commande)
+// Algorithme :
+//
+{
+    Commande curCommande;
+    curCommande.type = code;
+    curCommande.elements = commande;
+    resp.push_back(curCommande);
+}
+
+
+//------------------------------------------------------------------------
+void Symbole::writeStack(matrice commandes)
+// Algorithme :
+//
+{
+    for (Commande curCommande : commandes)
+    {
+        resp.push_back(curCommande);
+    }
+}
+
+//------------------------------------------------------------------------
+void Symbole::pushTemporalMatriceVari(vector<string> element)
+// Algorithme :
+//
+{
+    Commande line;
+    line.type = OPER;
+    line.elements = element;
+    temporalExpression.push_back(line);
+}
+
+
+//------------------------------------------------------------------------
+void Symbole::pushTemporalMatriceVari(commandeType code, vector<string> element)
+// Algorithme :
+//
+{
+    Commande line;
+    line.type = code;
+    line.elements = element;
+    temporalExpression.push_back(line);
+}
+
+
+//------------------------------------------------------------------------
+string Symbole::retrieveVarType(string var)
+// Algorithme :
+//
+{
+    for (Commande vs : resp)
+    {
+        if (vs.elements.size()!=0 && vs.elements[1] == var)
+        {
+            return vs.elements[0];
+        }
+    }
+
+    for (Commande vs : temporalExpression)
+    {
+        if ((vs.type == commandeType::OPER) && vs.elements[1] == var)
+        {
+            return vs.elements[0];
+        }
+    }
+
+    string typeVar;
+
+    if(browsBlocks(flowControl->first, typeVar, var))
+    {
+        return typeVar;
+    }
+
+    return nullptr;
+}
+
+
+//------------------------------------------------------------------------
+void Symbole::pushIntoFlowControl()
+// Algorithme :
+//
+{
+    if (flowControl->first == nullptr )
+    {
+        Cell *bloc = new Cell();
+        bloc->data = resp;
+        flowControl->first = bloc;
+        flowControl->last = flowControl->first;
+    }
+    else
+    {
+
+        Cell *bloc = new Cell();
+        bloc->data = resp;
+        flowControl->last->suivant1 = bloc;
+        flowControl->last = flowControl->last->suivant1;
+    }
+
+    resp.clear();
+    temporalExpression.clear();
+    temporalStackCommande.elements.clear();
+    temporalStackCommande.type=ERR;
+
+}
+
+
+//------------------------------------------------------------------------
+void Symbole::pushIfIntoFlowControl(Cell *curBlock)
+// Algorithme :
+//
+{
+    Cell *bloc = new Cell();
+    bloc->data = resp;
+    if(curBlock->suivant1==nullptr)
+    {
+        curBlock->suivant1 = bloc;
+    }
+    flowControl->last=bloc;
+
+    resp.clear();
+    temporalExpression.clear();
+    temporalStackCommande.elements.clear();
+    temporalStackCommande.type=ERR;
+}
+
+void Symbole::pushElseIntoFlowControl(Cell* curBlock)
+{
+    Cell *bloc = new Cell();
+    bloc->data = resp;
+
+    if(curBlock->suivant2==nullptr)
+    {
+        curBlock->suivant2 = bloc;
+    }
+    flowControl->last=bloc;
+    resp.clear();
+    temporalExpression.clear();
+    temporalStackCommande.elements.clear();
+    temporalStackCommande.type=ERR;
+}
+
+
+void Symbole::pushLastBlockIntoFlowControl()
+{
+    Cell *bloc = new Cell();
+    bloc->data = resp;
+    browsBlocks(flowControl->first, bloc);
+    flowControl->last = flowControl->last->suivant1;
+    resp.clear();
+    temporalExpression.clear();
+    temporalStackCommande.elements.clear();
+    temporalStackCommande.type=ERR;
+}
+
+
+
+//------------------------------------------------------------------------
+bool Symbole::browsBlocks(Cell *block, string var)
+// Algorithme : renvoi 'true' si la variable 'var' est déjà déclarée
+//
+{
+    if(block==nullptr)
+    {
+        return false;
+    }
+
+    for(Commande curCom: block->data)
+    {
+        if(curCom.elements[1]==var)
         {
             return true;
         }
     }
-    return false;
+    bool test = browsBlocks(block->suivant1, var) || browsBlocks(block->suivant2, var);
+    cout<<test<<endl;
+    return test;
 }
 
+//------------------------------------------------------------------------
+void Symbole::browsBlocks(Cell *block, Cell *curBlock)
+// Algorithme : parcours le graphe et attache le block courant à chaque block qui a un nullptr
+//
+{
+
+    if(block==curBlock)
+    {
+        return;
+    }
+    Cell *tmpCell = new Cell();
+    tmpCell->suivant1=curBlock;
+    tmpCell->suivant2=curBlock;
+    if(block->suivant1==nullptr)
+    {
+        block->suivant1=curBlock;
+        block->suivant2=curBlock;
+    }
+    else
+    {
+        if(block->suivant2==nullptr)
+        {
+            block->suivant2=tmpCell;
+        }
+    }
+    browsBlocks(block->suivant1, curBlock);
+    browsBlocks(block->suivant2, curBlock);
+}
 
 //------------------------------------------------------------------------
 bool Symbole::varDef(string var)
@@ -56,7 +273,8 @@ bool Symbole::varDef(string var)
             return true;
         }
     }
-    return false;
+
+    return browsBlocks(flowControl->first, var);
 }
 
 //------------------------------------------------------------------------
@@ -112,3 +330,15 @@ bool Symbole::browsBlocks(Cell *block, string &type, string var)
 //----------------------------------------------------- Méthodes protégées
 
 //------------------------------------------------------- Méthodes privées
+void Symbole::destroyGraph(Cell *block)
+{
+    if(block==nullptr)
+    {
+        return;
+    }
+
+    destroyGraph(block->suivant1);
+    destroyGraph(block->suivant2);
+    delete(block);
+
+}

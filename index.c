@@ -1,13 +1,13 @@
-int sum()
-{
-    int a = 4;
-    int b = 1;
-    return a+b;
-}
-
 int main()
 {
     int a;
-    a=sum();
+    if(3==2)
+    {
+        a=3;
+    }
+    else
+    {
+        a= 42;
+    }
     return a;
 }

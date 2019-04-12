@@ -17,11 +17,13 @@ code: typevar vari ';' #decdef
     | typevar VAR '=' VAR'(' param* ')' ';' #decfunc
     | VAR '=' VAR '(' param* ')' ';' #afffunc
     | VAR '(' param* ')' ';'#callfunc
+    | condition #condif
     ;
 
 condition: 'if' '('boolExpression')' '{'condIf'}' 'else' '{'condElse'}' #ifElse
     |'if' '('boolExpression')' '{'condIf'}' #simpleIf
     ;
+
 
 condIf:ifCore;
 condElse:ifCore;
@@ -37,7 +39,7 @@ predicat:expr '==' expr #egal
     |expr '>' expr # gt
     |expr '<=' expr # le
     |expr '<' expr # lt
-;
+    ;
 
 ret: 'return' expr ';' ;
 
