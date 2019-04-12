@@ -37,18 +37,20 @@ antlrcpp::Any Visiteur::visitFunction(ExprParser::FunctionContext *ctx)
     string functName = ctx->VAR()->getText();
     if (!checkFunctDec(functName))
     {
-        cout << "function exists" << endl;
+        //cout << "function exists" << endl;
         return false;
     }
     //Si functName n'existe pas dans la table des fonctions
     else
     {
-        cout << "function doesn't exist, let's create it" << endl;
+        //cout << "function doesn't exist, let's create it" << endl;
         symboleManager.createFunction(functName);
         commandeType code = commandeType::FUNC;
+
+        symboleManager.pushInTemporalCommande(code);
         symboleManager.pushInTemporalCommande(functName);
-        symboleManager.pushInTemporalCommande(code); // Surchage pushTemporalStack(vector<string> commande)
-        // TODO add parameter visit
+        //visit(ctx->param());
+        // Surchage pushTemporalStack(vector<string> commande)
         symboleManager.writeStack(symboleManager.getTemporalCommande());
         symboleManager.deleteTemporalCommand();
         visit(ctx->core());
@@ -63,7 +65,6 @@ antlrcpp::Any Visiteur::visitMainFunction(ExprParser::MainFunctionContext *ctx)
 {
     commandeType code = commandeType::MAIN;
     symboleManager.pushInTemporalCommande(code); // Surchage pushTemporalStack(vector<string> commande)
-    // TODO add parameter visit
     symboleManager.writeStack(symboleManager.getTemporalCommande());
     symboleManager.deleteTemporalCommand();
     visit(ctx->core());
@@ -74,10 +75,13 @@ antlrcpp::Any Visiteur::visitMainFunction(ExprParser::MainFunctionContext *ctx)
 antlrcpp::Any Visiteur::visitParam(ExprParser::ParamContext *ctx)
 // Algorithme :
 //
-{//
-    string varName = ctx->VAR()->getText();
-
-    symboleManager.pushInTemporalCommande(varName);
+{
+    for(antlr4::tree::TerminalNode *tn:ctx->VAR())
+    {
+        string varName = tn->getText();
+        symboleManager.pushInTemporalCommande(varName);
+    }
+    // todo : if name already exists, break and error
 
     return true;
 }
@@ -88,47 +92,69 @@ antlrcpp::Any Visiteur::visitAfffunc(ExprParser::AfffuncContext *ctx)
 // De plus, si la variable est déjà déclarée, efface la commande temporelle et la remplit avec une erreur
 // Sinon, ajoute la variable dans la pile de la commande
 {
-    string funcName = ctx->VAR()[1]->getText();
+
+
+    string retVar = ctx->VAR()[0].getText();
+    symboleManager.pushInTemporalCommande(retVar);
+
+
+    return visit(ctx->functionAff());
+}
+
+antlrcpp::Any Visiteur::visitFunctionAff(ExprParser::FunctionAffContext *ctx)
+{
+    string nameFunc = ctx->VAR(0)->getText();
     commandeType code = commandeType::FUNC_AFF;
-    string retVar = ctx->VAR()[0]->getText();
-    if(symboleManager.functExist(funcName))
-    {
+    if(symboleManager.functExist(nameFunc)) {
         symboleManager.pushInTemporalCommande(code);
-        symboleManager.pushInTemporalCommande(funcName);
-        symboleManager.pushInTemporalCommande(retVar);
-        // TODO push param
-        symboleManager.writeStack(symboleManager.getTemporalCommande());
-        symboleManager.deleteTemporalCommand();
+        symboleManager.pushInTemporalCommande(nameFunc);
     }
     else
     {
         commandeType code = commandeType::ERR;
         vector<string> err;
-        string error3 = "name of function '" + funcName + "' not assigned";
+        string error3 = "name of function '" + nameFunc + "' not assigned";
         err.push_back("0323");
         err.push_back(error3);
         symboleManager.deleteTemporalCommand(); //temporalStack = null;
         symboleManager.pushInTemporalCommande(code, err);
         symboleManager.writeStack(symboleManager.getTemporalCommande());
         symboleManager.deleteTemporalCommand();
+        return false;
     }
-
+    for(int i(1); i<ctx->VAR().size(); i++)
+    {
+        string varName = ctx->VAR(i)->getText();
+        symboleManager.pushInTemporalCommande(varName);
+    }
+        symboleManager.writeStack(symboleManager.getTemporalCommande());
+        symboleManager.deleteTemporalCommand();
     return true;
 }
-
 //------------------------------------------------------------------------
 antlrcpp::Any Visiteur::visitCallfunc(ExprParser::CallfuncContext *ctx)
 // Algorithme :
 //
 {
-    string funcName = ctx->VAR()->getText();
+    string funcName = "";//ctx->VAR()->getText();
 
     if(symboleManager.functExist(funcName))
     {
-        cout << "the function exists so we can call it" << endl;
+        //cout << "the function exists so we can call it" << endl;
         commandeType code = commandeType::FUNC_CALL;
         symboleManager.pushInTemporalCommande(code);
         symboleManager.pushInTemporalCommande(funcName);
+
+        /*vector<string> parameters = ctx->param();
+        if(parameters.size() > 6)
+        {
+            parameters.erase(parameters.begin()+6, parameters.end()-1);
+        }
+        for(unsigned long i = parameters.size()-1 ; i>=0 ; i--)
+        {
+            visitParam(ctx->param()[i]);
+        }*/
+
         symboleManager.writeStack(symboleManager.getTemporalCommande());
         symboleManager.deleteTemporalCommand();
     }
@@ -156,6 +182,7 @@ antlrcpp::Any Visiteur::visitCore(ExprParser::CoreContext *ctx)
 // Algorithme :
 //
 {
+
     for (ExprParser::CodeContext *cd : ctx->code())
     {
         visit(cd);

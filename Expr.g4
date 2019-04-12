@@ -4,18 +4,19 @@ prog:base;
 
 base: (function)* mainFunction;
 
-function : typevar VAR '(' param* ')' core ;
+function : typevar VAR '(' param? ')' core ;
+functionAff : VAR '(' VAR? (',' VAR)* ')' ;
 
 mainFunction : 'int main' '(' ')'core ;
 
-param : typevar VAR (',')*;
+param : typevar VAR(',' typevar VAR)*;
 
 core: '{' code* ret '}';
 
 code: typevar vari ';' #decdef
     | VAR '=' expr ';' #aff
-    | VAR '=' VAR '(' param* ')' ';' #afffunc
-    | VAR '(' param* ')' ';'#callfunc
+    | VAR '=' functionAff ';' #afffunc
+    | VAR '(' VAR? (',' VAR)* ')' ';'#callfunc
     ;
 
 condition: 'if' '('boolExpression')' '{'condIf'}' 'else' '{'condElse'}' #ifElse

@@ -80,19 +80,13 @@ bool AsmWriter::writeOutputFile(matrice resultat) {
                     cerr << "in case AFF" << endl;
                     myfile << writeAff((*itInstr));
                     break;
-                case 9: // FUNCTION
+                case 9 : // FUNCTION
                     cerr << "in case FUNCTION" << endl;
-                    myfile << ".global " << (*itInstr).elements[0] << "\n";
-                    myfile << "\t.type\t"+ (*itInstr).elements[0] +", @function\n";
-                    myfile << (*itInstr).elements[0] << ":\n";
-                    myfile << "\tpushq\t%rbp"<<endl;
-                    myfile << "\tmovq\t%rsp, %rbp"<<endl;
-                    //myfile << "\tsubq\t$16, %rsp" << endl;
-
+                    myfile << writeFunc((*itInstr));
                     break;
                 case 10: //MAIN
                     cerr << "in case MAIN" << endl;
-                    myfile << ".global main\n";
+                    myfile << "\t.global main\n";
                     myfile << "\t.type\t main, @function\n";
                     myfile << "main:\n";
                     myfile << "\tpushq\t%rbp"<<endl;
@@ -348,22 +342,75 @@ string AsmWriter::writeMult(Commande multiplicationCmd)
 
 string AsmWriter::writeFuncCall(Commande functionCmd)
 {
-    string funcName = functionCmd.elements[0];
-    string asmInstr = "\tcall " + funcName + "\n";
+    string funcName = functionCmd.elements[1];
+    string asmInstr = "";
+    for(int i=2 ; i<functionCmd.elements.size() ; i++)
+    {
+        string varName = functionCmd.elements[i];
+        map<string, string>::iterator it = variables.find(varName);
+        string varAddr;
+        if (it != variables.end())
+        {
+            varAddr = it->second;
+        }
+        else
+        {
+            cout << "Houston, we have a problem (the variable doesn't exist" << endl;
+        }
+        asmInstr += "\tmov " + varAddr + ", " + paramRegister[i-2] + "\n";
+    }
+    asmInstr += "\tcall " + funcName + "\n";
     return asmInstr;
 }
 
 string AsmWriter::writeFuncAff(Commande functionCmd)
 {
-    string funcName = functionCmd.elements[0];
-    string asmInstr = "\tcall " + funcName + "\n";
+    string funcName = functionCmd.elements[1];
+    string asmInstr = "";
+    for(int i=2 ; i<functionCmd.elements.size() ; i++)
+    {
+        string varName = functionCmd.elements[i];
+        map<string, string>::iterator it = variables.find(varName);
+        string varAddr;
+        if (it != variables.end())
+        {
+            varAddr = it->second;
+        }
+        else
+        {
+            cout << "Houston, we have a problem (the variable doesn't exist" << endl;
+        }
+        asmInstr += "\tmov " + varAddr + ", " + paramRegister[i-2] + "\n";
+    }
+    asmInstr += "\tcall " + funcName + "\n";
     map<string, string>::iterator it = variables.find(functionCmd.elements[1]);
     if(it != variables.end())
     {
         string retVarAddr = it->second;
         asmInstr += "\tmovl %eax, " + retVarAddr + "\n";
+    } else{
+        cout << "problem : the variable doesn't exist..." << endl;
     }
 
+    return asmInstr;
+}
+
+string AsmWriter::writeFunc(Commande functionCmd)
+{
+    string asmInstr = "\t.global " + functionCmd.elements[0] + "\n";
+    asmInstr += "\t.type\t"+ functionCmd.elements[0] +", @function\n";
+    asmInstr += functionCmd.elements[0] += ":\n";
+    asmInstr += "\tpushq\t%rbp\n";
+    asmInstr += "\tmovq\t%rsp, %rbp\n";
+    unsigned long nbParam = functionCmd.elements.size()-2;
+    for(int i = 0 ; i<nbParam ; i++)
+    {
+        long index = nbParam*(-4);
+        string varAddress = to_string(index) + "(%rbp)";
+        string varName = "!t" + to_string(nbParam);
+        variables.insert(make_pair(varName, varAddress));
+        asmInstr += "\tmovl\t" + paramRegister[i] + ", " + to_string(index) + "(%rbp)\n";
+    }
     return asmInstr;
 }
 

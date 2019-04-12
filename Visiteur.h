@@ -137,6 +137,8 @@ public:
     // Contrat :
     //
 
+    antlrcpp::Any visitFunctionAff(ExprParser::FunctionAffContext *ctx);
+
     antlrcpp::Any visitAdd(ExprParser::AddContext *ctx)
     //
     // Contrat :
