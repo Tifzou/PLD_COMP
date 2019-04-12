@@ -21,11 +21,9 @@ bool AsmWriter::convert(){
     size_t foundCpp=inFile.find(".cpp",0);
     if (foundCpp!=std::string::npos){
         inFile.replace(inFile.end()-4,inFile.end(),".asm");
-        cout<<"Okay, .cpp rules"<<endl;
     }else{
         size_t foundC=inFile.find(".c",0);
         if (foundC!=std::string::npos){
-            cout<<"Okay, .c rules"<<endl;
             inFile.replace(inFile.end()-2,inFile.end(),".s");
         }else{
             cerr<<"Le fichier d'entrée n'a pas la bonne extension !\n";
