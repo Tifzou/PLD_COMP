@@ -234,7 +234,7 @@ antlrcpp::Any Visiteur::visitExpr(ExprParser::ExprContext *ctx)
         commande.push_back(symboleManager.retrieveVarType(nomVar1));
         commande.push_back(tempVar);
         commande.push_back(nomVar1);
-        commande.push_back("+");
+        commande.push_back(ctx->operatorAddSub(i-1)->getText());
         commande.push_back(nomVar2);
 
         symboleManager.pushTemporalMatriceVari(commande);
@@ -257,7 +257,7 @@ antlrcpp::Any Visiteur::visitExpr(ExprParser::ExprContext *ctx)
             commande.push_back(symboleManager.retrieveVarType(nomVar1));
             commande.push_back(tempVar);
             commande.push_back(nomVar1);
-            commande.push_back("+");
+            commande.push_back(ctx->operatorAddSub(ctx->terme().size()-1)->getText());
             commande.push_back(nomVar2);
 
             symboleManager.pushTemporalMatriceVari(commande);

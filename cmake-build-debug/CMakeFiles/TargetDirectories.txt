@@ -1,0 +1,4 @@
+C:/Users/floch/CLionProjects/PLD_COMP/cmake-build-debug/CMakeFiles/generate.dir
+C:/Users/floch/CLionProjects/PLD_COMP/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/floch/CLionProjects/PLD_COMP/cmake-build-debug/CMakeFiles/compilate.dir
+C:/Users/floch/CLionProjects/PLD_COMP/cmake-build-debug/CMakeFiles/edit_cache.dir
