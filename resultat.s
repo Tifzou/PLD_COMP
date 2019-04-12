@@ -9,7 +9,7 @@ main:
 if0:
 	movl	-8(%rbp), %eax
 	movl	%eax, -12(%rbp)
-	movl	$4, -16(%rbp)
+	movl	$3, -16(%rbp)
 	movl	-12(%rbp), %edx
 	movl	-16(%rbp), %eax
 	cmpl	%edx, %eax
@@ -19,7 +19,7 @@ if0:
 	movl	%eax, -8(%rbp)
 	jmp endif0
 else0:
-	movl	$78, -24(%rbp)
+	movl	$70, -24(%rbp)
 	movl	-24(%rbp), %eax
 	movl	%eax, -8(%rbp)
 endif0:
