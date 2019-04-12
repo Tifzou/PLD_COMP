@@ -234,8 +234,6 @@ antlrcpp::Any Visiteur::visitRet(ExprParser::RetContext *ctx)
 {
     if(visit(ctx->expr()))
     {
-        cout<<"ICI"<<endl;
-
         symboleManager.pushInTemporalCommande(symboleManager.getTemporalExpression()->back().elements[1]);
         symboleManager.writeStack(*symboleManager.getTemporalExpression());
         symboleManager.deleteTemporalExpression();

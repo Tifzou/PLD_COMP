@@ -111,9 +111,6 @@ bool AsmWriter::writeOutputFile(matrice resultat) {
                     break;
             }
         }
-        myfile << "\tmovq\t%rbp, %rsp" << endl;
-        myfile << "\tpopq\t%rbp"<<endl;
-        myfile << "\tret"<<endl;
         myfile.close();
         return 0;
     }else{
@@ -136,6 +133,9 @@ string AsmWriter::writeReturn(Commande returnCmd)
         address = "$"+nomVar;
     }
     string asmInstr = "\tmovl\t"+address+", %eax\n";
+    asmInstr += "\tmovq\t%rbp, %rsp\n";
+    asmInstr += "\tpopq\t%rbp\n";
+    asmInstr += "\tret\n";
     return asmInstr;
 }
 
