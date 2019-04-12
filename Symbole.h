@@ -227,14 +227,10 @@ public:
     // Contrat :
     //
     {
+
         for (Commande vs : resp)
         {
-            if(vs == nullptr)
-                cout << "symbole.h --> retrieve Var type ==> vs null" << endl;
-            else
-                cout << "vs.elements.size not empty" << endl;
-
-            if (vs.elements[1] == var) // PB
+            if (vs.elements.size()!=0 && vs.elements[1] == var) // PB
             {
                 return vs.elements[0];
             }
@@ -242,14 +238,24 @@ public:
 
         for (Commande vs : temporalExpression)
         {
-            if ((vs.type == commandeType::OPER)  && vs.elements[1] == var)
+            if ((vs.type == commandeType::OPER) && vs.elements[1] == var)
             {
                 return vs.elements[0];
             }
         }
 
+        string typeVar;
+
+        if(browsBlocks(flowControl->first, typeVar, var))
+        {
+            return typeVar;
+        }
+
         return nullptr;
     }
+
+
+    bool browsBlocks(Cell *block, string &type, string var);
 
     void createVar(string varName)
     {

@@ -131,11 +131,27 @@ public:
     //
 
 
-    antlrcpp::Any visitFacteur(ExprParser::FacteurContext *ctx) ;
+    //antlrcpp::Any visitFacteur(ExprParser::FacteurContext *ctx) ;
     // Mode d'emploi :
     //
     // Contrat :
     //
+
+    antlrcpp::Any visitAdd(ExprParser::AddContext *ctx)
+    //
+    // Contrat :
+    //
+    {
+        return "+";
+    }
+
+    antlrcpp::Any visitSub(ExprParser::SubContext *ctx)
+    //
+    // Contrat :
+    //
+    {
+        return "-";
+    }
 
     antlrcpp::Any visitFactPar(ExprParser::FactParContext *ctx);
     // Mode d'emploi :

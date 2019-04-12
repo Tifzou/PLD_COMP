@@ -37,11 +37,13 @@ antlrcpp::Any Visiteur::visitFunction(ExprParser::FunctionContext *ctx)
     string functName = ctx->VAR()->getText();
     if (!checkFunctDec(functName)) // si function existe deja
     {
+        cout << "function exists" << endl;
         return false;
     }
     //Si functName n'existe pas dans la table des fonctions
     else
     {
+        cout << "function doesn't exist, let's create it" << endl;
         symboleManager.createFunction(functName);
         commandeType code = commandeType::FUNC;
         symboleManager.pushInTemporalCommande(functName);
@@ -125,6 +127,7 @@ antlrcpp::Any Visiteur::visitCallfunc(ExprParser::CallfuncContext *ctx)
 
     if(symboleManager.functExist(funcName))
     {
+        cout << "the function exists so we can call it" << endl;
         commandeType code = commandeType::FUNC_CALL;
         symboleManager.pushInTemporalCommande(code);
         symboleManager.pushInTemporalCommande(funcName);
@@ -132,6 +135,7 @@ antlrcpp::Any Visiteur::visitCallfunc(ExprParser::CallfuncContext *ctx)
         symboleManager.deleteTemporalCommand();
     }
     else{
+        cout << "the function doesn't exist, how do you want me to call it..." << endl;
         commandeType code = commandeType::ERR;
         vector<string> err;
         string error1 = "name of function '" + funcName + "' already assigned";
@@ -162,6 +166,7 @@ antlrcpp::Any Visiteur::visitCore(ExprParser::CoreContext *ctx)
     symboleManager.pushInTemporalCommande(code);
     if ((bool)visit(ctx->ret()))
     {
+
         symboleManager.writeStack(symboleManager.getTemporalCommande());
     }
     symboleManager.deleteTemporalCommand();
@@ -229,6 +234,8 @@ antlrcpp::Any Visiteur::visitAff(ExprParser::AffContext *ctx)
 antlrcpp::Any Visiteur::visitRet(ExprParser::RetContext *ctx)
 // Algorithme :
 //
+
+
 {
     if(visit(ctx->expr()))
     {
@@ -328,9 +335,8 @@ antlrcpp::Any Visiteur::visitExpr(ExprParser::ExprContext *ctx)
         commande.push_back(symboleManager.retrieveVarType(nomVar1));
         commande.push_back(tempVar);
         commande.push_back(nomVar1);
-        commande.push_back("+");
+        commande.push_back(ctx->operatorAddSub(i-1)->getText());
         commande.push_back(nomVar2);
-
         symboleManager.pushTemporalMatriceVari(commande);
     }
 
@@ -351,9 +357,8 @@ antlrcpp::Any Visiteur::visitExpr(ExprParser::ExprContext *ctx)
             commande.push_back(symboleManager.retrieveVarType(nomVar1));
             commande.push_back(tempVar);
             commande.push_back(nomVar1);
-            commande.push_back("+");
+            commande.push_back(ctx->operatorAddSub(ctx->terme().size()-1)->getText());
             commande.push_back(nomVar2);
-
             symboleManager.pushTemporalMatriceVari(commande);
         }
         else
@@ -442,15 +447,17 @@ antlrcpp::Any Visiteur::visitFactVar(ExprParser::FactVarContext *ctx)
 {
     vector<string> commande;
     string var = ctx->VAR()->getText();
-
     if (symboleManager.varDef(var))
     {
+
         commande.push_back(symboleManager.retrieveVarType(var));
+
         string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
         commande.push_back(tempVar);
         commande.push_back(ctx->VAR()->getText());
         //symboleManager.pushTemporalMatriceVari(commandeType::VAR_DEF,commande);
         symboleManager.pushTemporalMatriceVari(commande);
+
         return true;
     }
     else

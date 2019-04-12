@@ -4,7 +4,7 @@ prog:base;
 
 base: (function)* mainFunction;
 
-function : typevar VAR'(' param* ')'core ;
+function : typevar VAR '(' param* ')' core ;
 
 mainFunction : 'int main' '(' ')'core ;
 
@@ -15,8 +15,8 @@ core: '{' code* ret '}';
 code: typevar vari ';' #decdef
     | VAR '=' expr ';' #aff
     | typevar VAR '=' VAR'(' param* ')' ';' #decfunc
-    | VAR '=' VAR'(' param* ')' ';' #afffunc
-    | VAR'(' param* ')' ';'#callfunc
+    | VAR '=' VAR '(' param* ')' ';' #afffunc
+    | VAR '(' param* ')' ';'#callfunc
     ;
 
 condition: 'if' '('boolExpression')' '{'condIf'}' 'else' '{'condElse'}' #ifElse
@@ -40,11 +40,12 @@ predicat:expr '==' expr #egal
 ;
 
 ret: 'return' expr ';' ;
+
 vari: VAR (','VAR)* #decVar
     | VAR '=' expr #defVar
     ;
 
-expr: terme ('+' terme)* ;
+expr: terme (operatorAddSub  terme)* ;
 
 terme: facteur ('*' facteur)* ;
 
@@ -57,8 +58,14 @@ typevar: TYPEINT #int
     | TYPECHAR #char
     ;
 
+operatorAddSub: OPERATORADD #add
+    | OPERATORSUB #sub
+    ;
+
 TYPEINT: 'int';
 TYPECHAR:'char';
+OPERATORADD: '+';
+OPERATORSUB: '-';
 INT: [0-9]+ ;
 VAR: [a-zA-Z]+ ;
 WS: [ \t\r\n] -> skip;
