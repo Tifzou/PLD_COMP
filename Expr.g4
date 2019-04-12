@@ -8,8 +8,28 @@ core: '{' code* ret '}';
 
 code: typevar vari ';' #decdef
     | VAR '=' expr ';' #aff
+    | condition #condif
     ;
 
+condition: 'if' '('boolExpression')' '{'condIf'}' 'else' '{'condElse'}' #ifElse
+    |'if' '('boolExpression')' '{'condIf'}' #simpleIf
+    ;
+
+condIf:ifCore;
+condElse:ifCore;
+
+ifCore:code* #ifCommande
+    | code* ret #ifRet
+    ;
+
+boolExpression:predicat;
+
+predicat:expr '==' expr #egal
+    |expr '>=' expr # ge
+    |expr '>' expr # gt
+    |expr '<=' expr # le
+    |expr '<' expr # lt
+    ;
 
 ret: 'return' expr ';' ;
 vari: VAR (','VAR)* #decVar
