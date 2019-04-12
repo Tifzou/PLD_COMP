@@ -357,7 +357,13 @@ string AsmWriter::writeFuncAff(Commande functionCmd)
 {
     string funcName = functionCmd.elements[0];
     string asmInstr = "\tcall " + funcName + "\n";
-    asmInstr += "\tmovl %eax, " + functionCmd.elements[1] + "\n";
+    map<string, string>::iterator it = variables.find(functionCmd.elements[1]);
+    if(it != variables.end())
+    {
+        string retVarAddr = it->second;
+        asmInstr += "\tmovl %eax, " + retVarAddr + "\n";
+    }
+
     return asmInstr;
 }
 
