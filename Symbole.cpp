@@ -161,35 +161,53 @@ void Symbole::pushIntoFlowControl()
 
 
 //------------------------------------------------------------------------
-void Symbole::pushIfIntoFlowControl(int index)
+void Symbole::pushIfIntoFlowControl(Cell *curBlock)
 // Algorithme :
 //
 {
     Cell *bloc = new Cell();
     bloc->data = resp;
-
-    switch (index)
+    if(curBlock->suivant1==nullptr)
     {
-        case 1:
-            if (flowControl->last->suivant1 == nullptr)
-            {
-                flowControl->last->suivant1 = bloc;
-            }
-            else
-            {
-                flowControl->last->suivant2 = bloc;
-            }
-            break;
-        case 2: //pas une bonne solution, pour les ifs multiples
-            browsBlocks(flowControl->first, bloc);
-            flowControl->last = flowControl->last->suivant1;
-            break;
+        curBlock->suivant1 = bloc;
     }
+    flowControl->last=bloc;
+
     resp.clear();
     temporalExpression.clear();
     temporalStackCommande.elements.clear();
     temporalStackCommande.type=ERR;
 }
+
+void Symbole::pushElseIntoFlowControl(Cell* curBlock)
+{
+    Cell *bloc = new Cell();
+    bloc->data = resp;
+
+    if(curBlock->suivant2==nullptr)
+    {
+        curBlock->suivant2 = bloc;
+    }
+    flowControl->last=bloc;
+    resp.clear();
+    temporalExpression.clear();
+    temporalStackCommande.elements.clear();
+    temporalStackCommande.type=ERR;
+}
+
+
+void Symbole::pushLastBlockIntoFlowControl()
+{
+    Cell *bloc = new Cell();
+    bloc->data = resp;
+    browsBlocks(flowControl->first, bloc);
+    flowControl->last = flowControl->last->suivant1;
+    resp.clear();
+    temporalExpression.clear();
+    temporalStackCommande.elements.clear();
+    temporalStackCommande.type=ERR;
+}
+
 
 
 //------------------------------------------------------------------------
@@ -291,3 +309,15 @@ bool Symbole::varDef(string var)
 //----------------------------------------------------- Méthodes protégées
 
 //------------------------------------------------------- Méthodes privées
+void Symbole::destroyGraph(Cell *block)
+{
+    if(block==nullptr)
+    {
+        return;
+    }
+
+    destroyGraph(block->suivant1);
+    destroyGraph(block->suivant2);
+    delete(block);
+
+}

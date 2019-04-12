@@ -211,7 +211,19 @@ class Symbole
     //
 
 
-    void pushIfIntoFlowControl(int index);
+    void pushIfIntoFlowControl(Cell* curBlock);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    void pushElseIntoFlowControl(Cell* curBlock);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    void pushLastBlockIntoFlowControl();
     // Mode d'emploi :
     //
     // Contrat :
@@ -299,11 +311,15 @@ class Symbole
 
     virtual ~Symbole()
     {
-        /*Cell *ptrBloc=flowControl->first;
-        while (ptrBloc->)
-        {
-        }*/
+
     }
+
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    void destroyGraph(Cell* block);
     // Mode d'emploi :
     //
     // Contrat :

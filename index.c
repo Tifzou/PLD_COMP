@@ -1,13 +1,22 @@
 int main()
 {
-    int a = 5;
-    if(a==5)
+    int a = 3;
+    if(a==3)
     {
-        a=3;
+        a=4;
+        if(3==4)
+        {
+            a=7;
+        }
+        else
+        {
+            a=70;
+        }
+
     }
     else
     {
-        a=5;
+
     }
     return a;
 }

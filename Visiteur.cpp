@@ -62,7 +62,7 @@ antlrcpp::Any Visiteur::visitCore(ExprParser::CoreContext *ctx)
         }
         else
         {
-            symboleManager.pushIfIntoFlowControl(2);
+            symboleManager.pushLastBlockIntoFlowControl();
         }
         symboleManager.deleteTemporalCommand();
         return true;
@@ -413,6 +413,7 @@ antlrcpp::Any Visiteur::visitCondif(ExprParser::CondifContext *ctx)
     return visit(ctx->condition());
 }
 
+
 //------------------------------------------------------------------------
 antlrcpp::Any Visiteur::visitIfElse(ExprParser::IfElseContext *ctx)
 // Algorithme :
@@ -431,12 +432,12 @@ antlrcpp::Any Visiteur::visitIfElse(ExprParser::IfElseContext *ctx)
     {
         return false;
     }
-
+    Cell* curBlock=symboleManager.getFlowControl()->last;
     //On visite le block "if" qui s'executera si le predicat est verifié
     if(visit(ctx->condIf()))
     {
         //symboleManager.writeStack(symboleManager.getTemporalCommande());
-        symboleManager.pushIfIntoFlowControl(1);
+        symboleManager.pushIfIntoFlowControl(curBlock);
 
     }
     else
@@ -449,7 +450,7 @@ antlrcpp::Any Visiteur::visitIfElse(ExprParser::IfElseContext *ctx)
     if(visit(ctx->condElse()))
     {
         //symboleManager.writeStack(symboleManager.getTemporalCommande());
-        symboleManager.pushIfIntoFlowControl(1);
+        symboleManager.pushElseIntoFlowControl(curBlock);
     }
     else
     {
@@ -462,6 +463,7 @@ antlrcpp::Any Visiteur::visitIfElse(ExprParser::IfElseContext *ctx)
 antlrcpp::Any Visiteur::visitSimpleIf(ExprParser::SimpleIfContext *ctx){
 // Algorithme :
 //
+
     commandeType code = commandeType::IF;
     symboleManager.pushInTemporalCommande(code);
     symboleManager.writeStack(symboleManager.getTemporalCommande());
@@ -476,10 +478,12 @@ antlrcpp::Any Visiteur::visitSimpleIf(ExprParser::SimpleIfContext *ctx){
     }
 
     //On visite le block "if" qui s'executera si le predicat est verifié
+    Cell* curBlock=symboleManager.getFlowControl()->last;
     if(visit(ctx->condIf()))
     {
         //symboleManager.writeStack(symboleManager.getTemporalCommande());
-        symboleManager.pushIfIntoFlowControl(1);
+        symboleManager.pushIfIntoFlowControl(curBlock);
+        symboleManager.pushElseIntoFlowControl(curBlock);
     }
     else
     {
