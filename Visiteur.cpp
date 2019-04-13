@@ -322,11 +322,11 @@ antlrcpp::Any Visiteur::visitExpr(ExprParser::ExprContext *ctx)
 // Algorithme :
 //
 {
-    for(int i(1); i<ctx->terme().size(); i+=2)
+    for(int i(1); i<ctx->terme().size(); i++)
     {
         vector<string> commande;
 
-        if(!visit(ctx->terme(i-1)))
+        if(i==1&&!visit(ctx->terme(i-1)))
         {
             return false;
         }
@@ -336,6 +336,7 @@ antlrcpp::Any Visiteur::visitExpr(ExprParser::ExprContext *ctx)
             return false;
         }
         string nomVar2=symboleManager.getTemporalExpression()->back().elements[1];
+        cout<<nomVar1<<" "<<nomVar2<<endl;
         string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
 
         commande.push_back(symboleManager.retrieveVarType(nomVar1));
@@ -347,31 +348,9 @@ antlrcpp::Any Visiteur::visitExpr(ExprParser::ExprContext *ctx)
         symboleManager.pushTemporalMatriceVari(commande);
     }
 
-    if(ctx->terme().size()%2==1)
+    if(ctx->terme().size()==1)
     {
-
-        if(ctx->terme().size()>1)
-        {
-            vector<string> commande;
-            string nomVar1=symboleManager.getTemporalExpression()->back().elements[1];
-            if(!visit(ctx->terme(ctx->terme().size()-1)))
-            {
-                return false;
-            }
-            string nomVar2=symboleManager.getTemporalExpression()->back().elements[1];
-            string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
-
-            commande.push_back(symboleManager.retrieveVarType(nomVar1));
-            commande.push_back(tempVar);
-            commande.push_back(nomVar1);
-            commande.push_back(ctx->operatorAddSub(ctx->terme().size()-2)->getText());
-            commande.push_back(nomVar2);
-            symboleManager.pushTemporalMatriceVari(commande);
-        }
-        else
-        {
-            return visit(ctx->terme(ctx->terme().size()-1));
-        }
+        return visit(ctx->terme(ctx->terme().size()-1));
     }
 
     return true;
@@ -384,10 +363,10 @@ antlrcpp::Any Visiteur::visitTerme(ExprParser::TermeContext *ctx)
 //
 {
 
-    for(int i(1); i<ctx->facteur().size(); i+=2)
+    for(int i(1); i<ctx->facteur().size(); i++)
     {
         vector<string> commande;
-        if(!visit(ctx->facteur(i-1)))
+        if(i==1&&!visit(ctx->facteur(i-1)))
         {
             return false;
         }
@@ -408,32 +387,9 @@ antlrcpp::Any Visiteur::visitTerme(ExprParser::TermeContext *ctx)
         symboleManager.pushTemporalMatriceVari(commande);
     }
 
-    if(ctx->facteur().size()%2==1)
+    if(ctx->facteur().size()==1)
     {
-
-        if(ctx->facteur().size()>1)
-        {
-            vector<string> commande;
-            string nomVar1=symboleManager.getTemporalExpression()->back().elements[1];
-            if(!visit(ctx->facteur(ctx->facteur().size()-1)))
-            {
-                return false;
-            }
-            string nomVar2=symboleManager.getTemporalExpression()->back().elements[1];
-            string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
-
-            commande.push_back(symboleManager.retrieveVarType(nomVar1));
-            commande.push_back(tempVar);
-            commande.push_back(nomVar1);
-            commande.push_back("*");
-            commande.push_back(nomVar2);
-
-            symboleManager.pushTemporalMatriceVari(commande);
-        }
-        else
-        {
-            return visit(ctx->facteur(ctx->facteur().size()-1));
-        }
+        return visit(ctx->facteur(ctx->facteur().size()-1));
     }
 
     return true;

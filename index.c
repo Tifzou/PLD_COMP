@@ -1,14 +1,7 @@
-int sum()
-{
-    int b;
-    b=2+3*(1+1)*2-1;
-    return b;
-}
-
 int main()
 {
     int a;
     a=sum();
 
-    return a;
+    return 1+1+1+1+2*3*4-1-1-(1-2)*3;
 }
