@@ -34,5 +34,6 @@ main:
 	movl	-8(%rbp), %eax
 	movl	%eax, -48(%rbp)
 	movl	-48(%rbp), %eax
+	movq	%rbp, %rsp
 	popq	%rbp
 	ret

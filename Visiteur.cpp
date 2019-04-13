@@ -423,6 +423,7 @@ antlrcpp::Any Visiteur::visitIfElse(ExprParser::IfElseContext *ctx)
     commandeType code = commandeType::IF;
     symboleManager.pushInTemporalCommande(code);
     symboleManager.writeStack(symboleManager.getTemporalCommande());
+
     if(visit(ctx->boolExpression()))
     {
         //symboleManager.writeStack(symboleManager.getTemporalCommande());

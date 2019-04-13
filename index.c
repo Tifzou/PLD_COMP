@@ -1,27 +1,25 @@
 int main()
 {
-    int a = 3;
-    if(a==4)
+    int a=8;
+    if(a == 8)
     {
-        a=4;
-        if(3==4)
+        a = 2;
+        if(a==3)
         {
-            a=7;
+            a=88;
+            if(a==88)
+            {
+                a=89;
+            }
         }
         else
         {
-            a=70;
-        }
 
+        }
     }
     else
     {
-        a=5;
-        if(a==6){
-            a=8;
-        }else{
-            a=80;
-        }
+        a=33;
     }
     return a;
 }

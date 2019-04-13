@@ -22,5 +22,6 @@ main:
 	movl	-8(%rbp), %eax
 	movl	%eax, -32(%rbp)
 	movl	-32(%rbp), %eax
+	movq	%rbp, %rsp
 	popq	%rbp
 	ret

@@ -53,6 +53,41 @@ ostream & raz (ostream & os){
     return os;
 }//----- Fin de debug
 
+void afficheStruct(Cell *block, typeBlock type, int compteur)
+{
+    if(block== nullptr)
+    {
+        return;
+    }
+    if(block->data.back().type==commandeType::CONDITION)
+    {
+        cout<<"BlockCondition"<<endl;
+    }
+    else
+    {
+        cout<<"BlockSimple"<<endl;
+    }
+    if(type==typeBlock::IF_BLOCK)
+    {
+        cout<<"IF"+to_string(compteur)<<endl;
+    }
+    else
+    {
+        cout<<"ELSE"+to_string(compteur)<<endl;
+    }
+    for(Commande cmd: block->data)
+    {
+        cout<<cmd.type<<" ";
+        for(string st: cmd.elements)
+        {
+            cout<<st<<" ";
+        }
+        cout<<endl;
+    }
+    afficheStruct(block->suivant1, typeBlock::IF_BLOCK, ++compteur);
+    afficheStruct(block->suivant2, typeBlock::ELSE_BLOCK, ++compteur);
+}
+
 int main(int argc, char *argv[])
 {
     if (argc > 1)
@@ -76,8 +111,9 @@ int main(int argc, char *argv[])
 
         ListC *stack = resultat.getFlowControl();
         Cell * curCell = stack->first;
+        afficheStruct(curCell, typeBlock::IF_BLOCK, 0);
 
-        for (Commande curCommande: curCell->data) {
+        /*for (Commande curCommande: curCell->data) {
             cout << curCommande.type << " : ";
             for (string s : curCommande.elements) {
                 cout << s << " ";
@@ -109,7 +145,7 @@ int main(int argc, char *argv[])
                 cout << s << " ";
             }
             cout << endl;
-        }
+        }*/
 
 
 

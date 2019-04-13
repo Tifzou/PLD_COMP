@@ -9,5 +9,6 @@ main:
 	movl	-8(%rbp), %eax
 	movl	%eax, -12(%rbp)
 	movl	-12(%rbp), %eax
+	movq	%rbp, %rsp
 	popq	%rbp
 	ret

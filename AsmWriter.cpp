@@ -101,21 +101,21 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
         switch ((*itInstr).type) // {ERR, WARN, VAR_DEC, VAR_DEF, OPER, RET, AFF};
         {
             case 0 : // ERR
-                cerr << "in case ERR" << endl;
+                //cerr << "in case ERR" << endl;
                 break;
             case 1 : // WAR
-                cerr << "in case WAR" << endl;
+                //cerr << "in case WAR" << endl;
                 break;
             case 2 : // VAR DECLARATION
-                cerr << "in case VAR_DEC" << endl;
+                //cerr << "in case VAR_DEC" << endl;
                 writeDec((*itInstr));
                 break;
             case 3 : // VAR DEFINITION
-                cerr << "in case VAR_DEF" << endl;
+                //cerr << "in case VAR_DEF" << endl;
                 myfile << writeDef((*itInstr));
                 break;
             case 4 : // OPER
-                cerr << "in case OPER" << endl;
+                //cerr << "in case OPER" << endl;
                 if((*itInstr).elements.size() == 3)
                 {
                     myfile << writeDef((*itInstr));
@@ -126,19 +126,19 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
                 }
                 break;
             case 5 : // RET
-                cerr << "in case RET" << endl;
+                //cerr << "in case RET" << endl;
                 myfile << writeReturn((*itInstr));
                 break;
             case 6: // AFFECTATION
-                cerr << "in case AFF" << endl;
+                //cerr << "in case AFF" << endl;
                 myfile << writeAff((*itInstr));
                 break;
             case 7: // IF
-                cerr << "in case IF" << endl;
+                //cerr << "in case IF" << endl;
                 myfile << writeIf(curFlagCounter);
                 break;
             case 8: //Predicat (bloc)
-                cerr << "in case Predicat" << endl;
+                //cerr << "in case Predicat" << endl;
                 myfile << writePredicat(*itInstr, lastFlag);
                 break;
             case 9: // FUNCTION
@@ -191,6 +191,7 @@ void AsmWriter::browseGraph(Cell *block, ofstream &myfile, typeBlock typeCurBloc
 
     if(typeCurBlock==PREC_IF_BLOCK_LEFT || typeCurBlock==PREC_IF_BLOCK_RIGHT)
     {
+        cout<<"blockIF"+to_string(curFlagCounter);
         flagCounter++;
         if(block->suivant1!= nullptr && block->suivant1->data.back().type==commandeType::CONDITION)
         {
