@@ -63,7 +63,7 @@ typedef struct Cell
     Cell *suivant2;
 } Cell;
 
-// représentation du CFG
+// représentation du CFG - accès au premier et dernier élement du CFG
 typedef struct ListC
 {
     Cell *first;
