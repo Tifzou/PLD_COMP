@@ -209,6 +209,31 @@ void Symbole::pushLastBlockIntoFlowControl()
 }
 
 
+//------------------------------------------------------------------------
+bool Symbole::functExist(string funct)
+// Algorithme : renvoi 'true' si la variable 'var' est déjà déclarée
+//
+{
+    /*for(Commande commande : resp)
+    {
+        if((commande.type == commandeType::FUNC) && commande.elements[1] == funct)
+        {
+            return true;
+        }
+    }
+    return false;*/
+    map<string, int>::iterator it = tablesDesFonctions.find(funct);
+    if(it == tablesDesFonctions.end())
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+
 
 //------------------------------------------------------------------------
 bool Symbole::browsBlocks(Cell *block, string var)
@@ -251,7 +276,8 @@ bool Symbole::browsBlocks(Cell *block, string &type, string var)
             return true;
         }
     }
-    bool test = browsBlocks(block->suivant1, var) || browsBlocks(block->suivant2, var);
+
+    bool test = browsBlocks(block->suivant1, type, var) || browsBlocks(block->suivant2, type, var);
     return test;
 }
 

@@ -1,25 +1,24 @@
+int sum()
+{
+    int a;
+    a=1+2*3+4;
+    return a;
+}
+
 int main()
 {
-    int a=8;
-    if(a == 8)
+    int a,b,c;
+    a=5;
+    b=7;
+    c=5+(b-a)*2;
+    a=sum();
+    if(a==11)
     {
-        a = 2;
-        if(a==3)
-        {
-            a=88;
-            if(a==88)
-            {
-                a=89;
-            }
-        }
-        else
-        {
-
-        }
+        a=11;
     }
     else
     {
-        a=33;
+        a=22;
     }
     return a;
 }

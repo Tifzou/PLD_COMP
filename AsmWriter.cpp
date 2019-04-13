@@ -144,6 +144,7 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
             case 9: // FUNCTION
                 cerr << "in case FUNCTION" << endl;
                 myfile << ".global " << (*itInstr).elements[0] << "\n";
+                myfile << "\t.type\t "+ (*itInstr).elements[0]<<", @function\n";
                 myfile << (*itInstr).elements[0] << ":\n";
                 myfile << "\tpushq\t%rbp"<<endl;
                 myfile << "\tmovq\t%rsp, %rbp"<<endl;
@@ -152,6 +153,7 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
             case 10: //MAIN
                 cerr << "in case MAIN" << endl;
                 myfile << ".global main\n";
+                myfile << "\t.type\t main, @function\n";
                 myfile << "main:\n";
                 myfile << "\tpushq\t%rbp"<<endl;
                 myfile << "\tmovq\t%rsp, %rbp"<<endl;
@@ -230,10 +232,6 @@ bool AsmWriter::writeOutputFile(Cell *firstBlock) {
     ofstream myfile (outFile);
     if (myfile.is_open()){
         myfile << ".text\n";
-        myfile << ".global main\n";
-        myfile << "main:\n";
-        myfile << "\tpushq\t%rbp"<<endl;
-        myfile << "\tmovq\t%rsp, %rbp"<<endl;
         int stackPtr = 0;
         //for loop was here
 
@@ -271,6 +269,9 @@ string AsmWriter::writeReturn(Commande returnCmd)
         address = "$"+nomVar;
     }
     string asmInstr = "\tmovl\t"+address+", %eax\n";
+    asmInstr += "\tmovq\t%rbp, %rsp\n";
+    asmInstr += "\tpopq\t%rbp\n";
+    asmInstr += "\tret\n";
     return asmInstr;
 }
 
@@ -577,6 +578,12 @@ string AsmWriter::writeFuncAff(Commande functionCmd)
 {
     string funcName = functionCmd.elements[0];
     string asmInstr = "\tcall " + funcName + "\n";
-    asmInstr += "\tmovl %eax, " + functionCmd.elements[1] + "\n";
+    map<string, string>::iterator it = variables.find(functionCmd.elements[1]);
+    if(it != variables.end())
+    {
+        string retVarAddr = it->second;
+        asmInstr += "\tmovl %eax, " + retVarAddr + "\n";
+    }
+
     return asmInstr;
 }

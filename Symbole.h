@@ -36,7 +36,11 @@ enum commandeType
     RET,
     AFF,
     IF,
-    CONDITION
+    CONDITION,
+    FUNC,
+    MAIN,
+    FUNC_CALL,
+    FUNC_AFF
 };
 
 //structure contenant une commande correspondant à un type definit par 1 enum particulier
@@ -87,12 +91,17 @@ class Symbole
     // Contrat :
     //
 
-    void writeStack(Commande curCommande);
+    bool functExist(string funct);
     // Mode d'emploi :
     //
     // Contrat :
     //
 
+    void writeStack(Commande curCommande);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
 
     void writeStack(commandeType code, vector<string> commande);
     // Mode d'emploi :
@@ -239,6 +248,16 @@ class Symbole
         temporalExpression.clear();
     }
 
+    void createFunction(string funcName)
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+    {
+        pair<string, int> p(funcName, indexFunction++);
+        tablesDesFonctions.insert(p);
+    }
+
 
     bool browsBlocks(Cell *block, string var);
     // Mode d'emploi :
@@ -297,11 +316,13 @@ class Symbole
         return &temporalExpression;
     }
 
-    //-------------------------------------------- Constructeurs - destructeur
+
+//-------------------------------------------- Constructeurs - destructeur
     Symbole()
     {
         tmpCounter = 0;
         index = 0;
+        indexFunction = 0;
         flowControl = new ListC();
     }
     // Mode d'emploi :
@@ -327,26 +348,29 @@ class Symbole
 
     //------------------------------------------------------------------ PRIVE
 
-  protected:
-    //----------------------------------------------------- Méthodes protégées
+protected:
+//----------------------------------------------------- Méthodes protégées
 
-  private:
-    //------------------------------------------------------- Méthodes privées
+private:
+//------------------------------------------------------- Méthodes privées
 
-  protected:
-    //----------------------------------------------------- Attributs protégés
+protected:
+//----------------------------------------------------- Attributs protégés
 
-  private:
-    //------------------------------------------------------- Attributs privés
+private:
+//------------------------------------------------------- Attributs privés
     matrice resp;
     matrice temporalExpression;
     ListC *flowControl;
     Commande temporalStackCommande;
     map<string, int> tablesDesSymboles;
+    map<string, int> tablesDesFonctions;
     int tmpCounter;
     int index;
+    int indexFunction;
 
-    //----------------------------------------------------------- Types privés
+//----------------------------------------------------------- Types privés
+
 };
 
 #endif // SYMBOLE_H

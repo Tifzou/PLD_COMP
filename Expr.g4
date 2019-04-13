@@ -2,22 +2,30 @@ grammar Expr;
 prog:base;
 
 
+base: (function)* mainFunction;
 
-base: 'int main' '(' ')'core;
+function : typevar VAR '(' param* ')' core ;
+
+mainFunction : 'int main' '(' ')'core ;
+
+param : typevar VAR (',' VAR)*;
 
 core: '{' code* ret '}';
 
 code: typevar vari ';' #decdef
     | VAR '=' expr ';' #aff
     | condition #condif
+    | typevar VAR '=' VAR'(' param* ')' ';' #decfunc
+    | VAR '=' VAR '(' param* ')' ';' #afffunc
+    | VAR '(' param* ')' ';'#callfunc
     ;
 
-condition: 'if' '('boolExpression')' '{'condIf'}' 'else' '{'condElse'}' #ifElse
-    |'if' '('boolExpression')' '{'condIf'}' #simpleIf
+condition: 'if' '('boolExpression')' '{'coreIf'}' 'else' '{'coreElse'}' #ifElse
+    |'if' '('boolExpression')' '{'coreIf'}' #simpleIf
     ;
 
-condIf:ifCore;
-condElse:ifCore;
+coreIf:ifCore;
+coreElse:ifCore;
 
 ifCore:code* #ifCommande
     | code* ret #ifRet
@@ -33,11 +41,12 @@ predicat:expr '==' expr #egal
     ;
 
 ret: 'return' expr ';' ;
+
 vari: VAR (','VAR)* #decVar
     | VAR '=' expr #defVar
     ;
 
-expr: terme ('+' terme)* ;
+expr: terme (operatorAddSub  terme)* ;
 
 terme: facteur ('*' facteur)* ;
 
@@ -53,8 +62,14 @@ typevar: TYPEINT #int
     | TYPECHAR #char
     ;
 
+operatorAddSub: OPERATORADD #add
+    | OPERATORSUB #sub
+    ;
+
 TYPEINT: 'int';
 TYPECHAR:'char';
+OPERATORADD: '+';
+OPERATORSUB: '-';
 INT: [0-9]+ ;
 VAR: [a-zA-Z]+ ;
 WS: [ \t\r\n] -> skip;

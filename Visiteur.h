@@ -48,6 +48,36 @@ public:
     // Contrat :
     //
 
+    antlrcpp::Any visitFunction(ExprParser::FunctionContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitMainFunction(ExprParser::MainFunctionContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitParam(ExprParser::ParamContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitAfffunc(ExprParser::AfffuncContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    antlrcpp::Any visitCallfunc(ExprParser::CallfuncContext *ctx);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
     antlrcpp::Any visitCore(ExprParser::CoreContext *ctx);
     // Mode d'emploi :
     //
@@ -107,6 +137,21 @@ public:
     // Contrat :
     //
 
+    antlrcpp::Any visitAdd(ExprParser::AddContext *ctx)
+    //
+    // Contrat :
+    //
+    {
+        return "+";
+    }
+
+    antlrcpp::Any visitSub(ExprParser::SubContext *ctx)
+    //
+    // Contrat :
+    //
+    {
+        return "-";
+    }
 
     antlrcpp::Any visitFactPar(ExprParser::FactParContext *ctx);
     // Mode d'emploi :
@@ -144,7 +189,6 @@ public:
     //
     // Contrat :
     //
-
 
     antlrcpp::Any visitIfElse(ExprParser::IfElseContext *ctx);
     // Mode d'emploi :
@@ -194,6 +238,7 @@ public:
     // Contrat :
     //
 
+
 //-------------------------------------------- Constructeurs - destructeur
     Visiteur (){}
     // Mode d'emploi :
@@ -228,6 +273,11 @@ private:
     // Contrat :
     //
 
+    bool checkFunctDec(string functName);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
 
 protected:
 //----------------------------------------------------- Attributs protégés
