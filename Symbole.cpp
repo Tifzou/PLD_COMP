@@ -145,7 +145,6 @@ void Symbole::pushIntoFlowControl()
     }
     else
     {
-
         Cell *bloc = new Cell();
         bloc->data = resp;
         flowControl->last->suivant1 = bloc;
@@ -209,6 +208,31 @@ void Symbole::pushLastBlockIntoFlowControl()
 }
 
 
+//------------------------------------------------------------------------
+bool Symbole::functExist(string funct)
+// Algorithme : renvoi 'true' si la variable 'var' est déjà déclarée
+//
+{
+    /*for(Commande commande : resp)
+    {
+        if((commande.type == commandeType::FUNC) && commande.elements[1] == funct)
+        {
+            return true;
+        }
+    }
+    return false;*/
+    map<string, int>::iterator it = tablesDesFonctions.find(funct);
+    if(it == tablesDesFonctions.end())
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+
 
 //------------------------------------------------------------------------
 bool Symbole::browsBlocks(Cell *block, string var)
@@ -251,14 +275,15 @@ bool Symbole::browsBlocks(Cell *block, string &type, string var)
             return true;
         }
     }
-    bool test = browsBlocks(block->suivant1, var) || browsBlocks(block->suivant2, var);
+
+    bool test = browsBlocks(block->suivant1, type, var) || browsBlocks(block->suivant2, type, var);
     return test;
 }
 
 
 //------------------------------------------------------------------------
 void Symbole::browsBlocks(Cell *block, Cell *curBlock)
-// Algorithme : parcours le graphe et attache le block courant à chaque block qui a un nullptr
+// Algorithme : parcourt le graphe et attache le block courant à chaque block qui a un nullptr
 //
 {
 
@@ -287,12 +312,12 @@ void Symbole::browsBlocks(Cell *block, Cell *curBlock)
 
 //------------------------------------------------------------------------
 bool Symbole::varDef(string var)
-// Algorithme : renvoi 'true si la variable 'var' possède une valeur à l'issue d'une declaration avec affectation ou juste une affectation
+// Algorithme : renvoi 'true' si la variable 'var' possède une valeur à l'issue d'une declaration avec affectation ou juste une affectation
 //
 {
     for(Commande commande : resp)
     {
-        if((commande.type == commandeType::VAR_DEF || commande.type == commandeType::AFF)  && commande.elements[1] == var)
+        if((commande.type == commandeType::VAR_DEF || commande.type == commandeType::AFF || commande.type == commandeType ::FUNC_AFF)  && commande.elements[1] == var)
         {
             return true;
         }
@@ -300,8 +325,6 @@ bool Symbole::varDef(string var)
 
     return browsBlocks(flowControl->first, var);
 }
-
-
 
 
 //------------------------------------------------------------------ PRIVE

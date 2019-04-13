@@ -99,21 +99,21 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
         switch ((*itInstr).type) // {ERR, WARN, VAR_DEC, VAR_DEF, OPER, RET, AFF};
         {
             case 0 : // ERR
-                cerr << "in case ERR" << endl;
+                //cerr << "in case ERR" << endl;
                 break;
             case 1 : // WAR
-                cerr << "in case WAR" << endl;
+                //cerr << "in case WAR" << endl;
                 break;
             case 2 : // VAR DECLARATION
-                cerr << "in case VAR_DEC" << endl;
+                //cerr << "in case VAR_DEC" << endl;
                 writeDec((*itInstr));
                 break;
             case 3 : // VAR DEFINITION
-                cerr << "in case VAR_DEF" << endl;
+                //cerr << "in case VAR_DEF" << endl;
                 myfile << writeDef((*itInstr));
                 break;
             case 4 : // OPER
-                cerr << "in case OPER" << endl;
+                //cerr << "in case OPER" << endl;
                 if((*itInstr).elements.size() == 3)
                 {
                     myfile << writeDef((*itInstr));
@@ -124,24 +124,25 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
                 }
                 break;
             case 5 : // RET
-                cerr << "in case RET" << endl;
+                //cerr << "in case RET" << endl;
                 myfile << writeReturn((*itInstr));
                 break;
             case 6: // AFFECTATION
-                cerr << "in case AFF" << endl;
+                //cerr << "in case AFF" << endl;
                 myfile << writeAff((*itInstr));
                 break;
             case 7: // IF
-                cerr << "in case IF" << endl;
+                //cerr << "in case IF" << endl;
                 myfile << writeIf(curFlagCounter);
                 break;
             case 8: //Predicat (bloc)
-                cerr << "in case Predicat" << endl;
+                //cerr << "in case Predicat" << endl;
                 myfile << writePredicat(*itInstr, lastFlag);
                 break;
             case 9: // FUNCTION
                 cerr << "in case FUNCTION" << endl;
                 myfile << ".global " << (*itInstr).elements[0] << "\n";
+                myfile << "\t.type\t "+ (*itInstr).elements[0]<<", @function\n";
                 myfile << (*itInstr).elements[0] << ":\n";
                 myfile << "\tpushq\t%rbp"<<endl;
                 myfile << "\tmovq\t%rsp, %rbp"<<endl;
@@ -150,6 +151,7 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
             case 10: //MAIN
                 cerr << "in case MAIN" << endl;
                 myfile << ".global main\n";
+                myfile << "\t.type\t main, @function\n";
                 myfile << "main:\n";
                 myfile << "\tpushq\t%rbp"<<endl;
                 myfile << "\tmovq\t%rsp, %rbp"<<endl;
@@ -189,6 +191,7 @@ void AsmWriter::browseGraph(Cell *block, ofstream &myfile, typeBlock typeCurBloc
 
     if(typeCurBlock==PREC_IF_BLOCK_LEFT || typeCurBlock==PREC_IF_BLOCK_RIGHT)
     {
+        cout<<"blockIF"+to_string(curFlagCounter);
         flagCounter++;
         if(block->suivant1!= nullptr && block->suivant1->data.back().type==commandeType::CONDITION)
         {
@@ -227,10 +230,6 @@ bool AsmWriter::writeOutputFile(Cell *firstBlock) {
     ofstream myfile (outFile);
     if (myfile.is_open()){
         myfile << ".text\n";
-        myfile << ".global main\n";
-        myfile << "main:\n";
-        myfile << "\tpushq\t%rbp"<<endl;
-        myfile << "\tmovq\t%rsp, %rbp"<<endl;
         int stackPtr = 0;
         //for loop was here
 
@@ -268,6 +267,9 @@ string AsmWriter::writeReturn(Commande returnCmd)
         address = "$"+nomVar;
     }
     string asmInstr = "\tmovl\t"+address+", %eax\n";
+    asmInstr += "\tmovq\t%rbp, %rsp\n";
+    asmInstr += "\tpopq\t%rbp\n";
+    asmInstr += "\tret\n";
     return asmInstr;
 }
 
@@ -574,6 +576,12 @@ string AsmWriter::writeFuncAff(Commande functionCmd)
 {
     string funcName = functionCmd.elements[0];
     string asmInstr = "\tcall " + funcName + "\n";
-    asmInstr += "\tmovl %eax, " + functionCmd.elements[1] + "\n";
+    map<string, string>::iterator it = variables.find(functionCmd.elements[1]);
+    if(it != variables.end())
+    {
+        string retVarAddr = it->second;
+        asmInstr += "\tmovl %eax, " + retVarAddr + "\n";
+    }
+
     return asmInstr;
 }

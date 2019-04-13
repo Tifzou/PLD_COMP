@@ -1,7 +1,7 @@
 int main(){
 	int res = -1;
-  if(1<2)  {
-      if(4>3)
+  if(1==2)  {
+      if(4==3)
       {
       	res = 0;
       }

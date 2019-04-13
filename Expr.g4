@@ -2,21 +2,30 @@ grammar Expr;
 prog:base;
 
 
-base: 'int main' '(' ')'core;
+base: (function)* mainFunction;
+
+function : typevar VAR '(' param* ')' core ;
+
+mainFunction : 'int main' '(' ')'core ;
+
+param : typevar VAR (',' VAR)*;
 
 core: '{' code* ret '}';
 
 code: typevar vari ';' #decdef
     | VAR '=' expr ';' #aff
     | condition #condif
+    | typevar VAR '=' VAR'(' param* ')' ';' #decfunc
+    | VAR '=' VAR '(' param* ')' ';' #afffunc
+    | VAR '(' param* ')' ';'#callfunc
     ;
 
-condition: 'if' '('boolExpression')' '{'condIf'}' 'else' '{'condElse'}' #ifElse
-    |'if' '('boolExpression')' '{'condIf'}' #simpleIf
+condition: 'if' '('boolExpression')' '{'coreIf'}' 'else' '{'coreElse'}' #ifElse
+    |'if' '('boolExpression')' '{'coreIf'}' #simpleIf
     ;
 
-condIf:ifCore;
-condElse:ifCore;
+coreIf:ifCore;
+coreElse:ifCore;
 
 ifCore:code* #ifCommande
     | code* ret #ifRet
@@ -32,6 +41,7 @@ predicat:expr '==' expr #egal
     ;
 
 ret: 'return' expr ';' ;
+
 vari: VAR (','VAR)* #decVar
     | VAR '=' expr #defVar
     ;
@@ -44,6 +54,9 @@ facteur: INT #factInt
     | VAR #factVar
     | '(' expr ')' #factPar
     ;
+
+
+
 
 typevar: TYPEINT #int
     | TYPECHAR #char

@@ -1,14 +1,6 @@
 int main()
 {
-    int a = 3;
-    if(a==3)
-    {
-        a=4;
+    int a;
+    a=sum();
 
-    }
-    else
-    {
-        a=70;
-    }
-    return a;
-}
+    return 1+1+1+1+2*3*4-1-1-(1-2)*3;
