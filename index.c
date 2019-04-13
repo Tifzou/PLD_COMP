@@ -1,6 +1,13 @@
+int sum(int a int b)
+{
+    return 42;
+}
+
 int main()
 {
-    int a;
-    a=sum();
+    int a = 1;
+    int b = 2;
+    a = sum(a b);
 
-    return 1+1+1+1+2*3*4-1-1-(1-2)*3;
+    return a;
+}

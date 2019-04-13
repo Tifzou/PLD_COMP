@@ -47,9 +47,16 @@ antlrcpp::Any Visiteur::visitFunction(ExprParser::FunctionContext *ctx)
         cout << "function doesn't exist, let's create it" << endl;
         symboleManager.createFunction(functName);
         commandeType code = commandeType::FUNC;
-        symboleManager.pushInTemporalCommande(functName);
+
         symboleManager.pushInTemporalCommande(code); // Surchage pushTemporalStack(vector<string> commande)
-        // TODO add parameter visit
+        symboleManager.pushInTemporalCommande(functName);
+
+        for (int i=0 ;i <2 ;i++)
+        {
+            visit(ctx->param(i));
+        }
+
+
         symboleManager.writeStack(symboleManager.getTemporalCommande());
         symboleManager.deleteTemporalCommand();
         visit(ctx->core());
@@ -75,10 +82,13 @@ antlrcpp::Any Visiteur::visitMainFunction(ExprParser::MainFunctionContext *ctx)
 antlrcpp::Any Visiteur::visitParam(ExprParser::ParamContext *ctx)
 // Algorithme :
 //
-{//
-    string varName = ctx->VAR(0)->getText();
-
-    symboleManager.pushInTemporalCommande(varName);
+{
+    for(antlr4::tree::TerminalNode *tn:ctx->VAR())
+    {
+        string varName = tn->getText();
+        symboleManager.pushInTemporalCommande(varName);
+    }
+    // todo : if name already exists, break and error
 
     return true;
 }
@@ -124,7 +134,7 @@ antlrcpp::Any Visiteur::visitCallfunc(ExprParser::CallfuncContext *ctx)
 // Algorithme :
 //
 {
-    string funcName = ctx->VAR()->getText();
+    string funcName = ctx->VAR()[0]->getText();
 
     if(symboleManager.functExist(funcName))
     {

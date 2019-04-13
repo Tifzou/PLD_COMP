@@ -58,6 +58,7 @@ protected:
     string writePredicat(Commande returnCmd, string nextFlag);
     void browseGraph(Cell *block, ofstream &myfile, typeBlock typeCurBlock, int curFlagCounter);
     void browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBlock, int curFlagCounter);
+    string writeFunc(Commande functionCmd);
     string writeFuncCall(Commande functionCmd);
     string writeFuncAff(Commande functionCmd);
 
@@ -68,6 +69,7 @@ protected:
     string arbreAntlr;
     map<string, string> variables; // nom, adresse
     vector<string> namespaceFlags;
+    vector<string> paramRegister; // nom de registre parametres
     int flagCounter;
 
 };

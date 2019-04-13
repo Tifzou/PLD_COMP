@@ -141,12 +141,7 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
                 break;
             case 9: // FUNCTION
                 cerr << "in case FUNCTION" << endl;
-                myfile << ".global " << (*itInstr).elements[0] << "\n";
-                myfile << "\t.type\t "+ (*itInstr).elements[0]<<", @function\n";
-                myfile << (*itInstr).elements[0] << ":\n";
-                myfile << "\tpushq\t%rbp"<<endl;
-                myfile << "\tmovq\t%rsp, %rbp"<<endl;
-                myfile << "\tsubq\t$16, %rsp" << endl;
+                writeFunc((*itInstr));
                 break;
             case 10: //MAIN
                 cerr << "in case MAIN" << endl;
@@ -155,7 +150,7 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
                 myfile << "main:\n";
                 myfile << "\tpushq\t%rbp"<<endl;
                 myfile << "\tmovq\t%rsp, %rbp"<<endl;
-                myfile << "\tsubq\t$16, %rsp" << endl;
+                myfile << "\tsubq\t$16, %rsp" << endl; // TODO if more than 1 fct, change $16
                 break;
             case 11: // FUNC_CALL
                 cerr << "in case FUNCTION CALL" << endl;
@@ -563,6 +558,40 @@ string AsmWriter::writePredicat(Commande ifCondition, string nextFlag)
     }
 
     return line;
+}
+
+string AsmWriter::writeFunc(Commande functionCmd)
+{
+    string functName = functionCmd.elements[0];
+    string asmInstr = "\t.global " + functName + "\n";
+    asmInstr += "\t.type\t"+ functName + ", @function\n";
+    asmInstr += functName + ":\n";
+    asmInstr += "\tpushq\t%rbp\n";
+    asmInstr += "\tmovq\t%rsp, %rbp\n";
+
+    cout << functionCmd.elements[0] << functionCmd.elements[1] << functionCmd.elements[2] << endl;
+    if(functionCmd.elements.size() >1)
+    {
+        cout << "elements contains at least 1 param" << endl;
+        unsigned long nbParam = (functionCmd.elements.size())-2;
+        cout << nbParam << endl;
+        for(unsigned long i = 0 ; i<nbParam ; i++)
+        {
+            cout << i << endl;
+            long index = nbParam*(-4);
+            string varAddress = to_string(index) + "(%rbp)";
+            cout << varAddress << endl;
+            string varName = "!t" + to_string(nbParam);
+            cout << varName << endl;
+            pair<string, string> p(varName, varAddress);
+            cout << "une paire a ete creee" << endl;
+            //variables.insert(make_pair(varName, varAddress));
+            variables.insert(p);
+            cout << "la paire a ete inseree dans la map" << endl;
+            //asmInstr += "\tmovl\t" + paramRegister[i] + ", " + varAddress + "(%rbp)\n";
+        }
+    }
+    return asmInstr;
 }
 
 string AsmWriter::writeFuncCall(Commande functionCmd)
