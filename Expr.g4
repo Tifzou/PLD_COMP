@@ -4,11 +4,11 @@ prog:base;
 
 base: (function)* mainFunction;
 
-function : typevar VAR '(' param* ')' core ;
+function : typevar VAR '(' param? ')' core ;
 
 mainFunction : 'int main' '(' ')'core ;
 
-param : typevar VAR (',' VAR)*;
+param : typevar VAR (',' typevar VAR)*;
 
 core: '{' code* ret '}';
 

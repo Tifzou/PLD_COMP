@@ -8,38 +8,38 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug"/>
+				<Option working_dir="/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug"/>
+				<Option working_dir="/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug"/>
+				<Option working_dir="/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="helloworld">
-				<Option output="/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/helloworld" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug"/>
+				<Option output="/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/helloworld" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -54,15 +54,15 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 helloworld"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 helloworld"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="helloworld/fast">
-				<Option output="/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/helloworld" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug"/>
+				<Option output="/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/helloworld" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -77,79 +77,55 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 helloworld/fast"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 helloworld/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="generate">
-				<Option working_dir="/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug"/>
+				<Option working_dir="/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 generate"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 generate"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="compilate">
-				<Option working_dir="/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug"/>
+				<Option working_dir="/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 compilate"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 compilate"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/anonyme/PLD_COMP/PLD_COMP/AsmWriter.cpp">
+		<Unit filename="/home/alan/CLionProjects/PLD_COMP_fonction/AsmWriter.cpp">
 			<Option target="helloworld"/>
 		</Unit>
-		<Unit filename="/home/anonyme/PLD_COMP/PLD_COMP/AsmWriter.h">
+		<Unit filename="/home/alan/CLionProjects/PLD_COMP_fonction/AsmWriter.h">
 			<Option target="helloworld"/>
 		</Unit>
-		<Unit filename="/home/anonyme/PLD_COMP/PLD_COMP/ExprBaseVisitor.cpp">
+		<Unit filename="/home/alan/CLionProjects/PLD_COMP_fonction/Symbole.cpp">
 			<Option target="helloworld"/>
 		</Unit>
-		<Unit filename="/home/anonyme/PLD_COMP/PLD_COMP/ExprBaseVisitor.h">
+		<Unit filename="/home/alan/CLionProjects/PLD_COMP_fonction/Symbole.h">
 			<Option target="helloworld"/>
 		</Unit>
-		<Unit filename="/home/anonyme/PLD_COMP/PLD_COMP/ExprLexer.cpp">
+		<Unit filename="/home/alan/CLionProjects/PLD_COMP_fonction/Visiteur.cpp">
 			<Option target="helloworld"/>
 		</Unit>
-		<Unit filename="/home/anonyme/PLD_COMP/PLD_COMP/ExprLexer.h">
+		<Unit filename="/home/alan/CLionProjects/PLD_COMP_fonction/Visiteur.h">
 			<Option target="helloworld"/>
 		</Unit>
-		<Unit filename="/home/anonyme/PLD_COMP/PLD_COMP/ExprParser.cpp">
+		<Unit filename="/home/alan/CLionProjects/PLD_COMP_fonction/main.cpp">
 			<Option target="helloworld"/>
 		</Unit>
-		<Unit filename="/home/anonyme/PLD_COMP/PLD_COMP/ExprParser.h">
-			<Option target="helloworld"/>
-		</Unit>
-		<Unit filename="/home/anonyme/PLD_COMP/PLD_COMP/ExprVisitor.cpp">
-			<Option target="helloworld"/>
-		</Unit>
-		<Unit filename="/home/anonyme/PLD_COMP/PLD_COMP/ExprVisitor.h">
-			<Option target="helloworld"/>
-		</Unit>
-		<Unit filename="/home/anonyme/PLD_COMP/PLD_COMP/Symbole.cpp">
-			<Option target="helloworld"/>
-		</Unit>
-		<Unit filename="/home/anonyme/PLD_COMP/PLD_COMP/Symbole.h">
-			<Option target="helloworld"/>
-		</Unit>
-		<Unit filename="/home/anonyme/PLD_COMP/PLD_COMP/Visiteur.cpp">
-			<Option target="helloworld"/>
-		</Unit>
-		<Unit filename="/home/anonyme/PLD_COMP/PLD_COMP/Visiteur.h">
-			<Option target="helloworld"/>
-		</Unit>
-		<Unit filename="/home/anonyme/PLD_COMP/PLD_COMP/main.cpp">
-			<Option target="helloworld"/>
-		</Unit>
-		<Unit filename="/home/anonyme/PLD_COMP/PLD_COMP/CMakeLists.txt">
+		<Unit filename="/home/alan/CLionProjects/PLD_COMP_fonction/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>

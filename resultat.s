@@ -1,6 +1,13 @@
 .text
-	movl	$42, -8(%rbp)
-	movl	-8(%rbp), %eax
+	.global sum
+	.type	sum, @function
+sum:
+	pushq	%rbp
+	movq	%rsp, %rbp
+	movl	%rdi, -4(%rbp)
+	movl	%rsi, -8(%rbp)
+	movl	$42, -12(%rbp)
+	movl	-12(%rbp), %eax
 	movq	%rbp, %rsp
 	popq	%rbp
 	ret
@@ -13,13 +20,13 @@ main:
 	subq	$16, %rsp
 	movl	$1, -4(%rbp)
 	movl	-4(%rbp), %eax
-	movl	%eax, -12(%rbp)
-	movl	$2, -16(%rbp)
-	movl	-16(%rbp), %eax
+	movl	%eax, -16(%rbp)
+	movl	$2, -8(%rbp)
+	movl	-8(%rbp), %eax
 	movl	%eax, -20(%rbp)
 	call sum
-	movl %eax, -12(%rbp)
-	movl	-12(%rbp), %eax
+	movl %eax, -16(%rbp)
+	movl	-16(%rbp), %eax
 	movl	%eax, -24(%rbp)
 	movl	-24(%rbp), %eax
 	movq	%rbp, %rsp

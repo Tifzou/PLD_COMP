@@ -13,7 +13,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9cadfbaa-bb7d-488b-a991-4828cb9d5e79" name="Default Changelist" comment="">
+    <list default="true" id="9cadfbaa-bb7d-488b-a991-4828cb9d5e79" name="Default Changelist" comment="déclaration de fonction avec paramètre fonctionne&#10;reste à faire l'appel de fonction">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AsmWriter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/AsmWriter.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AsmWriter.h" beforeDir="false" afterPath="$PROJECT_DIR$/AsmWriter.h" afterDir="false" />
@@ -52,8 +52,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Expr.g4">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="20" column="5" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
+            <state relative-caret-position="105">
+              <caret line="10" column="36" selection-start-line="10" selection-start-column="36" selection-end-line="10" selection-end-column="36" />
             </state>
           </provider>
         </entry>
@@ -61,17 +61,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Visiteur.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="43">
-              <caret line="50" column="25" selection-start-line="50" selection-start-column="25" selection-end-line="50" selection-end-column="25" />
+            <state relative-caret-position="403">
+              <caret line="74" column="26" selection-start-line="74" selection-start-column="26" selection-end-line="74" selection-end-column="26" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/AsmWriter.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="205">
-              <caret line="579" column="30" selection-start-line="579" selection-start-column="30" selection-end-line="579" selection-end-column="30" />
+            <state relative-caret-position="335">
+              <caret line="598" column="46" lean-forward="true" selection-start-line="598" selection-start-column="46" selection-end-line="598" selection-end-column="46" />
             </state>
           </provider>
         </entry>
@@ -84,17 +84,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/AsmWriter.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="116">
-              <caret line="60" column="43" selection-start-line="60" selection-start-column="43" selection-end-line="60" selection-end-column="43" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Visiteur.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="256">
-              <caret line="53" column="8" selection-start-line="53" selection-start-column="8" selection-end-line="53" selection-end-column="8" />
+            <state relative-caret-position="240">
+              <caret line="47" column="39" selection-start-line="47" selection-start-column="39" selection-end-line="47" selection-end-column="39" />
             </state>
           </provider>
         </entry>
@@ -112,7 +103,7 @@
         <entry file="file://$PROJECT_DIR$/index.c">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="135">
-              <caret line="9" column="14" selection-start-line="9" selection-start-column="14" selection-end-line="9" selection-end-column="14" />
+              <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -131,6 +122,15 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="4785">
               <caret line="319" column="133" selection-start-line="319" selection-start-column="133" selection-end-line="319" selection-end-column="133" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Visiteur.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="254">
+              <caret line="149" column="50" selection-start-line="149" selection-start-column="50" selection-end-line="149" selection-end-column="50" />
             </state>
           </provider>
         </entry>
@@ -161,19 +161,19 @@
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/Symbole.cpp" />
         <option value="$PROJECT_DIR$/Symbole.h" />
-        <option value="$PROJECT_DIR$/AsmWriter.h" />
         <option value="$PROJECT_DIR$/Expr.g4" />
         <option value="$PROJECT_DIR$/index.c" />
-        <option value="$PROJECT_DIR$/Visiteur.cpp" />
         <option value="$PROJECT_DIR$/AsmWriter.cpp" />
+        <option value="$PROJECT_DIR$/AsmWriter.h" />
+        <option value="$PROJECT_DIR$/Visiteur.cpp" />
       </list>
     </option>
   </component>
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds" extendedState="4">
-    <option name="x" value="527" />
+    <option name="x" value="585" />
     <option name="y" value="25" />
-    <option name="width" value="1073" />
+    <option name="width" value="1015" />
     <option name="height" value="875" />
   </component>
   <component name="ProjectLevelVcsManager">
@@ -250,7 +250,7 @@
       <workItem from="1553591671257" duration="2446000" />
       <workItem from="1554975014881" duration="1264000" />
       <workItem from="1555046790805" duration="1746000" />
-      <workItem from="1555180302172" duration="3538000" />
+      <workItem from="1555180302172" duration="5298000" />
     </task>
     <task id="LOCAL-00001" summary="added clion config file">
       <created>1553592128766</created>
@@ -266,17 +266,24 @@
       <option name="project" value="LOCAL" />
       <updated>1555176579684</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Merge remote-tracking branch 'remotes/origin/master_commentaires' into IFREC&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;CMakeLists.txt&#10;#&#9;Symbole.h&#10;#&#9;cmake-build-debug/CMakeFiles/TargetDirectories.txt&#10;#&#9;cmake-build-debug/Makefile&#10;#&#9;cmake-build-debug/PLD_COMP.cbp">
+      <created>1555183937576</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1555183937576</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17034000" />
+    <option name="totallyTimeSpent" value="18794000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="527" y="25" width="1073" height="875" extended-state="4" />
+    <frame x="585" y="25" width="1015" height="875" extended-state="4" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1587147" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16821465" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -287,7 +294,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" />
-      <window_info anchor="bottom" id="Messages" order="8" weight="0.3285968" />
+      <window_info anchor="bottom" id="Messages" order="8" weight="0.32841823" />
       <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.49853945" visible="true" weight="0.37399465" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50048685" side_tool="true" weight="0.3297587" />
       <window_info anchor="bottom" id="Version Control" order="11" sideWeight="0.4996016" weight="0.05231689" />
@@ -346,7 +353,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="added clion config file" />
     <MESSAGE value="Merge remote-tracking branch 'remotes/origin/master_commentaires' into IFREC&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;CMakeLists.txt&#10;#&#9;Symbole.h&#10;#&#9;cmake-build-debug/CMakeFiles/TargetDirectories.txt&#10;#&#9;cmake-build-debug/Makefile&#10;#&#9;cmake-build-debug/PLD_COMP.cbp" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'remotes/origin/master_commentaires' into IFREC&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;CMakeLists.txt&#10;#&#9;Symbole.h&#10;#&#9;cmake-build-debug/CMakeFiles/TargetDirectories.txt&#10;#&#9;cmake-build-debug/Makefile&#10;#&#9;cmake-build-debug/PLD_COMP.cbp" />
+    <MESSAGE value="déclaration de fonction avec paramètre fonctionne&#10;reste à faire l'appel de fonction" />
+    <option name="LAST_COMMIT_MESSAGE" value="déclaration de fonction avec paramètre fonctionne&#10;reste à faire l'appel de fonction" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/index 3.c" />
@@ -402,48 +410,48 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Visiteur.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="43">
-          <caret line="50" column="25" selection-start-line="50" selection-start-column="25" selection-end-line="50" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Expr.g4">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="20" column="5" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
+        <state relative-caret-position="105">
+          <caret line="10" column="36" selection-start-line="10" selection-start-column="36" selection-end-line="10" selection-end-column="36" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.c">
+    <entry file="file://$PROJECT_DIR$/AsmWriter.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="14" selection-start-line="9" selection-start-column="14" selection-end-line="9" selection-end-column="14" />
+        <state relative-caret-position="335">
+          <caret line="598" column="46" lean-forward="true" selection-start-line="598" selection-start-column="46" selection-end-line="598" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Visiteur.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="403">
+          <caret line="74" column="26" selection-start-line="74" selection-start-column="26" selection-end-line="74" selection-end-column="26" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resultat.s">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/index.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/AsmWriter.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="116">
-          <caret line="60" column="43" selection-start-line="60" selection-start-column="43" selection-end-line="60" selection-end-column="43" />
+        <state relative-caret-position="240">
+          <caret line="47" column="39" selection-start-line="47" selection-start-column="39" selection-end-line="47" selection-end-column="39" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Visiteur.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="53" column="8" selection-start-line="53" selection-start-column="8" selection-end-line="53" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/AsmWriter.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="579" column="30" selection-start-line="579" selection-start-column="30" selection-end-line="579" selection-end-column="30" />
+        <state relative-caret-position="254">
+          <caret line="149" column="50" selection-start-line="149" selection-start-column="50" selection-end-line="149" selection-end-column="50" />
         </state>
       </provider>
     </entry>

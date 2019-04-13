@@ -39,19 +39,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /snap/clion/67/bin/cmake/linux/bin/cmake
+CMAKE_COMMAND = /home/alan/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/183.5429.37/bin/cmake/linux/bin/cmake
 
 # The command to remove a file.
-RM = /snap/clion/67/bin/cmake/linux/bin/cmake -E remove -f
+RM = /home/alan/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/183.5429.37/bin/cmake/linux/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/anonyme/PLD_COMP/PLD_COMP
+CMAKE_SOURCE_DIR = /home/alan/CLionProjects/PLD_COMP_fonction
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug
+CMAKE_BINARY_DIR = /home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = /home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/snap/clion/67/bin/cmake/linux/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/home/alan/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/183.5429.37/bin/cmake/linux/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -70,7 +70,7 @@ rebuild_cache/fast: rebuild_cache
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/snap/clion/67/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+	/home/alan/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/183.5429.37/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/CMakeFiles /home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/CMakeFiles /home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/alan/CLionProjects/PLD_COMP_fonction/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -175,114 +175,6 @@ AsmWriter.s: AsmWriter.cpp.s
 AsmWriter.cpp.s:
 	$(MAKE) -f CMakeFiles/helloworld.dir/build.make CMakeFiles/helloworld.dir/AsmWriter.cpp.s
 .PHONY : AsmWriter.cpp.s
-
-ExprBaseVisitor.o: ExprBaseVisitor.cpp.o
-
-.PHONY : ExprBaseVisitor.o
-
-# target to build an object file
-ExprBaseVisitor.cpp.o:
-	$(MAKE) -f CMakeFiles/helloworld.dir/build.make CMakeFiles/helloworld.dir/ExprBaseVisitor.cpp.o
-.PHONY : ExprBaseVisitor.cpp.o
-
-ExprBaseVisitor.i: ExprBaseVisitor.cpp.i
-
-.PHONY : ExprBaseVisitor.i
-
-# target to preprocess a source file
-ExprBaseVisitor.cpp.i:
-	$(MAKE) -f CMakeFiles/helloworld.dir/build.make CMakeFiles/helloworld.dir/ExprBaseVisitor.cpp.i
-.PHONY : ExprBaseVisitor.cpp.i
-
-ExprBaseVisitor.s: ExprBaseVisitor.cpp.s
-
-.PHONY : ExprBaseVisitor.s
-
-# target to generate assembly for a file
-ExprBaseVisitor.cpp.s:
-	$(MAKE) -f CMakeFiles/helloworld.dir/build.make CMakeFiles/helloworld.dir/ExprBaseVisitor.cpp.s
-.PHONY : ExprBaseVisitor.cpp.s
-
-ExprLexer.o: ExprLexer.cpp.o
-
-.PHONY : ExprLexer.o
-
-# target to build an object file
-ExprLexer.cpp.o:
-	$(MAKE) -f CMakeFiles/helloworld.dir/build.make CMakeFiles/helloworld.dir/ExprLexer.cpp.o
-.PHONY : ExprLexer.cpp.o
-
-ExprLexer.i: ExprLexer.cpp.i
-
-.PHONY : ExprLexer.i
-
-# target to preprocess a source file
-ExprLexer.cpp.i:
-	$(MAKE) -f CMakeFiles/helloworld.dir/build.make CMakeFiles/helloworld.dir/ExprLexer.cpp.i
-.PHONY : ExprLexer.cpp.i
-
-ExprLexer.s: ExprLexer.cpp.s
-
-.PHONY : ExprLexer.s
-
-# target to generate assembly for a file
-ExprLexer.cpp.s:
-	$(MAKE) -f CMakeFiles/helloworld.dir/build.make CMakeFiles/helloworld.dir/ExprLexer.cpp.s
-.PHONY : ExprLexer.cpp.s
-
-ExprParser.o: ExprParser.cpp.o
-
-.PHONY : ExprParser.o
-
-# target to build an object file
-ExprParser.cpp.o:
-	$(MAKE) -f CMakeFiles/helloworld.dir/build.make CMakeFiles/helloworld.dir/ExprParser.cpp.o
-.PHONY : ExprParser.cpp.o
-
-ExprParser.i: ExprParser.cpp.i
-
-.PHONY : ExprParser.i
-
-# target to preprocess a source file
-ExprParser.cpp.i:
-	$(MAKE) -f CMakeFiles/helloworld.dir/build.make CMakeFiles/helloworld.dir/ExprParser.cpp.i
-.PHONY : ExprParser.cpp.i
-
-ExprParser.s: ExprParser.cpp.s
-
-.PHONY : ExprParser.s
-
-# target to generate assembly for a file
-ExprParser.cpp.s:
-	$(MAKE) -f CMakeFiles/helloworld.dir/build.make CMakeFiles/helloworld.dir/ExprParser.cpp.s
-.PHONY : ExprParser.cpp.s
-
-ExprVisitor.o: ExprVisitor.cpp.o
-
-.PHONY : ExprVisitor.o
-
-# target to build an object file
-ExprVisitor.cpp.o:
-	$(MAKE) -f CMakeFiles/helloworld.dir/build.make CMakeFiles/helloworld.dir/ExprVisitor.cpp.o
-.PHONY : ExprVisitor.cpp.o
-
-ExprVisitor.i: ExprVisitor.cpp.i
-
-.PHONY : ExprVisitor.i
-
-# target to preprocess a source file
-ExprVisitor.cpp.i:
-	$(MAKE) -f CMakeFiles/helloworld.dir/build.make CMakeFiles/helloworld.dir/ExprVisitor.cpp.i
-.PHONY : ExprVisitor.cpp.i
-
-ExprVisitor.s: ExprVisitor.cpp.s
-
-.PHONY : ExprVisitor.s
-
-# target to generate assembly for a file
-ExprVisitor.cpp.s:
-	$(MAKE) -f CMakeFiles/helloworld.dir/build.make CMakeFiles/helloworld.dir/ExprVisitor.cpp.s
-.PHONY : ExprVisitor.cpp.s
 
 Symbole.o: Symbole.cpp.o
 
@@ -379,18 +271,6 @@ help:
 	@echo "... AsmWriter.o"
 	@echo "... AsmWriter.i"
 	@echo "... AsmWriter.s"
-	@echo "... ExprBaseVisitor.o"
-	@echo "... ExprBaseVisitor.i"
-	@echo "... ExprBaseVisitor.s"
-	@echo "... ExprLexer.o"
-	@echo "... ExprLexer.i"
-	@echo "... ExprLexer.s"
-	@echo "... ExprParser.o"
-	@echo "... ExprParser.i"
-	@echo "... ExprParser.s"
-	@echo "... ExprVisitor.o"
-	@echo "... ExprVisitor.i"
-	@echo "... ExprVisitor.s"
 	@echo "... Symbole.o"
 	@echo "... Symbole.i"
 	@echo "... Symbole.s"

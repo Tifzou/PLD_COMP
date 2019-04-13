@@ -51,10 +51,8 @@ antlrcpp::Any Visiteur::visitFunction(ExprParser::FunctionContext *ctx)
         symboleManager.pushInTemporalCommande(code); // Surchage pushTemporalStack(vector<string> commande)
         symboleManager.pushInTemporalCommande(functName);
 
-        for (int i=0 ;i <2 ;i++)
-        {
-            visit(ctx->param(i));
-        }
+        visit(ctx->param());
+
 
 
         symboleManager.writeStack(symboleManager.getTemporalCommande());
@@ -109,7 +107,11 @@ antlrcpp::Any Visiteur::visitAfffunc(ExprParser::AfffuncContext *ctx)
         symboleManager.pushInTemporalCommande(code);
         symboleManager.pushInTemporalCommande(funcName);
         symboleManager.pushInTemporalCommande(retVar);
-        // TODO push param
+        int nbParam = ctx->VAR().size();
+        for (int i = 1; i<=nbParam ; i++)
+        {
+            symboleManager.pushInTemporalCommande(ctx->VAR(i));
+        }
         symboleManager.writeStack(symboleManager.getTemporalCommande());
         symboleManager.deleteTemporalCommand();
     }
@@ -142,6 +144,11 @@ antlrcpp::Any Visiteur::visitCallfunc(ExprParser::CallfuncContext *ctx)
         commandeType code = commandeType::FUNC_CALL;
         symboleManager.pushInTemporalCommande(code);
         symboleManager.pushInTemporalCommande(funcName);
+        int nbParam = ctx->VAR().size();
+        for (int i = 1; i<=nbParam ; i++)
+        {
+            symboleManager.pushInTemporalCommande(ctx->VAR(i));
+        }
         symboleManager.writeStack(symboleManager.getTemporalCommande());
         symboleManager.deleteTemporalCommand();
     }

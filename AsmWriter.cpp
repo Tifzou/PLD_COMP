@@ -141,7 +141,7 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
                 break;
             case 9: // FUNCTION
                 cerr << "in case FUNCTION" << endl;
-                writeFunc((*itInstr));
+                myfile << writeFunc((*itInstr));
                 break;
             case 10: //MAIN
                 cerr << "in case MAIN" << endl;
@@ -573,22 +573,22 @@ string AsmWriter::writeFunc(Commande functionCmd)
     if(functionCmd.elements.size() >1)
     {
         cout << "elements contains at least 1 param" << endl;
-        unsigned long nbParam = (functionCmd.elements.size())-2;
+        unsigned long nbParam = (functionCmd.elements.size())-1;
         cout << nbParam << endl;
-        for(unsigned long i = 0 ; i<nbParam ; i++)
+        for(unsigned long i = 1 ; i<=nbParam ; i++)
         {
-            cout << i << endl;
-            long index = nbParam*(-4);
+            cout << "n° param " << i-1 << endl;
+            long index = i*(-4);
             string varAddress = to_string(index) + "(%rbp)";
             cout << varAddress << endl;
-            string varName = "!t" + to_string(nbParam);
+            string varName = "!t" + to_string(i);
             cout << varName << endl;
             pair<string, string> p(varName, varAddress);
             cout << "une paire a ete creee" << endl;
             //variables.insert(make_pair(varName, varAddress));
             variables.insert(p);
             cout << "la paire a ete inseree dans la map" << endl;
-            //asmInstr += "\tmovl\t" + paramRegister[i] + ", " + varAddress + "(%rbp)\n";
+            asmInstr += "\tmovl\t" + paramRegister[i-1] + ", " + varAddress + "\n";
         }
     }
     return asmInstr;
