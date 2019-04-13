@@ -8,9 +8,9 @@ add_custom_target(generate COMMAND make antlr -C ${PLD_COMP_SOURCE_DIR}
 
 add_custom_target(compilate COMMAND make exec -C ${PLD_COMP_SOURCE_DIR}
         CLION_EXE_DIR=${PROJECT_BINARY_DIR})
-#file(GLOB helloworld_SRC
- #       "*.h"
-  #      "*.cpp"
-   #     )
+file(GLOB helloworld_SRC
+        "*.h"
+        "*.cpp"
+        )
 
-#add_executable(helloworld ${helloworld_SRC})
+add_executable(helloworld ${helloworld_SRC})

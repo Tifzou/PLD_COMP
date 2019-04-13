@@ -145,7 +145,6 @@ void Symbole::pushIntoFlowControl()
     }
     else
     {
-
         Cell *bloc = new Cell();
         bloc->data = resp;
         flowControl->last->suivant1 = bloc;
@@ -258,7 +257,7 @@ bool Symbole::browsBlocks(Cell *block, string &type, string var)
 
 //------------------------------------------------------------------------
 void Symbole::browsBlocks(Cell *block, Cell *curBlock)
-// Algorithme : parcours le graphe et attache le block courant à chaque block qui a un nullptr
+// Algorithme : parcourt le graphe et attache le block courant à chaque block qui a un nullptr
 //
 {
 
@@ -287,7 +286,7 @@ void Symbole::browsBlocks(Cell *block, Cell *curBlock)
 
 //------------------------------------------------------------------------
 bool Symbole::varDef(string var)
-// Algorithme : renvoi 'true si la variable 'var' possède une valeur à l'issue d'une declaration avec affectation ou juste une affectation
+// Algorithme : renvoi 'true' si la variable 'var' possède une valeur à l'issue d'une declaration avec affectation ou juste une affectation
 //
 {
     for(Commande commande : resp)
