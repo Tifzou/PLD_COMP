@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated>
+      <config projectName="PLD_COMP" targetName="compilate" />
+      <config projectName="PLD_COMP" targetName="generate" />
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="9cadfbaa-bb7d-488b-a991-4828cb9d5e79" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeRuleHashes.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TargetDirectories.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-environment.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/cmake.check_cache" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/compilate.dir/DependInfo.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/compilate.dir/build.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/compilate.dir/cmake_clean.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/compilate.dir/progress.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/feature_tests.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/feature_tests.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/feature_tests.cxx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/generate.dir/DependInfo.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/generate.dir/build.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/generate.dir/cmake_clean.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/generate.dir/progress.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/progress.marks" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/Makefile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/PLD_COMP.cbp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmake-build-debug/cmake_install.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/File/indexSprint-5-1.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/File/indexSprint-5-2.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/File/indexSprint-6-1.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/File/indexSprint-6-2.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/File/indexSprint-6-3.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/File/indexSprint-6-4.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/File/indexSprint-7.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Test10/description" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Test11/description" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Test11/std.out" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Test12/description" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Test12/run" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Test12/std.out" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Test13/description" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Test13/run" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Test13/std.out" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Test14/description" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Test14/run" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Test14/std.out" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Test15/description" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Test15/run" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Test15/std.out" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Test16/description" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Test16/std.out" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AsmWriter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/AsmWriter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Visiteur.h" beforeDir="false" afterPath="$PROJECT_DIR$/Visiteur.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test1/description" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test1/results.csv" beforeDir="false" afterPath="$PROJECT_DIR$/test/Test02/results.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test1/run" beforeDir="false" afterPath="$PROJECT_DIR$/test/Test16/run" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test1/std.out" beforeDir="false" afterPath="$PROJECT_DIR$/test/Test02/std.out" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test2/description" beforeDir="false" afterPath="$PROJECT_DIR$/test/Test02/description" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test2/results.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test2/run" beforeDir="false" afterPath="$PROJECT_DIR$/test/Test02/run" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test2/std.out" beforeDir="false" afterPath="$PROJECT_DIR$/test/Test10/std.out" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test3/description" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test3/results.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test3/run" beforeDir="false" afterPath="$PROJECT_DIR$/test/Test10/run" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test3/std.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test4/description" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test4/results.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test4/run" beforeDir="false" afterPath="$PROJECT_DIR$/test/Test11/run" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test4/std.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test5/description" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test5/results.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test5/run" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test5/std.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test6/description" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test6/results.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test6/run" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test6/std.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test7/description" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test7/results.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test7/run" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test7/std.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test8/description" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test8/results.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test8/run" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test8/std.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test9/description" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test9/results.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test9/run" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Test9/std.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/results.csv" beforeDir="false" afterPath="$PROJECT_DIR$/test/results.csv" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Expr.g4">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="98">
+              <caret line="41" selection-start-line="41" selection-end-line="41" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Visiteur.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2805">
+              <caret line="187" column="42" selection-start-line="187" selection-start-column="42" selection-end-line="187" selection-end-column="42" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/AsmWriter.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2235">
+              <caret line="149" column="22" selection-start-line="149" selection-start-column="22" selection-end-line="149" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ExprParser.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="22230">
+              <caret line="1482" selection-start-line="1482" selection-end-line="1482" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Visiteur.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1380">
+              <caret line="92" column="46" selection-start-line="92" selection-start-column="38" selection-end-line="92" selection-end-column="46" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/results.csv">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/main.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1635">
+              <caret line="109" selection-start-line="109" selection-end-line="109" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resultat.s">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/index.c">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="45">
+              <caret line="3" column="15" selection-start-line="3" selection-start-column="15" selection-end-line="3" selection-end-column="15" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Symbole.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4800">
+              <caret line="320" column="133" selection-start-line="320" selection-start-column="133" selection-end-line="320" selection-end-column="133" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>pushIntoFlowControl</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="sprint2end" />
+      </map>
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/index.c" />
+        <option value="$PROJECT_DIR$/Expr.g4" />
+        <option value="$PROJECT_DIR$/test/test.sh" />
+        <option value="$PROJECT_DIR$/AsmWriter.cpp" />
+        <option value="$PROJECT_DIR$/main.cpp" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="65" />
+    <option name="y" value="-4" />
+    <option name="width" value="1301" />
+    <option name="height" value="772" />
+  </component>
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="PLD_COMP" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PLD_COMP" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="PLD_COMP" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PLD_COMP" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/test/File/indexSprint-1.c" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="CMake Application.compilate">
+    <configuration name="compilate" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="PLD_COMP" TARGET_NAME="compilate" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="generate" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="PLD_COMP" TARGET_NAME="generate" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="CMake Application.compilate" />
+      <item itemvalue="CMake Application.generate" />
+    </list>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9cadfbaa-bb7d-488b-a991-4828cb9d5e79" name="Default Changelist" comment="" />
+      <created>1553591668490</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1553591668490</updated>
+      <workItem from="1553591671257" duration="2446000" />
+      <workItem from="1554975014881" duration="1264000" />
+      <workItem from="1555046790805" duration="1746000" />
+      <workItem from="1555171293312" duration="309000" />
+    </task>
+    <task id="LOCAL-00001" summary="added clion config file">
+      <created>1553592128766</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1553592128766</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="6270000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="64" y="-11" width="1303" height="780" extended-state="6" />
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1625498" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Database Changes" order="7" />
+      <window_info anchor="bottom" id="Messages" order="8" weight="0.3285968" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" visible="true" weight="0.7832586" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="11" weight="0.32884902" />
+      <window_info anchor="bottom" id="CMake" order="12" weight="0.3285968" />
+      <window_info anchor="bottom" id="Tool Output" order="13" weight="0.32986626" />
+      <window_info anchor="bottom" id="ANTLR Preview" order="14" weight="0.32986626" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" />
+    </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.10039841" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4996016" weight="0.20926756" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49959967" weight="0.26756352" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49879903" weight="0.32884902" />
+      <window_info anchor="bottom" id="Tool Output" order="7" weight="0.32884902" />
+      <window_info anchor="bottom" id="Database Changes" order="8" />
+      <window_info anchor="bottom" id="Messages" order="9" weight="0.3258595" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49880478" visible="true" weight="0.1554559" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5004003" side_tool="true" weight="0.32884902" />
+      <window_info anchor="bottom" id="Version Control" order="12" sideWeight="0.49959967" weight="0.32884902" />
+      <window_info anchor="bottom" id="ANTLR Preview" order="13" weight="0.32884902" />
+      <window_info anchor="bottom" id="CMake" order="14" weight="0.19282511" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list />
+          </value>
+        </entry>
+        <entry key="User">
+          <value>
+            <list />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="added clion config file" />
+    <option name="LAST_COMMIT_MESSAGE" value="added clion config file" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/index 3.c" />
+    <entry file="file://$PROJECT_DIR$/index2.c" />
+    <entry file="file://$PROJECT_DIR$/Expr2.g4" />
+    <entry file="file://$PROJECT_DIR$/test/Test1/run" />
+    <entry file="file://$PROJECT_DIR$/test/Test1/resultat.s" />
+    <entry file="file://$PROJECT_DIR$/test/Test2/resultat.s" />
+    <entry file="file://$PROJECT_DIR$/test/mktest.sh">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/File/index.c">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/File/indexSprint-1.c">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/test.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="273">
+          <caret line="181" selection-start-line="181" selection-end-line="181" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Expr.g4">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="98">
+          <caret line="41" selection-start-line="41" selection-end-line="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Visiteur.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2805">
+          <caret line="187" column="42" selection-start-line="187" selection-start-column="42" selection-end-line="187" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AsmWriter.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2235">
+          <caret line="149" column="22" selection-start-line="149" selection-start-column="22" selection-end-line="149" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ExprParser.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22230">
+          <caret line="1482" selection-start-line="1482" selection-end-line="1482" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Visiteur.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1380">
+          <caret line="92" column="46" selection-start-line="92" selection-start-column="38" selection-end-line="92" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/results.csv">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1635">
+          <caret line="109" selection-start-line="109" selection-end-line="109" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resultat.s">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="15" selection-start-line="3" selection-start-column="15" selection-end-line="3" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Symbole.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4800">
+          <caret line="320" column="133" selection-start-line="320" selection-start-column="133" selection-end-line="320" selection-end-column="133" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

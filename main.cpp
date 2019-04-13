@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
             cout << endl;
         }
 
-            cout<<"block IF"<<endl;
+        /*    cout<<"block IF"<<endl;
         for (Commande curCommande: curCell->suivant1->data) {
             cout << curCommande.type << " : ";
             for (string s : curCommande.elements) {
