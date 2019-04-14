@@ -1,4 +1,4 @@
-Programme de tests automatiques - mode d'emploi
+Programme de tests automatiques fourni par l'équipe enseignante de 3IF - mode d'emploi
 
 
 -------------------------------------------------------------------------------

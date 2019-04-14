@@ -183,7 +183,7 @@ int main(int argc, char *argv[])
     cout << tree->toStringTree(&parser) << endl;
 
     if(showError){
-        cout<<erreur;
+        cerr<<erreur;
     }
     Visiteur visitor(showError);
 
@@ -192,7 +192,7 @@ int main(int argc, char *argv[])
     ListC *stack = resultat.getFlowControl();
 
     if(showError){
-        cout<<raz<<endl;
+        cerr<<raz<<endl;
     }
 
 #ifdef DEBUG
