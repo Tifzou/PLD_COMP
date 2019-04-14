@@ -1,13 +1,14 @@
 int main(){
-	int res = -1;
-  if(1==2)  {
-      if(4==3)
+	int res = 1;
+  if(res==1)  {
+      res=4;
+      if(res==3)
       {
       	res = 0;
       }
       else
       {
-      	res = 1;
+      	res = 3;
       }
     } 
   else  

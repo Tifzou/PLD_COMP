@@ -530,6 +530,7 @@ antlrcpp::Any Visiteur::visitIfElse(ExprParser::IfElseContext *ctx)
         return false;
     }
 
+    symboleManager.getFlowControl()->last=curBlock;
 
     //On visit le block "else" qui s'executera si le predicat est faux
     if(visit(ctx->coreElse()))

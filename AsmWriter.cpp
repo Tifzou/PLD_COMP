@@ -48,11 +48,6 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
 
         case ELSE_BLOCK:
         {
-            if(!block->data.empty())
-            {
-                myfile << "else" + to_string(curFlagCounter) + ":\n";
-            }
-
             break;
         }
 
@@ -70,8 +65,6 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
 
         case PREC_IF_BLOCK_RIGHT:
         {
-
-            myfile << "else" + to_string(curFlagCounter) + ":\n";;
 
             if(block->suivant2->data.size()==0)
             {
@@ -176,44 +169,45 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
     }*/
 }
 
-void AsmWriter::browseGraph(Cell *block, ofstream &myfile, typeBlock typeCurBlock, int flagCounter)
+void AsmWriter::browseGraph(Cell *block, ofstream &myfile, typeBlock typeCurBlock, int curFlagCounter)
 {
-    int curFlagCounter = flagCounter;
+    //curFlagCounter = flagCounter;
 
     if(block==nullptr || block->data.size()==0)
     {
         return;
     }
 
-    browseBlock(block, myfile, typeCurBlock, flagCounter);
+    browseBlock(block, myfile, typeCurBlock, curFlagCounter);
 
 
 
     if(typeCurBlock==PREC_IF_BLOCK_LEFT || typeCurBlock==PREC_IF_BLOCK_RIGHT)
     {
-        cout<<"blockIF"+to_string(curFlagCounter);
-        flagCounter++;
+        curFlagCounter =++flagCounter;
         if(block->suivant1!= nullptr && block->suivant1->data.back().type==commandeType::CONDITION)
         {
-            browseGraph(block->suivant1, myfile, PREC_IF_BLOCK_LEFT, curFlagCounter+1);
-            myfile << "\tjmp endif" + to_string(curFlagCounter) + "\n";
+            browseGraph(block->suivant1, myfile, PREC_IF_BLOCK_LEFT, flagCounter);
+            myfile << "\tjmp endif" + to_string((curFlagCounter-1)) + "\n";
         }
         else
         {
             browseBlock(block->suivant1, myfile, IF_BLOCK, curFlagCounter+1);
-            myfile << "\tjmp endif" + to_string(curFlagCounter) + "\n";
+            myfile << "\tjmp endif" + to_string((curFlagCounter-1)) + "\n";
 
         }
 
         if(block->suivant2!= nullptr && block->suivant2->data.size()!=0 && block->suivant2->data.back().type==commandeType::CONDITION )
         {
-            browseGraph(block->suivant2, myfile, PREC_IF_BLOCK_RIGHT, curFlagCounter);
-            myfile << "\tjmp endif" + to_string(curFlagCounter) + "\n";
+            myfile << "else" + to_string((curFlagCounter-1)) + ":\n";
+            browseGraph(block->suivant2, myfile, PREC_IF_BLOCK_RIGHT, flagCounter);
+            myfile << "\tjmp endif" + to_string((curFlagCounter-1)) + "\n";
         }
         else
         {
+            myfile << "else" + to_string((curFlagCounter-1)) + ":\n";
             browseBlock(block->suivant2, myfile, ELSE_BLOCK, curFlagCounter);
-            myfile<<"endif"+to_string(curFlagCounter)+":\n";
+            myfile<<"endif"+to_string((curFlagCounter-1))+":\n";
         }
 
 
@@ -236,11 +230,12 @@ bool AsmWriter::writeOutputFile(Cell *firstBlock, Cell *lastBlock) {
         if(firstBlock->data.back().type==commandeType::CONDITION)
         {
             browseGraph(firstBlock, myfile, PREC_IF_BLOCK_LEFT, flagCounter);
-            browseBlock(lastBlock, myfile, SIMPLE_BLOCK, flagCounter);
+            myfile<<"endif"+to_string(0)+":\n";
+            browseBlock(lastBlock, myfile, SIMPLE_BLOCK, 0);
         }
         else
         {
-            browseGraph(firstBlock, myfile, FIRST_BLOCK, flagCounter);
+            browseGraph(firstBlock, myfile, FIRST_BLOCK, 0);
         }
 
 

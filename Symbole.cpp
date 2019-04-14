@@ -145,10 +145,18 @@ void Symbole::pushIntoFlowControl()
     }
     else
     {
+
         Cell *bloc = new Cell();
         bloc->data = resp;
-        flowControl->last->suivant1 = bloc;
-        flowControl->last = flowControl->last->suivant1;
+        if(flowControl->last->suivant1==nullptr)
+        {
+            flowControl->last->suivant1 = bloc;
+        }
+        else if(flowControl->last->suivant2==nullptr)
+        {
+            flowControl->last->suivant2 = bloc;
+        }
+        flowControl->last = bloc;
     }
 
     resp.clear();
@@ -169,8 +177,9 @@ void Symbole::pushIfIntoFlowControl(Cell *curBlock)
     if(curBlock->suivant1==nullptr)
     {
         curBlock->suivant1 = bloc;
+        flowControl->last=bloc;
     }
-    flowControl->last=bloc;
+
 
     resp.clear();
     temporalExpression.clear();
@@ -186,8 +195,9 @@ void Symbole::pushElseIntoFlowControl(Cell* curBlock)
     if(curBlock->suivant2==nullptr)
     {
         curBlock->suivant2 = bloc;
+        flowControl->last=bloc;
     }
-    flowControl->last=bloc;
+
     resp.clear();
     temporalExpression.clear();
     temporalStackCommande.elements.clear();

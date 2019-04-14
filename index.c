@@ -1,20 +1,26 @@
-int main()
-{
-    int a=1;
-    if(a==0)
+int main(){
+
+    int res = 1;
+    if(res==1)
     {
-        a=2;
+        res=3;
+        if(1 == 2)
+        {
+            res = 4;
+        }
+        else
+        {
+            res = 7;
+            if(1 == 1)
+            {
+                res = 8;
+            }
+        }
 
     }
     else
     {
-        a=6;
-        if(a==6)
-        {
-            a=7;
-        }
+        res = 2;
     }
-
-    return a;
+    return res;
 }
-

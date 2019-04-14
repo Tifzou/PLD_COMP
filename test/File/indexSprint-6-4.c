@@ -1,10 +1,11 @@
 
 int main(){
-	int res = -1;
-  if(1==2)  {
-      if(4==3)
+	int res = 1;
+  if(res==1)  {
+      res=3;
+      if(res==3)
       {
-      	if(1 != 1)
+      	if(1 == 2)
         {
           res = 4;
         }
@@ -13,7 +14,7 @@ int main(){
           res = 7;
           if(1 == 1)
           {
-            res = 8
+            res = 8;
           }
         }
       }

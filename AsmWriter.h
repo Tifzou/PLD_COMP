@@ -44,6 +44,7 @@ public:
     bool writeOutputFile(Cell *firstBlock, Cell *lastBlock);
     void printVariableMap();
 
+
 protected:
     string writeReturn(Commande returnCmd);
     string writeAff(Commande affectationCmd);

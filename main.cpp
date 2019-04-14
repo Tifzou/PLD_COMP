@@ -59,14 +59,7 @@ void afficheStruct(Cell *block, typeBlock type, int compteur)
     {
         return;
     }
-    if(!block->data.empty() && block->data.back().type==commandeType::CONDITION)
-    {
-        cout<<"BlockCondition"<<endl;
-    }
-    else
-    {
-        cout<<"BlockSimple"<<endl;
-    }
+
     if(type==typeBlock::IF_BLOCK)
     {
         cout<<"IF"+to_string(compteur)<<endl;
