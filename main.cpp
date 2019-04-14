@@ -174,18 +174,29 @@ int main(int argc, char *argv[])
     ANTLRInputStream input(file);
 
     ExprLexer lexer(&input);
-
+    if(lexer.getNumberOfSyntaxErrors() > 0) {
+        cerr << "Le lexer a rencontrée " << lexer.getNumberOfSyntaxErrors()<< " erreurs !" << endl;
+        return -1;
+    }
     CommonTokenStream tokens(&lexer);
     file.close();
 
     ExprParser parser(&tokens);
     tree::ParseTree *tree = parser.prog();
 
+
     cout << tree->toStringTree(&parser) << endl;
 
     if(showError){
         cerr<<erreur;
         //cerr<<tree->getNumberOfSyntaxErrors()<<" erreurs ont été detectées lors de l'analyse via la grammaire !"<<endl;
+    }
+
+    if(parser.getNumberOfSyntaxErrors() > 0) {
+        if(showError){
+            cerr << "Le parseur a rencontrée " << lexer.getNumberOfSyntaxErrors()<< " erreurs !" << raz<<endl;
+        }
+        return -1;
     }
 
     Visiteur visitor(showError);
