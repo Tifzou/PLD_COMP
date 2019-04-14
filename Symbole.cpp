@@ -223,14 +223,6 @@ bool Symbole::functExist(string funct)
 // Algorithme : renvoi 'true' si la variable 'var' est déjà déclarée
 //
 {
-    /*for(Commande commande : resp)
-    {
-        if((commande.type == commandeType::FUNC) && commande.elements[1] == funct)
-        {
-            return true;
-        }
-    }
-    return false;*/
     map<string, int>::iterator it = tablesDesFonctions.find(funct);
     if(it == tablesDesFonctions.end())
     {
@@ -321,7 +313,10 @@ void Symbole::browsBlocks(Cell *block, Cell *curBlock)
 }
 
 
+//------------------------------------------------------------------------
 bool Symbole::browsBlocks(Cell *curBlock)
+// Algorithme : parcourt le graphe et affiche les erreurs qui y sont stockées
+//
 {
     bool noErrorTest=true;
     if(curBlock== nullptr)

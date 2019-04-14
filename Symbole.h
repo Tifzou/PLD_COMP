@@ -1,5 +1,7 @@
 /*************************************************************************
                            PLD_COMP  -  description
+
+    Classe réalisant l'IR et génèrant la représentation intermédiaire
                              -------------------
     début                : 05/03/2019
     copyright            : (C) 2019 par HALUNKA Matthieu, COQUIO-LEBRESNE Clémentine,
@@ -12,7 +14,6 @@
 #define SYMBOLE_H
 
 //--------------------------------------------------- Interfaces utilisées
-
 #include <string>
 #include <vector>
 #include <map>
@@ -40,7 +41,10 @@ enum commandeType
     FUNC,
     MAIN,
     FUNC_CALL,
-    FUNC_AFF
+    FUNC_AFF,
+    WHILE,
+    CONDITIONWHILE,
+    AFFL,
 };
 
 //structure contenant une commande correspondant à un type defini par 1 enum particuliere

@@ -54,7 +54,7 @@ if3:
 	movl	%eax, -8(%rbp)
 	jmp endif3
 endif3:
-	endif2:
+endif2:
 	jmp endif1
 else1:
 	movl	$1, -60(%rbp)
