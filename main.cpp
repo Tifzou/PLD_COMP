@@ -11,7 +11,6 @@
 #include "Visiteur.h"
 #include "AsmWriter.h"
 
-#define GEN_EXE
 
 using namespace antlr4;
 using namespace std;
