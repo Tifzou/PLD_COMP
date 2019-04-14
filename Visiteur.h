@@ -256,10 +256,16 @@ public:
     antlrcpp::Any visitLt(ExprParser::LtContext *ctx);
 
     // Mode d'emploi :
-    //
+    //      Permet d'obtenir l'IR associé au visiteur
     // Contrat :
     //
     Symbole getSymboleManager();
+
+    // Mode d'emploi :
+    //      Permet de vérifier si une erreur est apparue
+    // Contrat :
+    //
+    bool checkError(){ return hasError;};
 
 //------------------------------------------------------------------ PRIVE
 
@@ -294,6 +300,7 @@ private:
 //------------------------------------------------------- Attributs privés
     Symbole symboleManager;
     bool showError=false;
+    bool hasError=false;
 //----------------------------------------------------------- Types privés
 
 };

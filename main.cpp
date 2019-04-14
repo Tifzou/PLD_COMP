@@ -191,18 +191,17 @@ int main(int argc, char *argv[])
     Visiteur visitor(showError);
 
     //vector<vector<string>> resultat = visitor.visit(tree);
-    if(!visitor.visit(tree)){
+    if(!visitor.visit(tree)||visitor.checkError()){
         if(showError){
-            cerr<<"Des erreurs sont apparues lors de l'analyse statique !"<<endl;
+            cerr<<"Des erreurs sont apparues lors de l'analyse statique !"<<raz<<endl;
         }
         return -1;
     }
-
+    Symbole resultat=visitor.getSymboleManager();
     if(showError){
         cerr<<raz<<endl;
     }
 
-    Symbole resultat=visitor.getSymboleManager();
     ListC *stack = resultat.getFlowControl();
 
 #ifdef DEBUG

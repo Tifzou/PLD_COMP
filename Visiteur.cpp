@@ -43,6 +43,7 @@ antlrcpp::Any Visiteur::visitFunction(ExprParser::FunctionContext *ctx)
         if(showError){
             cerr<<"Line "<<ctx->start->getLine()<<" : name of function '"<<functName<<"' already assigne !"<<endl;
         }
+        hasError=true;
         return false;
     }
     //Si functName n'existe pas dans la table des fonctions
@@ -172,6 +173,7 @@ antlrcpp::Any Visiteur::visitCallfunc(ExprParser::CallfuncContext *ctx)
         symboleManager.pushInTemporalCommande(code, err);
         symboleManager.writeStack(symboleManager.getTemporalCommande());
         symboleManager.deleteTemporalCommand();
+        hasError=true;
         return false;
 
     }
@@ -206,6 +208,7 @@ antlrcpp::Any Visiteur::visitCore(ExprParser::CoreContext *ctx)
         return true;
     }
 
+    hasError=true;
     return false;
 }
 
@@ -238,6 +241,7 @@ antlrcpp::Any Visiteur::visitAff(ExprParser::AffContext *ctx)
         symboleManager.pushInTemporalCommande(varName);
         if(!visit(ctx->expr()))
         {
+            hasError=true;
             return false;
         }
         symboleManager.pushInTemporalCommande(symboleManager.getTemporalExpression()->back().elements[1]);
@@ -278,6 +282,7 @@ antlrcpp::Any Visiteur::visitRet(ExprParser::RetContext *ctx)
         symboleManager.deleteTemporalExpression();
         return true;
     }
+    hasError=true;
     return false;
 }
 
@@ -297,6 +302,7 @@ antlrcpp::Any Visiteur::visitDecVar(ExprParser::DecVarContext *ctx)
             if(showError){
                 cerr<<"Line "<<ctx->start->getLine()<<" : Name of variable '"<<nameVar<<"' already assigned !"<<endl;
             }
+            hasError=true;
             return false;
         }
 
@@ -332,6 +338,7 @@ antlrcpp::Any Visiteur::visitDefVar(ExprParser::DefVarContext *ctx)
             cerr<<"Line "<<ctx->start->getLine()<<" : Name of variable '"<<nameVar<<"' already assigned !"<<endl;
         }
 
+        hasError=true;
         return false;
 
     }
@@ -351,6 +358,7 @@ antlrcpp::Any Visiteur::visitDefVar(ExprParser::DefVarContext *ctx)
             symboleManager.deleteTemporalCommand();
             return true;
         }
+        hasError=true;
         return false;
     }
 }
@@ -366,11 +374,13 @@ antlrcpp::Any Visiteur::visitExpr(ExprParser::ExprContext *ctx)
 
         if(i==1&&!visit(ctx->terme(i-1)))
         {
+            hasError=true;
             return false;
         }
         string nomVar1=symboleManager.getTemporalExpression()->back().elements[1];
         if(!visit(ctx->terme(i)))
         {
+            hasError=true;
             return false;
         }
         string nomVar2=symboleManager.getTemporalExpression()->back().elements[1];
@@ -406,11 +416,13 @@ antlrcpp::Any Visiteur::visitTerme(ExprParser::TermeContext *ctx)
         vector<string> commande;
         if(i==1&&!visit(ctx->facteur(i-1)))
         {
+            hasError=true;
             return false;
         }
         string nomVar1=symboleManager.getTemporalExpression()->back().elements[1];
         if(!visit(ctx->facteur(i)))
         {
+            hasError=true;
             return false;
         }
         string nomVar2=symboleManager.getTemporalExpression()->back().elements[1];
@@ -474,6 +486,7 @@ antlrcpp::Any Visiteur::visitFactVar(ExprParser::FactVarContext *ctx)
         symboleManager.pushInTemporalCommande(code, err);
         symboleManager.writeStack(symboleManager.getTemporalCommande());
         symboleManager.deleteTemporalCommand();
+        hasError=true;
         return false;
     }
 }
@@ -534,6 +547,7 @@ antlrcpp::Any Visiteur::visitIfElse(ExprParser::IfElseContext *ctx)
     }
     else
     {
+        hasError=true;
         return false;
     }
     Cell* curBlock=symboleManager.getFlowControl()->last;
@@ -546,6 +560,7 @@ antlrcpp::Any Visiteur::visitIfElse(ExprParser::IfElseContext *ctx)
     }
     else
     {
+        hasError=true;
         return false;
     }
 
@@ -558,6 +573,7 @@ antlrcpp::Any Visiteur::visitIfElse(ExprParser::IfElseContext *ctx)
     }
     else
     {
+        hasError=true;
         return false;
     }
     return true;
@@ -578,6 +594,7 @@ antlrcpp::Any Visiteur::visitSimpleIf(ExprParser::SimpleIfContext *ctx){
     }
     else
     {
+        hasError=true;
         return false;
     }
 
@@ -591,6 +608,7 @@ antlrcpp::Any Visiteur::visitSimpleIf(ExprParser::SimpleIfContext *ctx){
     }
     else
     {
+        hasError=true;
         return false;
     }
     return true;
@@ -611,6 +629,7 @@ antlrcpp::Any Visiteur::visitGe(ExprParser::GeContext *ctx)
     }
     else
     {
+        hasError=true;
         return false;
     }
 
@@ -620,6 +639,7 @@ antlrcpp::Any Visiteur::visitGe(ExprParser::GeContext *ctx)
     }
     else
     {
+        hasError=true;
         return false;
     }
     string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
@@ -647,6 +667,7 @@ antlrcpp::Any Visiteur::visitGt(ExprParser::GtContext *ctx)
     }
     else
     {
+        hasError=true;
         return false;
     }
 
@@ -656,6 +677,7 @@ antlrcpp::Any Visiteur::visitGt(ExprParser::GtContext *ctx)
     }
     else
     {
+        hasError=true;
         return false;
     }
     string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
@@ -683,6 +705,7 @@ antlrcpp::Any Visiteur::visitLe(ExprParser::LeContext *ctx)
     }
     else
     {
+        hasError=true;
         return false;
     }
 
@@ -692,6 +715,7 @@ antlrcpp::Any Visiteur::visitLe(ExprParser::LeContext *ctx)
     }
     else
     {
+        hasError=true;
         return false;
     }
     string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
@@ -720,6 +744,7 @@ antlrcpp::Any Visiteur::visitLt(ExprParser::LtContext *ctx)
     }
     else
     {
+        hasError=true;
         return false;
     }
 
@@ -729,6 +754,7 @@ antlrcpp::Any Visiteur::visitLt(ExprParser::LtContext *ctx)
     }
     else
     {
+        hasError=true;
         return false;
     }
     string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
@@ -758,6 +784,7 @@ antlrcpp::Any Visiteur::visitEgal(ExprParser::EgalContext *ctx)
     }
     else
     {
+        hasError=true;
         return false;
     }
 
@@ -767,6 +794,7 @@ antlrcpp::Any Visiteur::visitEgal(ExprParser::EgalContext *ctx)
     }
     else
     {
+        hasError=true;
         return false;
     }
     string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
@@ -835,6 +863,7 @@ bool Visiteur::checkVarDec(string varName)
         symboleManager.pushInTemporalCommande(code, err);
         symboleManager.writeStack(symboleManager.getTemporalCommande());
         symboleManager.deleteTemporalCommand();
+        hasError=true;
         return false;
     }
     else
@@ -861,6 +890,8 @@ bool Visiteur::checkVarDef(string varName)
         symboleManager.pushInTemporalCommande(code, err);
         symboleManager.writeStack(symboleManager.getTemporalCommande());
         symboleManager.deleteTemporalCommand();
+        hasError=true;
+
         return false;
     }
     else
@@ -886,6 +917,7 @@ bool Visiteur::checkFunctDec(string functName)
         symboleManager.pushInTemporalCommande(code, err);
         symboleManager.writeStack(symboleManager.getTemporalCommande());
         symboleManager.deleteTemporalCommand();
+        hasError=true;
         return false;
     }
     else
