@@ -1,5 +1,7 @@
 /*************************************************************************
                            PLD_COMP  -  description
+
+    Classe réalisant l'IR et génèrant la représentation intermédiaire
                              -------------------
     début                : 05/03/2019
     copyright            : (C) 2019 par HALUNKA Matthieu, COQUIO-LEBRESNE Clémentine,
@@ -12,7 +14,6 @@
 #define SYMBOLE_H
 
 //--------------------------------------------------- Interfaces utilisées
-
 #include <string>
 #include <vector>
 #include <map>
@@ -40,7 +41,10 @@ enum commandeType
     FUNC,
     MAIN,
     FUNC_CALL,
-    FUNC_AFF
+    FUNC_AFF,
+    WHILE,
+    CONDITIONWHILE,
+    AFFL,
 };
 
 //structure contenant une commande correspondant à un type defini par 1 enum particuliere
@@ -73,7 +77,6 @@ typedef struct ListC
 //------------------------------------------------------------------------
 // Rôle de la classe <Symbole>
 // génère la représentation intermédiaire
-//
 //------------------------------------------------------------------------
 
 class Symbole
@@ -82,97 +85,96 @@ class Symbole
 
   public:
     //----------------------------------------------------- Méthodes publiques
+    // Mode d'emploi :
+    //      vérifie qu'une variable a été déclarée
+    //      renvoie true si oui, false sinon
+    // Contrat :
+    //      Aucun
     bool varExist(string var);
-    // Mode d'emploi :
-    // vérifie qu'une variable a été déclarée
-    // renvoie true si oui, false sinon
-    // Contrat :
-    //
 
+    // Mode d'emploi :
+    //      vérifie qu'une variable a déjà une valeur soit avec une définition soit avec une affectation
+    //      renvoie true si oui, false sinon
+    // Contrat :
+    //      renvoie false si la variable n'a pas été déclarée
     bool varDef(string var);
-    // Mode d'emploi :
-    // vérifie qu'une variable a déjà une valeur
-    // soit avec une définition soit avec une affectation
-    // renvoie true si oui, false sinon
-    // Contrat :
-    // renvoie false si la variable n'a pas été déclarée
 
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
     bool functExist(string funct);
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
 
+    // Mode d'emploi :
+    //      ajoute une commande à la liste de commandes
+    // Contrat :
+    //      la commande doit être complète
     void writeStack(Commande curCommande);
+
+    // TODO : à supprimer ? vu qu'elle n'est pas utilisée
     // Mode d'emploi :
-    // ajoute une commande à la liste de commandes
+    //      ajoute une commande à la liste de commandes
     // Contrat :
-    // la commande doit être complète
-
-
+    //      la commande est créée dans cette méthode directement
     void writeStack(commandeType code, vector<string> commande);
+
     // Mode d'emploi :
-    // ajoute une commande à la liste de commandes
+    //      ajoute une liste de commandes à la liste de commandes existante
     // Contrat :
-    // la commande est créée dans cette méthode directement
-
-
+    //      les commandes doivent être complètes
     void writeStack(matrice commandes);
+
+
     // Mode d'emploi :
-    // ajoute une liste de commandes à la liste de commandes existante
-    // Contrat :
-    // les commandes doivent être complètes
-
-
+    //      crée une commande temporaire
     void pushInTemporalCommande(commandeType code, vector<string> commande)
-    // Mode d'emploi :
-    // crée une commande temporaire
     {
         temporalStackCommande.type = code;
         temporalStackCommande.elements = commande;
     }
 
+    // TODO : à supprimer ? vu qu'elle n'est pas utilisée et n'a pas de code ?
+    // Mode d'emploi :
+    //      crée une commande temporaire
+    // Contrat :
+    //      ne possède pas de code définissant le type de la commande
     void pushInTemporalCommande(vector<string> commande)
-    // Mode d'emploi :
-    // crée une commande temporaire
-    // Contrat :
-    // ne possède pas de code définissant le type de la commande
     {
         temporalStackCommande.elements = commande;
     }
 
-    void pushInTemporalCommande(commandeType code)
     // Mode d'emploi :
-    // crée une commande temporaire
+    //      crée une commande temporaire
     // Contrat :
-    // ne possède pas de corps définissant les instructions de la commande
+    //      ne possède pas de corps définissant les instructions de la commande
+    void pushInTemporalCommande(commandeType code)
     {
         temporalStackCommande.type = code;
     }
 
-    void pushInTemporalCommande(string element)
     // Mode d'emploi :
     // crée une commande temporaire
     // Contrat :
-    // ne possède pas de code définissant le type de la commande
-    // la commande ne possède qu'un seul élément dans le vector
+    //      ne possède pas de code définissant le type de la commande
+    //      la commande ne possède qu'un seul élément dans le vector
+    void pushInTemporalCommande(string element)
     {
         temporalStackCommande.elements.push_back(element);
     }
 
     void popBackLastElemTmpCommande()
     // Mode d'emploi :
-    // supprime le dernier élément ajouté à la commande
+    //      supprime le dernier élément ajouté à la commande
     {
         temporalStackCommande.elements.pop_back();
     }
 
     void deleteTemporalCommand()
     // Mode d'emploi :
-    // supprime le contenu de la commande temporaire
+    //      supprime le contenu de la commande temporaire
     // Contrat :
-    // le type de commande par défaut est ERR
-    // le corps de la commande est par défaut vide
+    //      le type de commande par défaut est ERR
+    //      le corps de la commande est par défaut vide
     {
         temporalStackCommande.type = ERR;
         temporalStackCommande.elements.clear();
@@ -180,36 +182,36 @@ class Symbole
 
     void pushTemporalMatriceVari(vector<string> element);
     // Mode d'emploi :
-    // crée une commande de type opération avec les elements
-    // l'ajoute à la liste de commandes temporaires (temporalExpression) // TODO changer le nom (?)
+    //      crée une commande de type opération avec les elements
+    //      l'ajoute à la liste de commandes temporaires (temporalExpression) // TODO changer le nom (?)
 
     // TODO : à supprimer ? vu qu'elle n'est pas utilisée
     void pushTemporalMatriceVari(commandeType code, vector<string> element);
     // Mode d'emploi :
-    // crée une commande
-    // l'ajoute à la liste de commandes temporaires (temporalExpression) // TODO changer le nom (?)
+    //      crée une commande
+    //      l'ajoute à la liste de commandes temporaires (temporalExpression) // TODO changer le nom (?)
 
     int createTemporalVar()
     // Mode d'emploi :
-    // incrémente le nombre de variables temporaires
+    //      incrémente le nombre de variables temporaires
     // Contrat :
-    // le numéro d'une variable temporaire la définit
+    //      le numéro d'une variable temporaire la définit
     {
         return tmpCounter++;
     }
 
     string retrieveVarType(string var);
     // Mode d'emploi :
-    // retourne le type de la variable
+    //      retourne le type de la variable
     // Contrat :
-    // parcourt le block actuel, la commande temporaire actuelle et les autres blocks
-    // ce qui induit qu'il n'est pas possible dans notre structure d'avoir plusieurs variables avec le même nom,
-    // même si l'une est dans une block if et l'autre non par exemple
+    //      parcourt le block actuel, la commande temporaire actuelle et les autres blocks
+    //      ce qui induit qu'il n'est pas possible dans notre structure d'avoir plusieurs variables avec le même nom,
+    //      même si l'une est dans une block if et l'autre non par exemple
 
 
     void createVar(string varName)
     // Mode d'emploi :
-    // ajoute la variable à la table des symboles
+    //      ajoute la variable à la table des symboles
     {
         pair<string, int> p(varName, index++);
         tablesDesSymboles.insert(p);
@@ -217,41 +219,41 @@ class Symbole
 
     void pushIntoFlowControl();
     // Mode d'emploi :
-    // crée un nouveau block dans le graph de controle
-    // l'ajoute au CFG
+    //      crée un nouveau block dans le graph de controle
+    //      l'ajoute au CFG
     // Contrat :
-    // la liste de commandes est remise à 0
-    // toutes les variables temporaires sont remises à 0
+    //      la liste de commandes est remise à 0
+    //      toutes les variables temporaires sont remises à 0
 
 
     void pushIfIntoFlowControl(Cell* curBlock);
     // Mode d'emploi :
-    // crée un nouveau block de type IF dans le graph de controle
-    // l'ajoute au CFG
+    //      crée un nouveau block de type IF dans le graph de controle
+    //      l'ajoute au CFG
     // Contrat :
-    // la liste de commandes est remise à 0
-    // toutes les variables temporaires sont remises à 0
+    //      la liste de commandes est remise à 0
+    //      toutes les variables temporaires sont remises à 0
 
     void pushElseIntoFlowControl(Cell* curBlock);
     // Mode d'emploi :
-    // crée un nouveau block de type ELSE dans le graph de controle
-    // l'ajoute au CFG
+    //      crée un nouveau block de type ELSE dans le graph de controle
+    //      l'ajoute au CFG
     // Contrat :
-    // la liste de commandes est remise à 0
-    // toutes les variables temporaires sont remises à 0
+    //      la liste de commandes est remise à 0
+    //      toutes les variables temporaires sont remises à 0
 
     void pushLastBlockIntoFlowControl();
     // Mode d'emploi :
-    // crée un nouveau block le graph de controle
-    // l'ajout au CFG en parcourant le graphe et en attachant le block courant à chaque block qui a un nullptr
+    //      crée un nouveau block le graph de controle
+    //      l'ajout au CFG en parcourant le graphe et en attachant le block courant à chaque block qui a un nullptr
     // Contrat :
-    // la liste de commandes est remise à 0
-    // toutes les variables temporaires sont remises à 0
+    //      la liste de commandes est remise à 0
+    //      toutes les variables temporaires sont remises à 0
 
 
     void deleteTemporalExpression()
     // Mode d'emploi :
-    // remet à 0 la liste des commandes temporaire
+    //      remet à 0 la liste des commandes temporaire
     {
         temporalExpression.clear();
     }
@@ -269,23 +271,20 @@ class Symbole
 
     bool browsBlocks(Cell *block, string var);
     // Mode d'emploi :
-    // parcourt le block et les blocks qui le suivent pour vérifier si la variable a été déclarée
+    //      parcourt le block et les blocks qui le suivent pour vérifier si la variable a été déclarée
     // Contrat :
-    // true si elle existe, false sinon
+    //      true si elle existe, false sinon
 
     bool browsBlocks(Cell *block, string &type, string var);
     // Mode d'emploi :
-    // parcourt le block et les blocks qui le suivent pour vérifier si la variable a été déclarée
-    // si elle existe, le type passé en paramètre est changé pour prendre la valeur de la variable trouvée
+    //      parcourt le block et les blocks qui le suivent pour vérifier si la variable a été déclarée
+    //      si elle existe, le type passé en paramètre est changé pour prendre la valeur de la variable trouvée
     // Contrat :
-    // true si elle existe, false sinon
+    //      true si elle existe, false sinon
 
     void browsBlocks(Cell *block, Cell *curBlock);
     // Mode d'emploi :
-    //parcourt le block et les blocks qui le suivent pour vérifier si la variable a été déclarée
-    // si elle existe, le type passé en paramètre est changé pour prendre la valeur de la variable trouvée
-    //Contrat :
-    // parcourt le graphe et attache le block courant à chaque block qui a un nullptr
+    //      parcourt le graphe et attache le block courant à chaque block qui a un nullptr
 
     bool browsBlocks(Cell *curCell);
     // Mode d'emploi :parcourt le block et les blocks qui le suivent pour detecter les erreurs presentes
@@ -298,7 +297,7 @@ class Symbole
 
     Commande getTemporalCommande()
     // Mode d'emploi :
-    // retourne la commande temporaire
+    //      retourne la commande temporaire
     {
         return temporalStackCommande;
     }
@@ -312,14 +311,14 @@ class Symbole
 
     ListC *getFlowControl()
     // Mode d'emploi :
-    // return la liste des blocks
+    //      return la liste des blocks
     {
         return &*flowControl;
     }
 
     matrice *getTemporalExpression()
     // Mode d'emploi :
-    // return la liste de commande temporaire
+    //      return la liste de commande temporaire
     {
         return &temporalExpression;
     }
@@ -327,7 +326,7 @@ class Symbole
     //-------------------------------------------- Constructeurs - destructeur
     Symbole()
     // Mode d'emploi :
-    // initialise les variables
+    //      initialise les variables
     {
         tmpCounter = 0;
         index = 0;
@@ -340,9 +339,9 @@ class Symbole
 
     }
 
-    void destroyGraph(Cell* block);
     // Mode d'emploi :
-    // libère la mémoire de tous les blocks du graphe de controle
+    //      libère la mémoire de tous les blocks du graphe de controle
+    void destroyGraph(Cell* block);
 
     //------------------------------------------------------------------ PRIVE
 

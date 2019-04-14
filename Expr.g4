@@ -4,11 +4,11 @@ prog:base;
 
 base: (function)* mainFunction;
 
-function : typevar VAR '(' param* ')' core ;
+function : typevar VAR '(' param? ')' core ;
 
 mainFunction : 'int main' '(' ')'core ;
 
-param : typevar VAR (',' VAR)*;
+param : typevar VAR (',' typevar VAR)*;
 
 core: '{' code* ret '}';
 
@@ -18,11 +18,19 @@ code: typevar vari ';' #decdef
     | typevar VAR '=' VAR'(' param* ')' ';' #decfunc
     | VAR '=' VAR '(' param* ')' ';' #afffunc
     | VAR '(' param* ')' ';'#callfunc
+    | exprl'=' expr ';' #lvalue
     ;
+
+exprl: (expr operatorAll)* VAR (operatorAll expr)*;
+
+operatorAll: OPERATORADD #add_l
+            | OPERATORSUB #sub_l
+;
 
 condition: 'if' '('boolExpression')' '{'coreIf'}' 'else' '{'coreElse'}' #ifElse
     |'if' '('boolExpression')' '{'coreIf'}' #simpleIf
-    ;
+    |'while' '('boolExpressionWhile')' '{'coreIf'}' #whileLoop
+;
 
 coreIf:ifCore;
 coreElse:ifCore;
@@ -31,6 +39,7 @@ ifCore:code* #ifCommande
     | code* ret #ifRet
     ;
 
+boolExpressionWhile:predicat;
 boolExpression:predicat;
 
 predicat:expr '==' expr #egal
@@ -38,6 +47,7 @@ predicat:expr '==' expr #egal
     |expr '>' expr # gt
     |expr '<=' expr # le
     |expr '<' expr # lt
+    |expr '!=' expr # negal
     ;
 
 ret: 'return' expr ';' ;
