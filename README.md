@@ -21,6 +21,7 @@ Assurez-vous d'avoir installé CLang (sous ubuntu 18.10 -> 1:7.0-43ubuntu1 minim
 La solution s'utilise par l'exécution du fichier <code>exec</code> généré. 
 Un fichier à compiler devra être spécifier pour que l'application fonctionne. 
 <br/>Ex : <code>./exec index.c</code><br/>
+
 L'application affiche la représentation en mémoire du code analysé.<br/>
 Les options pour utiliser cette solution sont :
 <ul>
@@ -30,6 +31,7 @@ Les options pour utiliser cette solution sont :
 <li><code>-o</code> pour activer l'optimisation de la structure.</li>
 </ul>
 
+Le script shell <code>ultimate_script.sh</code> permet de compiler la solution, de lancer l'application avec un fichier index.c situé dans le même dossier et d'exécuter l'assembleur obtenu pour obtenir le résultat de son exécution.
 
 ## Compiler et générer en dehors de IF - Guide de déploiement Antlr
 
