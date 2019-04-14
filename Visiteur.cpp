@@ -49,7 +49,6 @@ antlrcpp::Any Visiteur::visitFunction(ExprParser::FunctionContext *ctx)
     //Si functName n'existe pas dans la table des fonctions
     else
     {
-        cout << "function doesn't exist, let's create it" << endl;
         symboleManager.createFunction(functName);
         commandeType code = commandeType::FUNC;
 
@@ -60,7 +59,6 @@ antlrcpp::Any Visiteur::visitFunction(ExprParser::FunctionContext *ctx)
         {
             visit(ctx->param());
         }
-        cout << "we visited the parameters" << endl;
         symboleManager.writeStack(symboleManager.getTemporalCommande());
         symboleManager.deleteTemporalCommand();
         visit(ctx->core());
@@ -110,12 +108,10 @@ antlrcpp::Any Visiteur::visitAfffunc(ExprParser::AfffuncContext *ctx)
         symboleManager.pushInTemporalCommande(code);
         symboleManager.pushInTemporalCommande(funcName);
         symboleManager.pushInTemporalCommande(retVar);
-        cout << ctx->VAR().size() << endl;
         int nbParam = ctx->VAR().size()-2;
         for (int i = 2; i<=nbParam+1 ; i++)
         {
             symboleManager.pushInTemporalCommande(ctx->VAR(i)->getText());
-            cout << ctx->VAR(i)->getText() << endl;
         }
         symboleManager.writeStack(symboleManager.getTemporalCommande());
         symboleManager.deleteTemporalCommand();
@@ -148,7 +144,6 @@ antlrcpp::Any Visiteur::visitCallfunc(ExprParser::CallfuncContext *ctx)
 
     if(symboleManager.functExist(funcName))
     {
-        cout << "the function exists so we can call it" << endl;
         commandeType code = commandeType::FUNC_CALL;
         symboleManager.pushInTemporalCommande(code);
         symboleManager.pushInTemporalCommande(funcName);
@@ -446,7 +441,6 @@ antlrcpp::Any Visiteur::visitExpr(ExprParser::ExprContext *ctx)
             return false;
         }
         string nomVar2=symboleManager.getTemporalExpression()->back().elements[1];
-        cout<<nomVar1<<" "<<nomVar2<<endl;
         string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
 
         commande.push_back(symboleManager.retrieveVarType(nomVar1));
