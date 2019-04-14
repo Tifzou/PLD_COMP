@@ -255,6 +255,11 @@ public:
     //
     antlrcpp::Any visitLt(ExprParser::LtContext *ctx);
 
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+    Symbole getSymboleManager();
 
 //------------------------------------------------------------------ PRIVE
 

@@ -25,9 +25,7 @@ antlrcpp::Any Visiteur::visitProg(ExprParser::ProgContext *ctx)
 // Algorithme :
 //
 {
-    visitChildren(ctx);
-    //FIXME wtf ??????
-    return symboleManager;
+    return visitChildren(ctx);
 }
 /*------------------------------------------------------------------------*/
 antlrcpp::Any Visiteur::visitBase(ExprParser::BaseContext *ctx)
@@ -42,7 +40,9 @@ antlrcpp::Any Visiteur::visitFunction(ExprParser::FunctionContext *ctx)
     string functName = ctx->VAR()->getText();
     if (!checkFunctDec(functName)) // si function existe deja
     {
-        cout << "function exists" << endl;
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : name of function '"<<functName<<"' already assigne !"<<endl;
+        }
         return false;
     }
     //Si functName n'existe pas dans la table des fonctions
@@ -56,7 +56,6 @@ antlrcpp::Any Visiteur::visitFunction(ExprParser::FunctionContext *ctx)
         symboleManager.pushInTemporalCommande(functName);
 
         visit(ctx->param());
-
 
 
         symboleManager.writeStack(symboleManager.getTemporalCommande());
@@ -126,6 +125,9 @@ antlrcpp::Any Visiteur::visitAfffunc(ExprParser::AfffuncContext *ctx)
         string error3 = "name of function '" + funcName + "' not assigned";
         err.push_back("0323");
         err.push_back(error3);
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : Name of function '"<<funcName<<"' not assigned !"<<endl;
+        }
         symboleManager.deleteTemporalCommand(); //temporalStack = null;
         symboleManager.pushInTemporalCommande(code, err);
         symboleManager.writeStack(symboleManager.getTemporalCommande());
@@ -163,6 +165,9 @@ antlrcpp::Any Visiteur::visitCallfunc(ExprParser::CallfuncContext *ctx)
         string error1 = "name of function '" + funcName + "' already assigned";
         err.push_back("0667");
         err.push_back(error1);
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : Name of function '"<<funcName<<"' already assigned !"<<endl;
+        }
         symboleManager.deleteTemporalCommand(); //temporalStack = null;
         symboleManager.pushInTemporalCommande(code, err);
         symboleManager.writeStack(symboleManager.getTemporalCommande());
@@ -248,6 +253,9 @@ antlrcpp::Any Visiteur::visitAff(ExprParser::AffContext *ctx)
         string error3 = "name of variable '" + varName + "' not assigned";
         err.push_back("0323");
         err.push_back(error3);
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : Name of variable '"<<varName<<"' not assigned !"<<endl;
+        }
         symboleManager.deleteTemporalCommand(); //temporalStack = null;
         symboleManager.pushInTemporalCommande(code, err);
         symboleManager.writeStack(symboleManager.getTemporalCommande());
@@ -285,6 +293,10 @@ antlrcpp::Any Visiteur::visitDecVar(ExprParser::DecVarContext *ctx)
 
         if (!checkVarDec(nameVar))
         {
+
+            if(showError){
+                cerr<<"Line "<<ctx->start->getLine()<<" : Name of variable '"<<nameVar<<"' already assigned !"<<endl;
+            }
             return false;
         }
 
@@ -315,6 +327,11 @@ antlrcpp::Any Visiteur::visitDefVar(ExprParser::DefVarContext *ctx)
     if (!checkVarDec(nameVar))
     {
         symboleManager.deleteTemporalExpression();
+
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : Name of variable '"<<nameVar<<"' already assigned !"<<endl;
+        }
+
         return false;
 
     }
@@ -448,6 +465,10 @@ antlrcpp::Any Visiteur::visitFactVar(ExprParser::FactVarContext *ctx)
         string error2 = "variable : '" + var + "' not defined";
         err.push_back("0322");
         err.push_back(error2);
+
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : Variable '"<<var<<"' not defined !"<<endl;
+        }
         symboleManager.deleteTemporalExpression(); //temporalStack = null;
 
         symboleManager.pushInTemporalCommande(code, err);
@@ -782,6 +803,14 @@ antlrcpp::Any Visiteur::visitLdconst(ExprParser::LdconstContext *ctx)
 }
 */
 
+//------------------------------------------------------------------------
+Symbole Visiteur::getSymboleManager()
+// Algorithme :
+//
+{
+    return symboleManager;
+}
+
 //------------------------------------------------------------------ PRIVE
 
 //----------------------------------------------------- Méthodes protégées
@@ -801,6 +830,7 @@ bool Visiteur::checkVarDec(string varName)
         string error1 = "name of variable '" + varName + "' already assigned";
         err.push_back("0321");
         err.push_back(error1);
+
         symboleManager.deleteTemporalCommand(); //temporalStack = null;
         symboleManager.pushInTemporalCommande(code, err);
         symboleManager.writeStack(symboleManager.getTemporalCommande());

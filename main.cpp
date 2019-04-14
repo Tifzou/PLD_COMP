@@ -174,6 +174,7 @@ int main(int argc, char *argv[])
     ANTLRInputStream input(file);
 
     ExprLexer lexer(&input);
+
     CommonTokenStream tokens(&lexer);
     file.close();
 
@@ -186,15 +187,23 @@ int main(int argc, char *argv[])
         cerr<<erreur;
         //cerr<<tree->getNumberOfSyntaxErrors()<<" erreurs ont été detectées lors de l'analyse via la grammaire !"<<endl;
     }
+
     Visiteur visitor(showError);
 
     //vector<vector<string>> resultat = visitor.visit(tree);
-    Symbole resultat = visitor.visit(tree);
-    ListC *stack = resultat.getFlowControl();
+    if(!visitor.visit(tree)){
+        if(showError){
+            cerr<<"Des erreurs sont apparues lors de l'analyse statique !"<<endl;
+        }
+        return -1;
+    }
 
     if(showError){
         cerr<<raz<<endl;
     }
+
+    Symbole resultat=visitor.getSymboleManager();
+    ListC *stack = resultat.getFlowControl();
 
 #ifdef DEBUG
     Cell * curCell = stack->first;
