@@ -23,6 +23,7 @@ antlrcpp::Any Visiteur::visitProg(ExprParser::ProgContext *ctx)
 //
 {
     visitChildren(ctx);
+    //FIXME wtf ??????
     return symboleManager;
 }
 /*------------------------------------------------------------------------*/
@@ -94,8 +95,8 @@ antlrcpp::Any Visiteur::visitParam(ExprParser::ParamContext *ctx)
 //------------------------------------------------------------------------
 antlrcpp::Any Visiteur::visitAfffunc(ExprParser::AfffuncContext *ctx)
 // Algorithme : renvoi "true" si la variable avec le nom 'varName' n'est pas déclarée
-// De plus, si la variable est déjà déclarée, efface la commande temporelle et la remplit avec une erreur
-// Sinon, ajoute la variable dans la pile de la commande
+//              De plus, si la variable est déjà déclarée, efface la commande temporelle et la remplit avec une erreur
+//              Sinon, ajoute la variable dans la pile de la commande
 {
     string funcName = ctx->VAR()[1]->getText();
     commandeType code = commandeType::FUNC_AFF;
@@ -720,7 +721,10 @@ antlrcpp::Any Visiteur::visitLt(ExprParser::LtContext *ctx)
 
 
 //------------------------------------------------------------------------
-antlrcpp::Any Visiteur::visitEgal(ExprParser::EgalContext *ctx){
+antlrcpp::Any Visiteur::visitEgal(ExprParser::EgalContext *ctx)
+// Algorithme :
+//
+{
     cout<<"test predicat"<<endl;
     string nomVar1;
     string nomVar2;
@@ -784,8 +788,8 @@ antlrcpp::Any Visiteur::visitLdconst(ExprParser::LdconstContext *ctx)
 //------------------------------------------------------------------------
 bool Visiteur::checkVarDec(string varName)
 // Algorithme : renvoi "true" si la variable avec le nom 'varName' n'est pas déclarée
-// De plus, si la variable est déjà déclarée, efface la commande temporelle et la remplit avec une erreur
-// Sinon, ajoute la variable dans la pile de la commande
+//              De plus, si la variable est déjà déclarée, efface la commande temporelle et la remplit avec une erreur
+//              Sinon, ajoute la variable dans la pile de la commande
 {
     if (symboleManager.varExist(varName)) //doit verifier que la variable est bien au dessus et pas en dessous
     {                                     //check if the variable exist
@@ -810,8 +814,8 @@ bool Visiteur::checkVarDec(string varName)
 //------------------------------------------------------------------------
 bool Visiteur::checkVarDef(string varName)
 // Algorithme : renvoi 'true' si la variable 'varName' est bien défini.
-// De plus, si la variable n'est pas définit, efface la commande temporelle et la remplit avec une erreur
-//Dans le cas contraire, ajoute le nom de la variable dans la pile de la commande
+//              De plus, si la variable n'est pas définit, efface la commande temporelle et la remplit avec une erreur
+//              Dans le cas contraire, ajoute le nom de la variable dans la pile de la commande
 {
     if (!symboleManager.varDef(varName)) //doit verifier que la variable est bien au dessus et pas en dessous
     {                                     //check if the variable exist
@@ -835,8 +839,8 @@ bool Visiteur::checkVarDef(string varName)
 //------------------------------------------------------------------------
 bool Visiteur::checkFunctDec(string functName)
 // Algorithme : renvoi "true" si la variable avec le nom 'varName' n'est pas déclarée
-// De plus, si la variable est déjà déclarée, efface la commande temporelle et la remplit avec une erreur
-// Sinon, ajoute la variable dans la pile de la commande
+//              De plus, si la variable est déjà déclarée, efface la commande temporelle et la remplit avec une erreur
+//              Sinon, ajoute la variable dans la pile de la commande
 {
     if (symboleManager.functExist(functName)) //doit verifier que la fonction est bien au dessus et pas en dessous
     {                                     //check if the function exists
