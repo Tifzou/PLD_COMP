@@ -1,5 +1,5 @@
 /*************************************************************************
-                           PLD_COMP  -  description
+                           PLD_COMP  -  d
                              -------------------
     début                : 05/03/2019
     copyright            : (C) 2019 par HALUNKA Matthieu, COQUIO-LEBRESNE Clémentine,
@@ -12,7 +12,6 @@
 #define SYMBOLE_H
 
 //--------------------------------------------------- Interfaces utilisées
-
 #include <string>
 #include <vector>
 #include <map>
