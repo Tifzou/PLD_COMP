@@ -41,7 +41,7 @@ public:
     void setNomFichierInput(string nomFichier);
     void setNomFichierOutput(string nomFichier);
     bool convert();
-    bool writeOutputFile(Cell *firstBlock);
+    bool writeOutputFile(Cell *firstBlock, Cell *lastBlock);
     void printVariableMap();
 
 protected:

@@ -109,7 +109,7 @@ class Symbole
     // Contrat :
     // la commande doit être complète
 
-    // TODO : à supprimer ? vu qu'elle n'est pas utilisée
+
     void writeStack(commandeType code, vector<string> commande);
     // Mode d'emploi :
     // ajoute une commande à la liste de commandes
@@ -132,7 +132,6 @@ class Symbole
         temporalStackCommande.elements = commande;
     }
 
-    // TODO : à supprimer ? vu qu'elle n'est pas utilisée et n'a pas de code ?
     void pushInTemporalCommande(vector<string> commande)
     // Mode d'emploi :
     // crée une commande temporaire
@@ -283,7 +282,17 @@ class Symbole
 
     void browsBlocks(Cell *block, Cell *curBlock);
     // Mode d'emploi :
+    //parcourt le block et les blocks qui le suivent pour vérifier si la variable a été déclarée
+    // si elle existe, le type passé en paramètre est changé pour prendre la valeur de la variable trouvée
+    //Contrat :
     // parcourt le graphe et attache le block courant à chaque block qui a un nullptr
+
+    bool browsBlocks(Cell *curCell);
+    // Mode d'emploi :parcourt le block et les blocks qui le suivent pour detecter les erreurs presentes
+    //si elles existe, la fonction affiche l'erreur
+    //
+    // Contrat :
+    //true si aucuneerreur n'est detectée, false sinon.
 
     //----------------------------------------------------- Getter et Setter
 

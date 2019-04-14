@@ -1,6 +1,20 @@
 int main()
 {
-    int a;
-    a=sum();
+    int a=1;
+    if(a==0)
+    {
+        a=2;
 
-    return 1+1+1+1+2*3*4-1-1-(1-2)*3;
+    }
+    else
+    {
+        a=6;
+        if(a==6)
+        {
+            a=7;
+        }
+    }
+
+    return a;
+}
+

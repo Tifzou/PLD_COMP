@@ -59,7 +59,7 @@ void afficheStruct(Cell *block, typeBlock type, int compteur)
     {
         return;
     }
-    if(block->data.back().type==commandeType::CONDITION)
+    if(!block->data.empty() && block->data.back().type==commandeType::CONDITION)
     {
         cout<<"BlockCondition"<<endl;
     }
@@ -101,13 +101,16 @@ int main(int argc, char *argv[])
 
         ExprParser parser(&tokens);
         tree::ParseTree *tree = parser.prog();
-
         cout << tree->toStringTree(&parser) << endl;
 
         Visiteur visitor;
 
         //vector<vector<string>> resultat = visitor.visit(tree);
         Symbole resultat = visitor.visit(tree);
+        if(resultat.getFlowControl()->first== nullptr)
+        {
+            return 0;
+        }
 
         ListC *stack = resultat.getFlowControl();
         Cell * curCell = stack->first;
@@ -151,7 +154,7 @@ int main(int argc, char *argv[])
 
         AsmWriter *a = new AsmWriter(argv[1], "resultat.s", tree->toStringTree(&parser));
         a->convert();
-        a->writeOutputFile(stack->first);
+        a->writeOutputFile(stack->first, stack->last);
 
         return 0;
     }

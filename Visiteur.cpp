@@ -22,14 +22,44 @@ antlrcpp::Any Visiteur::visitProg(ExprParser::ProgContext *ctx)
 // Algorithme :
 //
 {
+    bool noErrorTest = true;
+    /*if(Parser().getNumberOfSyntaxErrors()!=0)
+    {
+        noErrorTest=false;
+    }*/
+    //getNumberOfSyntaxErrors()
     visitChildren(ctx);
+    if(symboleManager.getFlowControl()->first== nullptr)
+    {
+        symboleManager.pushIntoFlowControl();
+    }
+    else
+    {
+        symboleManager.pushLastBlockIntoFlowControl();
+    }
+
+    noErrorTest= symboleManager.browsBlocks(symboleManager.getFlowControl()->first);
+    //browse block and show error
+    if(!noErrorTest)
+    {
+        symboleManager.destroyGraph(symboleManager.getFlowControl()->first);
+
+    }
     return symboleManager;
+
+
 }
 /*------------------------------------------------------------------------*/
 antlrcpp::Any Visiteur::visitBase(ExprParser::BaseContext *ctx)
 /* Algorithme : */
 {
-    return visitChildren(ctx);
+    for(ExprParser::FunctionContext *func: ctx->function())
+    {
+        visit(func);
+    }
+    visit(ctx->mainFunction());
+
+    return true;
 }
 /*------------------------------------------------------------------------*/
 antlrcpp::Any Visiteur::visitFunction(ExprParser::FunctionContext *ctx)
@@ -52,8 +82,7 @@ antlrcpp::Any Visiteur::visitFunction(ExprParser::FunctionContext *ctx)
         // TODO add parameter visit
         symboleManager.writeStack(symboleManager.getTemporalCommande());
         symboleManager.deleteTemporalCommand();
-        visit(ctx->core());
-        return true;
+        return visit(ctx->core());
     }
 }
 
@@ -67,8 +96,7 @@ antlrcpp::Any Visiteur::visitMainFunction(ExprParser::MainFunctionContext *ctx)
     // TODO add parameter visit
     symboleManager.writeStack(symboleManager.getTemporalCommande());
     symboleManager.deleteTemporalCommand();
-    visit(ctx->core());
-    return true;
+    return visit(ctx->core());
 }
 
 //------------------------------------------------------------------------
@@ -161,26 +189,21 @@ antlrcpp::Any Visiteur::visitCore(ExprParser::CoreContext *ctx)
 {
     for (ExprParser::CodeContext *cd : ctx->code())
     {
-        visit(cd);
+        if(!visit(cd))
+        {
+            return false;
+        }
     }
     commandeType code = commandeType::RET;
     symboleManager.pushInTemporalCommande(code);
-    if ((bool)visit(ctx->ret()))
+    if (!visit(ctx->ret()))
     {
-        symboleManager.writeStack(symboleManager.getTemporalCommande());
-        if(symboleManager.getFlowControl()->first== nullptr)
-        {
-            symboleManager.pushIntoFlowControl();
-        }
-        else
-        {
-            symboleManager.pushLastBlockIntoFlowControl();
-        }
-        symboleManager.deleteTemporalCommand();
-        return true;
-    }
 
-    return false;
+        return false;
+    }
+    symboleManager.writeStack(symboleManager.getTemporalCommande());
+    symboleManager.deleteTemporalCommand();
+    return true;
 }
 
 //------------------------------------------------------------------------

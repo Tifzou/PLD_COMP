@@ -114,7 +114,7 @@ string Symbole::retrieveVarType(string var)
 
     for (Commande vs : temporalExpression)
     {
-        if ((vs.type == commandeType::OPER) && vs.elements[1] == var)
+        if (vs.type == commandeType::OPER && vs.elements[1] == var)
         {
             return vs.elements[0];
         }
@@ -246,7 +246,7 @@ bool Symbole::browsBlocks(Cell *block, string var)
 
     for(Commande curCom: block->data)
     {
-        if(curCom.elements[1]==var)
+        if(!curCom.elements.empty()&& curCom.elements[1]==var)
         {
             return true;
         }
@@ -269,7 +269,7 @@ bool Symbole::browsBlocks(Cell *block, string &type, string var)
 
     for(Commande curCom: block->data)
     {
-        if (curCom.elements[1] == var)
+        if (!curCom.elements.empty() && curCom.elements[1] == var)
         {
             type = curCom.elements[0];
             return true;
@@ -310,6 +310,33 @@ void Symbole::browsBlocks(Cell *block, Cell *curBlock)
     browsBlocks(block->suivant2, curBlock);
 }
 
+
+bool Symbole::browsBlocks(Cell *curBlock)
+{
+    bool noErrorTest=true;
+    if(curBlock== nullptr)
+    {
+        return true;
+    }
+
+    for(Commande cd : curBlock->data)
+    {
+        if(cd.type==commandeType::ERR)
+        {
+            cout<<"error : ";
+            for(string st:cd.elements)
+            {
+                cout<< st<<" ";
+            }
+            cout<<endl;
+            noErrorTest=false;
+        }
+    }
+
+    noErrorTest=noErrorTest && browsBlocks(curBlock->suivant1) && browsBlocks(curBlock->suivant2);
+    return noErrorTest;
+}
+
 //------------------------------------------------------------------------
 bool Symbole::varDef(string var)
 // Algorithme : renvoi 'true' si la variable 'var' possède une valeur à l'issue d'une declaration avec affectation ou juste une affectation
@@ -317,7 +344,7 @@ bool Symbole::varDef(string var)
 {
     for(Commande commande : resp)
     {
-        if((commande.type == commandeType::VAR_DEF || commande.type == commandeType::AFF || commande.type == commandeType ::FUNC_AFF)  && commande.elements[1] == var)
+        if(!commande.elements.empty()&&(commande.type == commandeType::VAR_DEF || commande.type == commandeType::AFF || commande.type == commandeType ::FUNC_AFF)  && commande.elements[1] == var)
         {
             return true;
         }
@@ -327,15 +354,13 @@ bool Symbole::varDef(string var)
 }
 
 
-//------------------------------------------------------------------ PRIVE
-
-//----------------------------------------------------- Méthodes protégées
-
-//------------------------------------------------------- Méthodes privées
+//------------------------------------------------------------------------
 void Symbole::destroyGraph(Cell *block)
 {
     if(block==nullptr)
     {
+        flowControl->first=nullptr;
+        flowControl->last= nullptr;
         return;
     }
 
@@ -344,3 +369,8 @@ void Symbole::destroyGraph(Cell *block)
     delete(block);
 
 }
+//------------------------------------------------------------------ PRIVE
+
+//----------------------------------------------------- Méthodes protégées
+
+//------------------------------------------------------- Méthodes privées

@@ -87,7 +87,7 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
 
         case SIMPLE_BLOCK: //à changer pour if multiples
 
-            myfile<<"endif"+to_string(curFlagCounter)+":\n";
+           // myfile<<"endif"+to_string(curFlagCounter)+":\n";
             break;
 
         default:
@@ -212,7 +212,8 @@ void AsmWriter::browseGraph(Cell *block, ofstream &myfile, typeBlock typeCurBloc
         }
         else
         {
-            browseGraph(block->suivant2, myfile, ELSE_BLOCK, curFlagCounter);
+            browseBlock(block->suivant2, myfile, ELSE_BLOCK, curFlagCounter);
+            myfile<<"endif"+to_string(curFlagCounter)+":\n";
         }
 
 
@@ -222,11 +223,10 @@ void AsmWriter::browseGraph(Cell *block, ofstream &myfile, typeBlock typeCurBloc
         browseGraph(block->suivant1, myfile, SIMPLE_BLOCK, flagCounter);
     }
 
-
 }
 
 
-bool AsmWriter::writeOutputFile(Cell *firstBlock) {
+bool AsmWriter::writeOutputFile(Cell *firstBlock, Cell *lastBlock) {
     ofstream myfile (outFile);
     if (myfile.is_open()){
         myfile << ".text\n";
@@ -236,11 +236,14 @@ bool AsmWriter::writeOutputFile(Cell *firstBlock) {
         if(firstBlock->data.back().type==commandeType::CONDITION)
         {
             browseGraph(firstBlock, myfile, PREC_IF_BLOCK_LEFT, flagCounter);
+            browseBlock(lastBlock, myfile, SIMPLE_BLOCK, flagCounter);
         }
         else
         {
             browseGraph(firstBlock, myfile, FIRST_BLOCK, flagCounter);
         }
+
+
 
         myfile << "\tmovq\t%rbp, %rsp" << endl;
         myfile << "\tpopq\t%rbp"<<endl;
