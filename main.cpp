@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
 
     ExprLexer lexer(&input);
     if(lexer.getNumberOfSyntaxErrors() > 0) {
-        cerr << "Le lexer a rencontrée " << lexer.getNumberOfSyntaxErrors()<< " erreurs !" << endl;
+        cerr << "Le lexer a rencontrée des erreurs !" << endl;
         return -1;
     }
     CommonTokenStream tokens(&lexer);
@@ -194,7 +194,7 @@ int main(int argc, char *argv[])
 
     if(parser.getNumberOfSyntaxErrors() > 0) {
         if(showError){
-            cerr << "Le parseur a rencontrée " << lexer.getNumberOfSyntaxErrors()<< " erreurs !" << raz<<endl;
+            cerr << "Le parseur a rencontrée des erreurs !" << raz<<endl;
         }
         return -1;
     }
