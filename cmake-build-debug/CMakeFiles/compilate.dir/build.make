@@ -34,19 +34,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /snap/clion/67/bin/cmake/linux/bin/cmake
+CMAKE_COMMAND = /home/halunka/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/191.6183.77/bin/cmake/linux/bin/cmake
 
 # The command to remove a file.
-RM = /snap/clion/67/bin/cmake/linux/bin/cmake -E remove -f
+RM = /home/halunka/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/191.6183.77/bin/cmake/linux/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/anonyme/PLD_COMP/PLD_COMP
+CMAKE_SOURCE_DIR = /home/halunka/CLionProjects/PLD_COMP_master
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug
+CMAKE_BINARY_DIR = /home/halunka/CLionProjects/PLD_COMP_master/cmake-build-debug
 
 # Utility rule file for compilate.
 
@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug
 include CMakeFiles/compilate.dir/progress.make
 
 CMakeFiles/compilate:
-	make exec -C /home/anonyme/PLD_COMP/PLD_COMP CLION_EXE_DIR=/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug
+	make exec -C /home/halunka/CLionProjects/PLD_COMP_master CLION_EXE_DIR=/home/halunka/CLionProjects/PLD_COMP_master/cmake-build-debug
 
 compilate: CMakeFiles/compilate
 compilate: CMakeFiles/compilate.dir/build.make
@@ -71,6 +71,6 @@ CMakeFiles/compilate.dir/clean:
 .PHONY : CMakeFiles/compilate.dir/clean
 
 CMakeFiles/compilate.dir/depend:
-	cd /home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/anonyme/PLD_COMP/PLD_COMP /home/anonyme/PLD_COMP/PLD_COMP /home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug /home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug /home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/CMakeFiles/compilate.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/halunka/CLionProjects/PLD_COMP_master/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/halunka/CLionProjects/PLD_COMP_master /home/halunka/CLionProjects/PLD_COMP_master /home/halunka/CLionProjects/PLD_COMP_master/cmake-build-debug /home/halunka/CLionProjects/PLD_COMP_master/cmake-build-debug /home/halunka/CLionProjects/PLD_COMP_master/cmake-build-debug/CMakeFiles/compilate.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/compilate.dir/depend
 

@@ -1,5 +1,5 @@
-/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/CMakeFiles/helloworld.dir
-/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/CMakeFiles/generate.dir
-/home/anonyme/PLD_COMP/PLD_COMP/cmake-build-debug/CMakeFiles/compilate.dir
+/home/halunka/CLionProjects/PLD_COMP_master/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/halunka/CLionProjects/PLD_COMP_master/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/halunka/CLionProjects/PLD_COMP_master/cmake-build-debug/CMakeFiles/helloworld.dir
+/home/halunka/CLionProjects/PLD_COMP_master/cmake-build-debug/CMakeFiles/generate.dir
+/home/halunka/CLionProjects/PLD_COMP_master/cmake-build-debug/CMakeFiles/compilate.dir

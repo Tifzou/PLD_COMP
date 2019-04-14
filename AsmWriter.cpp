@@ -1,49 +1,39 @@
-/*************************************************************************
-                           PLD_COMP  -  description
-    Classe en charge de la transformation en assembleur des blocks renvoyés par l'IR
-                             -------------------
-    début                : 05/03/2019
-    copyright            : (C) 2019 par HALUNKA Matthieu, COQUIO-LEBRESNE Clémentine,
-                            FLOCH Tifenn, GASIUK Anatolii, HIRT Christophe, PAUGOIS Alan
-    e-mail               : matthieu.halunka@insa-lyon.fr (chef de projet)
-*************************************************************************/
+//
+// Created by halunka on 26/03/19.
+//
 
-//---------- Réalisation de la classe <AsmWriter> (fichier AsmWriter.cpp) ------------
-
-//---------------------------------------------------------------- INCLUDE
-
-//-------------------------------------------------------- Include système
 #include "AsmWriter.h"
 
 #include <iostream>
 #include <fstream>
 #include <string>
-
-//------------------------------------------------------ Include personnel
 #include <stdio.h>
 
+void AsmWriter::setNomFichierInput(string nom){
+    inFile=nom;
+}
 
-//------------------------------------------------------------- Constantes
-
-//---------------------------------------------------- Variables de classe
-
-//----------------------------------------------------------- Types privés
-
-
-//----------------------------------------------------------------- PUBLIC
-
-//----------------------------------------------------- Méthodes publiques
-void AsmWriter::setNomFichierOutput(string nom)
-// Algorithme :
-//
-{
+void AsmWriter::setNomFichierOutput(string nom){
     outFile=nom;
 }
 
-//------------------------------------------------------------------------
+bool AsmWriter::convert(){
+    size_t foundCpp=inFile.find(".cpp",0);
+    if (foundCpp!=std::string::npos){
+        inFile.replace(inFile.end()-4,inFile.end(),".asm");
+    }else{
+        size_t foundC=inFile.find(".c",0);
+        if (foundC!=std::string::npos){
+            inFile.replace(inFile.end()-2,inFile.end(),".s");
+        }else{
+            cerr<<"Le fichier d'entrée n'a pas la bonne extension !\n";
+            return 0;
+        }
+    }
+    return 1;
+}
+
 void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBlock, int curFlagCounter)
-// Algorithme :
-//
 {
     vector<Commande> resultat= block->data;
     vector<Commande>::iterator itInstr;
@@ -144,21 +134,21 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
                 break;
             case 9: // FUNCTION
                 cerr << "in case FUNCTION" << endl;
-                myfile << writeFunc((*itInstr));
+                myfile << ".global " << (*itInstr).elements[0] << "\n";
+                myfile << "\t.type\t "+ (*itInstr).elements[0]<<", @function\n";
+                myfile << (*itInstr).elements[0] << ":\n";
+                myfile << "\tpushq\t%rbp"<<endl;
+                myfile << "\tmovq\t%rsp, %rbp"<<endl;
+                myfile << "\tsubq\t$16, %rsp" << endl;
                 break;
             case 10: //MAIN
                 cerr << "in case MAIN" << endl;
-
-#ifdef __APPLE__
-                myfile << ".globl _main\n";
-#else
                 myfile << ".global main\n";
-#endif
                 myfile << "\t.type\t main, @function\n";
                 myfile << "main:\n";
                 myfile << "\tpushq\t%rbp"<<endl;
                 myfile << "\tmovq\t%rsp, %rbp"<<endl;
-                myfile << "\tsubq\t$16, %rsp" << endl; // TODO if more than 1 fct, change $16
+                myfile << "\tsubq\t$16, %rsp" << endl;
                 break;
             case 11: // FUNC_CALL
                 cerr << "in case FUNCTION CALL" << endl;
@@ -172,17 +162,9 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
                 break;
         }
     }
-    //changer pour plusieurs if
-    /*if(typeCurBlock==IF_BLOCK || typeCurBlock==PREC_IF_BLOCK_LEFT)
-    {
-        myfile << "\tjmp endif" + to_string(flagCounter) + "\n";
-    }*/
 }
 
-//------------------------------------------------------------------------
 void AsmWriter::browseGraph(Cell *block, ofstream &myfile, typeBlock typeCurBlock, int curFlagCounter)
-// Algorithme :
-//
 {
     //curFlagCounter = flagCounter;
 
@@ -197,30 +179,34 @@ void AsmWriter::browseGraph(Cell *block, ofstream &myfile, typeBlock typeCurBloc
 
     if(typeCurBlock==PREC_IF_BLOCK_LEFT || typeCurBlock==PREC_IF_BLOCK_RIGHT)
     {
-        curFlagCounter =++flagCounter;
+        curFlagCounter =flagCounter;
+        flagCounter++;
         if(block->suivant1!= nullptr && block->suivant1->data.back().type==commandeType::CONDITION)
         {
             browseGraph(block->suivant1, myfile, PREC_IF_BLOCK_LEFT, flagCounter);
-            myfile << "\tjmp endif" + to_string((curFlagCounter-1)) + "\n";
+            myfile << "\tjmp endif" + to_string(curFlagCounter) + "\n";
         }
         else
         {
             browseBlock(block->suivant1, myfile, IF_BLOCK, curFlagCounter+1);
-            myfile << "\tjmp endif" + to_string((curFlagCounter-1)) + "\n";
+            myfile << "\tjmp endif" + to_string(curFlagCounter) + "\n";
 
         }
 
         if(block->suivant2!= nullptr && block->suivant2->data.size()!=0 && block->suivant2->data.back().type==commandeType::CONDITION )
         {
-            myfile << "else" + to_string((curFlagCounter-1)) + ":\n";
+            myfile << "else" + to_string(curFlagCounter) + ":\n";
             browseGraph(block->suivant2, myfile, PREC_IF_BLOCK_RIGHT, flagCounter);
-            myfile << "\tjmp endif" + to_string((curFlagCounter-1)) + "\n";
+            myfile << "endif" + to_string(curFlagCounter) + ":\n";
         }
         else
         {
-            myfile << "else" + to_string((curFlagCounter-1)) + ":\n";
+            if(block->suivant2!= nullptr && !block->suivant2->data.empty())
+            {
+                myfile << "else" + to_string(curFlagCounter) + ":\n";
+            }
             browseBlock(block->suivant2, myfile, ELSE_BLOCK, curFlagCounter);
-            myfile<<"endif"+to_string((curFlagCounter-1))+":\n";
+            myfile<<"endif"+to_string(curFlagCounter)+":\n";
         }
 
 
@@ -237,12 +223,12 @@ bool AsmWriter::writeOutputFile(Cell *firstBlock, Cell *lastBlock) {
     ofstream myfile (outFile);
     if (myfile.is_open()){
         myfile << ".text\n";
+        int stackPtr = 0;
         //for loop was here
 
         if(firstBlock->data.back().type==commandeType::CONDITION)
         {
             browseGraph(firstBlock, myfile, PREC_IF_BLOCK_LEFT, flagCounter);
-            myfile<<"endif"+to_string(0)+":\n";
             browseBlock(lastBlock, myfile, SIMPLE_BLOCK, 0);
         }
         else
@@ -263,10 +249,7 @@ bool AsmWriter::writeOutputFile(Cell *firstBlock, Cell *lastBlock) {
     }
 }
 
-//------------------------------------------------------------------------
 string AsmWriter::writeReturn(Commande returnCmd)
-// Algorithme :
-//
 {
     string nomVar = returnCmd.elements[0];
     map<string, string>::iterator it = variables.find(nomVar);
@@ -286,10 +269,7 @@ string AsmWriter::writeReturn(Commande returnCmd)
     return asmInstr;
 }
 
-//------------------------------------------------------------------------
 string AsmWriter::writeAff(Commande affectationCmd)
-// Algorithme :
-//
 {
     string nomVar = affectationCmd.elements[1];
     string valVar = affectationCmd.elements[2];
@@ -311,13 +291,11 @@ string AsmWriter::writeAff(Commande affectationCmd)
         asmInstr = "\tmovl\t"+valVar+", "+address+"\n";
     }
 
+
     return asmInstr;
 }
 
-//------------------------------------------------------------------------
 void AsmWriter::writeDec(Commande declarationCmd)
-// Algorithme :
-//
 {
     string varName = declarationCmd.elements[1];
     int stackPos = (variables.size()+1) * (-4);
@@ -325,20 +303,14 @@ void AsmWriter::writeDec(Commande declarationCmd)
     variables.insert(make_pair(varName, varAddress));
 }
 
-//------------------------------------------------------------------------
 string AsmWriter::writeDef(Commande definitionCmd)
-// Algorithme :
-//
 {
     writeDec(definitionCmd);
     string asmInstr = writeAff(definitionCmd);
     return asmInstr;
 }
 
-//------------------------------------------------------------------------
 string AsmWriter::writeOperation(Commande operationCmd)
-// Algorithme :
-//
 {
     if (operationCmd.elements[3] == "*")
     {
@@ -356,10 +328,7 @@ string AsmWriter::writeOperation(Commande operationCmd)
     }
 }
 
-//------------------------------------------------------------------------
 string AsmWriter::writeAdd(Commande additionCmd)
-// Algorithme :
-//
 {
     map<string, string>::iterator it;
 
@@ -408,11 +377,9 @@ string AsmWriter::writeAdd(Commande additionCmd)
     return asmInstr;
 }
 
-//------------------------------------------------------------------------
 string AsmWriter::writeSub(Commande substractionCmd)
-// Algorithme :
-//
 {
+    cout << "yeah for substraction" << endl;
     map<string, string>::iterator it;
 
     string varResultat = substractionCmd.elements[1];
@@ -460,10 +427,7 @@ string AsmWriter::writeSub(Commande substractionCmd)
     return asmInstr;
 }
 
-//------------------------------------------------------------------------
 string AsmWriter::writeMult(Commande multiplicationCmd)
-// Algorithme :
-//
 {
     map<string, string>::iterator it;
 
@@ -512,10 +476,8 @@ string AsmWriter::writeMult(Commande multiplicationCmd)
     return asmInstr;
 }
 
-//------------------------------------------------------------------------
+
 string AsmWriter::writeIf(int curFlagCounter)
-// Algorithme :
-//
 {
     string flagIf = "if"+std::to_string(curFlagCounter);
     namespaceFlags.push_back(flagIf);
@@ -524,10 +486,7 @@ string AsmWriter::writeIf(int curFlagCounter)
 
 }
 
-//------------------------------------------------------------------------
 void AsmWriter::printVariableMap()
-// Algorithme :
-//
 {
     map<string, string>::iterator it;
     for (it = variables.begin() ; it != variables.end() ; ++it)
@@ -536,10 +495,7 @@ void AsmWriter::printVariableMap()
     }
 }
 
-//------------------------------------------------------------------------
 string AsmWriter::generateIfLine(Commande curCommande)
-// Algorithme :
-//
 {
     map<string, string>::iterator it;
     string addVar1;
@@ -572,10 +528,7 @@ string AsmWriter::generateIfLine(Commande curCommande)
     return asmInstr;
 }
 
-//------------------------------------------------------------------------
 string AsmWriter::writePredicat(Commande ifCondition, string nextFlag)
-// Algorithme :
-//
 {
     string line = generateIfLine(ifCondition);
     if (ifCondition.elements[3] == "==")
@@ -608,57 +561,14 @@ string AsmWriter::writePredicat(Commande ifCondition, string nextFlag)
     return line;
 }
 
-//------------------------------------------------------------------------
-string AsmWriter::writeFunc(Commande functionCmd)
-// Algorithme :
-//
-{
-    string functName = functionCmd.elements[0];
-    string asmInstr = "\t.global " + functName + "\n";
-    asmInstr += "\t.type\t"+ functName + ", @function\n";
-    asmInstr += functName + ":\n";
-    asmInstr += "\tpushq\t%rbp\n";
-    asmInstr += "\tmovq\t%rsp, %rbp\n";
-
-    cout << functionCmd.elements[0] << functionCmd.elements[1] << functionCmd.elements[2] << endl;
-    if(functionCmd.elements.size() >1)
-    {
-        cout << "elements contains at least 1 param" << endl;
-        unsigned long nbParam = (functionCmd.elements.size())-1;
-        cout << nbParam << endl;
-        for(unsigned long i = 1 ; i<=nbParam ; i++)
-        {
-            cout << "n° param " << i-1 << endl;
-            long index = i*(-4);
-            string varAddress = to_string(index) + "(%rbp)";
-            cout << varAddress << endl;
-            string varName = "!t" + to_string(i);
-            cout << varName << endl;
-            pair<string, string> p(varName, varAddress);
-            cout << "une paire a ete creee" << endl;
-            //variables.insert(make_pair(varName, varAddress));
-            variables.insert(p);
-            cout << "la paire a ete inseree dans la map" << endl;
-            asmInstr += "\tmovl\t" + paramRegister[i-1] + ", " + varAddress + "\n";
-        }
-    }
-    return asmInstr;
-}
-
-//------------------------------------------------------------------------
 string AsmWriter::writeFuncCall(Commande functionCmd)
-// Algorithme :
-//
 {
     string funcName = functionCmd.elements[0];
     string asmInstr = "\tcall " + funcName + "\n";
     return asmInstr;
 }
 
-//------------------------------------------------------------------------
 string AsmWriter::writeFuncAff(Commande functionCmd)
-// Algorithme :
-//
 {
     string funcName = functionCmd.elements[0];
     string asmInstr = "\tcall " + funcName + "\n";

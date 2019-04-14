@@ -1,0 +1,5 @@
+../../exec ../File/indexSprint-1.c -c resultat.s
+
+&& as -o resultat.o resultat.s
+&& gcc resultat.o -o resultat.exe
+&& ./resultat.exe
