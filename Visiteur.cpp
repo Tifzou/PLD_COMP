@@ -90,7 +90,7 @@ antlrcpp::Any Visiteur::visitParam(ExprParser::ParamContext *ctx)
         string varName = tn->getText();
         symboleManager.pushInTemporalCommande(varName);
     }
-    // todo : if name already exists, break and error
+    // Fixme : if name already exists, break and error
 
     return true;
 }
@@ -160,7 +160,6 @@ antlrcpp::Any Visiteur::visitCallfunc(ExprParser::CallfuncContext *ctx)
         symboleManager.deleteTemporalCommand();*/
     }
     else{
-        cout << "the function doesn't exist, how do you want me to call it..." << endl;
         commandeType code = commandeType::ERR;
         vector<string> err;
         string error1 = "name of function '" + funcName + "' already assigned";
@@ -256,6 +255,10 @@ antlrcpp::Any Visiteur::visitCore(ExprParser::CoreContext *ctx)
     }
 
     hasError=true;
+    //TODO check message
+    if(showError){
+        cerr<<"Line "<<ctx->start->getLine()<<" : the following block is not closed !"<<endl;
+    }
     return false;
 }
 
@@ -288,6 +291,10 @@ antlrcpp::Any Visiteur::visitAff(ExprParser::AffContext *ctx)
         symboleManager.pushInTemporalCommande(varName);
         if(!visit(ctx->expr()))
         {
+            //TODO check message
+            if(showError){
+                cerr<<"Line "<<ctx->start->getLine()<<" : the following expression is not valid !"<<endl;
+            }
             hasError=true;
             return false;
         }
@@ -330,6 +337,10 @@ antlrcpp::Any Visiteur::visitRet(ExprParser::RetContext *ctx)
         return true;
     }
     hasError=true;
+    //TODO check message
+    if(showError){
+        cerr<<"Line "<<ctx->start->getLine()<<" : the return expression is invalid !"<<endl;
+    }
     return false;
 }
 
@@ -345,15 +356,12 @@ antlrcpp::Any Visiteur::visitDecVar(ExprParser::DecVarContext *ctx)
 
         if (!checkVarDec(nameVar))
         {
-
             if(showError){
                 cerr<<"Line "<<ctx->start->getLine()<<" : Name of variable '"<<nameVar<<"' already assigned !"<<endl;
             }
             hasError=true;
             return false;
-        }
-
-        else
+        }else
         {
             symboleManager.createVar(nameVar);
             commandeType code = commandeType::VAR_DEC;
@@ -405,6 +413,10 @@ antlrcpp::Any Visiteur::visitDefVar(ExprParser::DefVarContext *ctx)
             symboleManager.deleteTemporalCommand();
             return true;
         }
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : the definition of "<<nameVar<<" is invalid !"<<endl;
+        }
         hasError=true;
         return false;
     }
@@ -422,12 +434,20 @@ antlrcpp::Any Visiteur::visitExpr(ExprParser::ExprContext *ctx)
         if(i==1&&!visit(ctx->terme(i-1)))
         {
             hasError=true;
+            //TODO check message
+            if(showError){
+                cerr<<"Line "<<ctx->start->getLine()<<" : the last factor is invalid !"<<endl;
+            }
             return false;
         }
         string nomVar1=symboleManager.getTemporalExpression()->back().elements[1];
         if(!visit(ctx->terme(i)))
         {
             hasError=true;
+            //TODO check message
+            if(showError){
+                cerr<<"Line "<<ctx->start->getLine()<<" : one of the factor used is invalid !"<<endl;
+            }
             return false;
         }
         string nomVar2=symboleManager.getTemporalExpression()->back().elements[1];
@@ -464,12 +484,21 @@ antlrcpp::Any Visiteur::visitTerme(ExprParser::TermeContext *ctx)
         if(i==1&&!visit(ctx->facteur(i-1)))
         {
             hasError=true;
+
+            //TODO check message
+            if(showError){
+                cerr<<"Line "<<ctx->start->getLine()<<" : one of the factor used is invalid !"<<endl;
+            }
             return false;
         }
         string nomVar1=symboleManager.getTemporalExpression()->back().elements[1];
         if(!visit(ctx->facteur(i)))
         {
             hasError=true;
+            //TODO check message
+            if(showError){
+                cerr<<"Line "<<ctx->start->getLine()<<" : one of the factor used is invalid !"<<endl;
+            }
             return false;
         }
         string nomVar2=symboleManager.getTemporalExpression()->back().elements[1];
@@ -595,6 +624,11 @@ antlrcpp::Any Visiteur::visitIfElse(ExprParser::IfElseContext *ctx)
     else
     {
         hasError=true;
+
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : the boolean expression is invalid !"<<endl;
+        }
         return false;
     }
     Cell* curBlock=symboleManager.getFlowControl()->last;
@@ -608,6 +642,11 @@ antlrcpp::Any Visiteur::visitIfElse(ExprParser::IfElseContext *ctx)
     else
     {
         hasError=true;
+
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : the block of if structure is invalid !"<<endl;
+        }
         return false;
     }
 
@@ -642,6 +681,10 @@ antlrcpp::Any Visiteur::visitSimpleIf(ExprParser::SimpleIfContext *ctx){
     else
     {
         hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : the boolean expression is invalid !"<<endl;
+        }
         return false;
     }
 
@@ -656,6 +699,10 @@ antlrcpp::Any Visiteur::visitSimpleIf(ExprParser::SimpleIfContext *ctx){
     else
     {
         hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : the content of the if block is invalid !"<<endl;
+        }
         return false;
     }
     return true;
@@ -677,6 +724,11 @@ antlrcpp::Any Visiteur::visitGe(ExprParser::GeContext *ctx)
     else
     {
         hasError=true;
+
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : one of the expression used is invalid !"<<endl;
+        }
         return false;
     }
 
@@ -687,6 +739,10 @@ antlrcpp::Any Visiteur::visitGe(ExprParser::GeContext *ctx)
     else
     {
         hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : one of the expression used is invalid !"<<endl;
+        }
         return false;
     }
     string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
@@ -715,6 +771,10 @@ antlrcpp::Any Visiteur::visitGt(ExprParser::GtContext *ctx)
     else
     {
         hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : one of the expression used is invalid !"<<endl;
+        }
         return false;
     }
 
@@ -725,6 +785,10 @@ antlrcpp::Any Visiteur::visitGt(ExprParser::GtContext *ctx)
     else
     {
         hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : one of the expression used is invalid !"<<endl;
+        }
         return false;
     }
     string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
@@ -753,6 +817,10 @@ antlrcpp::Any Visiteur::visitLe(ExprParser::LeContext *ctx)
     else
     {
         hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : one of the expression used is invalid !"<<endl;
+        }
         return false;
     }
 
@@ -763,6 +831,10 @@ antlrcpp::Any Visiteur::visitLe(ExprParser::LeContext *ctx)
     else
     {
         hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : one of the expression used is invalid !"<<endl;
+        }
         return false;
     }
     string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
@@ -792,6 +864,10 @@ antlrcpp::Any Visiteur::visitLt(ExprParser::LtContext *ctx)
     else
     {
         hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : one of the expression used is invalid !"<<endl;
+        }
         return false;
     }
 
@@ -802,6 +878,10 @@ antlrcpp::Any Visiteur::visitLt(ExprParser::LtContext *ctx)
     else
     {
         hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : one of the expression used is invalid !"<<endl;
+        }
         return false;
     }
     string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
@@ -832,6 +912,10 @@ antlrcpp::Any Visiteur::visitEgal(ExprParser::EgalContext *ctx)
     else
     {
         hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : one of the expression used is invalid !"<<endl;
+        }
         return false;
     }
 
@@ -842,6 +926,10 @@ antlrcpp::Any Visiteur::visitEgal(ExprParser::EgalContext *ctx)
     else
     {
         hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : one of the expression used is invalid !"<<endl;
+        }
         return false;
     }
     string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
@@ -871,6 +959,10 @@ antlrcpp::Any Visiteur::visitNEgal(ExprParser::NegalContext *ctx)
     else
     {
         hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : one of the expression used is invalid !"<<endl;
+        }
         return false;
     }
 
@@ -881,6 +973,10 @@ antlrcpp::Any Visiteur::visitNEgal(ExprParser::NegalContext *ctx)
     else
     {
         hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : one of the expression used is invalid !"<<endl;
+        }
         return false;
     }
     string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
@@ -919,6 +1015,10 @@ antlrcpp::Any Visiteur::visitWhileLoop(ExprParser::WhileLoopContext *ctx)
     }
     else
     {
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : the boolean expression of while loop is invalid !"<<endl;
+        }
         return false;
     }
 
@@ -929,6 +1029,10 @@ antlrcpp::Any Visiteur::visitWhileLoop(ExprParser::WhileLoopContext *ctx)
     }
     else
     {
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : the content of the while loop is invalid !"<<endl;
+        }
         return false;
     }
 }
