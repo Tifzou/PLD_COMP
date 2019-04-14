@@ -569,7 +569,7 @@ string AsmWriter::writeFunc(Commande functionCmd)
     asmInstr += "\tpushq\t%rbp\n";
     asmInstr += "\tmovq\t%rsp, %rbp\n";
 
-    cout << functionCmd.elements[0] << functionCmd.elements[1] << functionCmd.elements[2] << endl;
+    //cout << functionCmd.elements[0] << functionCmd.elements[1] << functionCmd.elements[2] << endl;
     if(functionCmd.elements.size() >1)
     {
         cout << "elements contains at least 1 param" << endl;
@@ -581,7 +581,7 @@ string AsmWriter::writeFunc(Commande functionCmd)
             long index = i*(-4);
             string varAddress = to_string(index) + "(%rbp)";
             cout << varAddress << endl;
-            string varName = "!t" + to_string(i);
+            string varName = functionCmd.elements[i];
             cout << varName << endl;
             pair<string, string> p(varName, varAddress);
             cout << "une paire a ete creee" << endl;
@@ -597,19 +597,45 @@ string AsmWriter::writeFunc(Commande functionCmd)
 string AsmWriter::writeFuncCall(Commande functionCmd)
 {
     string funcName = functionCmd.elements[0];
-    string asmInstr = "\tcall " + funcName + "\n";
+    string asmInstr = "";
+    for (int i = 1; i < functionCmd.elements.size() ; i++)
+    {
+        string varName = functionCmd.elements[i];
+        map<string, string>::iterator it = variables.find(varName);
+        if (it != variables.end())
+        {
+            string varAddr = it->second;
+            asmInstr += "\tmovl\t" + varAddr + ", " + paramRegister[i-1] + "\n";
+        }
+    }
+    asmInstr += "\tcall " + funcName + "\n";
     return asmInstr;
 }
 
 string AsmWriter::writeFuncAff(Commande functionCmd)
 {
     string funcName = functionCmd.elements[0];
-    string asmInstr = "\tcall " + funcName + "\n";
+    string asmInstr = "";
+    // parameters
+    for (int i = 2; i < functionCmd.elements.size() ; i++)
+    {
+        string varName = functionCmd.elements[i];
+        cout << varName << endl;
+        map<string, string>::iterator it = variables.find(varName);
+        if (it != variables.end())
+        {
+            string varAddr = it->second;
+            asmInstr += "\tmovl\t" + varAddr + ", " + paramRegister[i-1] + "\n";
+        }
+    }
+    asmInstr += "\tcall " + funcName + "\n";
+
+    // return value
     map<string, string>::iterator it = variables.find(functionCmd.elements[1]);
     if(it != variables.end())
     {
         string retVarAddr = it->second;
-        asmInstr += "\tmovl %eax, " + retVarAddr + "\n";
+        asmInstr += "\tmovl\t%eax, " + retVarAddr + "\n";
     }
 
     return asmInstr;

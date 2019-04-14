@@ -51,10 +51,11 @@ antlrcpp::Any Visiteur::visitFunction(ExprParser::FunctionContext *ctx)
         symboleManager.pushInTemporalCommande(code); // Surchage pushTemporalStack(vector<string> commande)
         symboleManager.pushInTemporalCommande(functName);
 
-        visit(ctx->param());
-
-
-
+        if(ctx->param() != nullptr)
+        {
+            visit(ctx->param());
+        }
+        cout << "we visited the parameters" << endl;
         symboleManager.writeStack(symboleManager.getTemporalCommande());
         symboleManager.deleteTemporalCommand();
         visit(ctx->core());
@@ -84,6 +85,7 @@ antlrcpp::Any Visiteur::visitParam(ExprParser::ParamContext *ctx)
     for(antlr4::tree::TerminalNode *tn:ctx->VAR())
     {
         string varName = tn->getText();
+        symboleManager.createVar(varName);
         symboleManager.pushInTemporalCommande(varName);
     }
     // todo : if name already exists, break and error
@@ -107,10 +109,13 @@ antlrcpp::Any Visiteur::visitAfffunc(ExprParser::AfffuncContext *ctx)
         symboleManager.pushInTemporalCommande(code);
         symboleManager.pushInTemporalCommande(funcName);
         symboleManager.pushInTemporalCommande(retVar);
-        int nbParam = ctx->VAR().size();
-        for (int i = 1; i<=nbParam ; i++)
+        cout << ctx->VAR().size() << endl;
+        int nbParam = ctx->VAR().size()-2;
+        for (int i = 2; i<=nbParam+1 ; i++)
         {
-            symboleManager.pushInTemporalCommande(ctx->VAR(i));
+            cout << "n° param " << i << endl;
+            symboleManager.pushInTemporalCommande(ctx->VAR(i)->getText());
+            cout << ctx->VAR(i)->getText() << endl;
         }
         symboleManager.writeStack(symboleManager.getTemporalCommande());
         symboleManager.deleteTemporalCommand();
@@ -144,10 +149,10 @@ antlrcpp::Any Visiteur::visitCallfunc(ExprParser::CallfuncContext *ctx)
         commandeType code = commandeType::FUNC_CALL;
         symboleManager.pushInTemporalCommande(code);
         symboleManager.pushInTemporalCommande(funcName);
-        int nbParam = ctx->VAR().size();
-        for (int i = 1; i<=nbParam ; i++)
+        int nbParam = ctx->VAR().size()-2;
+        for (int i = 2; i<=nbParam ; i++)
         {
-            symboleManager.pushInTemporalCommande(ctx->VAR(i));
+            symboleManager.pushInTemporalCommande(ctx->VAR(i)->getText());
         }
         symboleManager.writeStack(symboleManager.getTemporalCommande());
         symboleManager.deleteTemporalCommand();

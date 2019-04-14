@@ -40,10 +40,11 @@ public:
     {
         flagCounter=0;
         // {RDI, RSI, RDX, RCX, R8, R9}
-        paramRegister.push_back("%rdi");
-        paramRegister.push_back("%rsi");
-        paramRegister.push_back("%rdx");
-        paramRegister.push_back("%rcx");
+        paramRegister.push_back("%edi");
+        paramRegister.push_back("%esi");
+        paramRegister.push_back("%edx");
+        paramRegister.push_back("%ecx");
+        paramRegister.push_back("%r8");
         paramRegister.push_back("%r8");
         paramRegister.push_back("%r9");
     }

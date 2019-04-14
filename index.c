@@ -1,13 +1,14 @@
-int sum(int a, int b)
+int sum()
 {
-    return 42;
+    return c+10;
 }
 
 int main()
 {
-    int a = 1;
-    int b = 2;
-    a = sum(a b);
+    int a;
+    int b = 5;
+    int e = 1;
+    a = sum();
 
     return a;
 }

@@ -15,9 +15,9 @@ core: '{' code* ret '}';
 code: typevar vari ';' #decdef
     | VAR '=' expr ';' #aff
     | condition #condif
-    | typevar VAR '=' VAR'(' VAR* ')' ';' #decfunc
-    | VAR '=' VAR '(' VAR* ')' ';' #afffunc
-    | VAR '(' VAR* ')' ';'#callfunc
+    | typevar VAR '=' VAR'(' VAR? (',' VAR)* ')' ';' #decfunc
+    | VAR '=' VAR '(' VAR? (',' VAR)* ')' ';' #afffunc
+    | VAR '(' VAR? (',' VAR)* ')' ';'#callfunc
     ;
 
 condition: 'if' '('boolExpression')' '{'coreIf'}' 'else' '{'coreElse'}' #ifElse

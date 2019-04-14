@@ -263,6 +263,7 @@ class Symbole
     // Contrat :
     //
     {
+        cout << "new fonction created in symbole" << endl;
         pair<string, int> p(funcName, indexFunction++);
         tablesDesFonctions.insert(p);
     }
