@@ -17,22 +17,6 @@ void AsmWriter::setNomFichierOutput(string nom){
     outFile=nom;
 }
 
-bool AsmWriter::convert(){
-    size_t foundCpp=inFile.find(".cpp",0);
-    if (foundCpp!=std::string::npos){
-        inFile.replace(inFile.end()-4,inFile.end(),".asm");
-    }else{
-        size_t foundC=inFile.find(".c",0);
-        if (foundC!=std::string::npos){
-            inFile.replace(inFile.end()-2,inFile.end(),".s");
-        }else{
-            cerr<<"Le fichier d'entrée n'a pas la bonne extension !\n";
-            return 0;
-        }
-    }
-    return 1;
-}
-
 void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBlock, int curFlagCounter)
 {
     vector<Commande> resultat= block->data;

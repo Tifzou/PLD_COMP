@@ -50,7 +50,6 @@ public:
     AsmWriter(){flagCounter=0;}
     void setNomFichierInput(string nomFichier);
     void setNomFichierOutput(string nomFichier);
-    bool convert();
     bool writeOutputFile(Cell *firstBlock);
     void printVariableMap();
 

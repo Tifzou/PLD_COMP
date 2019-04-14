@@ -104,7 +104,7 @@ antlrcpp::Any Visiteur::visitAfffunc(ExprParser::AfffuncContext *ctx)
     if(symboleManager.functExist(funcName))
     {
         cout << "la fonction existe" << endl;
-        symboleManager.pushInTemporalCommande(code);
+        /*symboleManager.pushInTemporalCommande(code);
         symboleManager.pushInTemporalCommande(funcName);
         symboleManager.pushInTemporalCommande(retVar);
         int nbParam = ctx->VAR().size();
@@ -113,7 +113,7 @@ antlrcpp::Any Visiteur::visitAfffunc(ExprParser::AfffuncContext *ctx)
             symboleManager.pushInTemporalCommande(ctx->VAR(i));
         }
         symboleManager.writeStack(symboleManager.getTemporalCommande());
-        symboleManager.deleteTemporalCommand();
+        symboleManager.deleteTemporalCommand();*/
     }
     else
     {
@@ -141,7 +141,7 @@ antlrcpp::Any Visiteur::visitCallfunc(ExprParser::CallfuncContext *ctx)
     if(symboleManager.functExist(funcName))
     {
         cout << "the function exists so we can call it" << endl;
-        commandeType code = commandeType::FUNC_CALL;
+        /*commandeType code = commandeType::FUNC_CALL;
         symboleManager.pushInTemporalCommande(code);
         symboleManager.pushInTemporalCommande(funcName);
         int nbParam = ctx->VAR().size();
@@ -150,7 +150,7 @@ antlrcpp::Any Visiteur::visitCallfunc(ExprParser::CallfuncContext *ctx)
             symboleManager.pushInTemporalCommande(ctx->VAR(i));
         }
         symboleManager.writeStack(symboleManager.getTemporalCommande());
-        symboleManager.deleteTemporalCommand();
+        symboleManager.deleteTemporalCommand();*/
     }
     else{
         cout << "the function doesn't exist, how do you want me to call it..." << endl;

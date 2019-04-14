@@ -247,6 +247,12 @@ public:
     // Contrat :
     //
 
+    Visiteur (bool showErrorAnalyse): showError(showErrorAnalyse){}
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
     virtual ~Visiteur(){}
     // Mode d'emploi :
     //
@@ -286,7 +292,7 @@ protected:
 private:
 //------------------------------------------------------- Attributs privés
     Symbole symboleManager;
-
+    bool showError=false;
 //----------------------------------------------------------- Types privés
 
 };
