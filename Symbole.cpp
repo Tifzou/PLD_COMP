@@ -1,5 +1,8 @@
 /*************************************************************************
                            PLD_COMP  -  description
+
+    Classe réalisant l'IR et génèrant la représentation intermédiaire
+
                              -------------------
     début                : 05/03/2019
     copyright            : (C) 2019 par HALUNKA Matthieu, COQUIO-LEBRESNE Clémentine,
@@ -178,7 +181,10 @@ void Symbole::pushIfIntoFlowControl(Cell *curBlock)
     temporalStackCommande.type=ERR;
 }
 
+//------------------------------------------------------------------------
 void Symbole::pushElseIntoFlowControl(Cell* curBlock)
+// Algorithme :
+//
 {
     Cell *bloc = new Cell();
     bloc->data = resp;
@@ -194,8 +200,10 @@ void Symbole::pushElseIntoFlowControl(Cell* curBlock)
     temporalStackCommande.type=ERR;
 }
 
-
+//------------------------------------------------------------------------
 void Symbole::pushLastBlockIntoFlowControl()
+// Algorithme :
+//
 {
     Cell *bloc = new Cell();
     bloc->data = resp;
@@ -317,7 +325,11 @@ bool Symbole::varDef(string var)
 {
     for(Commande commande : resp)
     {
-        if((commande.type == commandeType::VAR_DEF || commande.type == commandeType::AFF || commande.type == commandeType ::FUNC_AFF)  && commande.elements[1] == var)
+        if((commande.type == commandeType::VAR_DEF
+        || commande.type == commandeType::AFF
+        || commande.type == commandeType::AFFL
+        || commande.type == commandeType ::FUNC_AFF)
+        && commande.elements[1] == var)
         {
             return true;
         }
@@ -333,6 +345,8 @@ bool Symbole::varDef(string var)
 
 //------------------------------------------------------- Méthodes privées
 void Symbole::destroyGraph(Cell *block)
+// Algorithme :
+//
 {
     if(block==nullptr)
     {

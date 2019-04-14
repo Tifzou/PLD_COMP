@@ -1,0 +1,5 @@
+/home/halunka/CLionProjects/PLD_COMP_master/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/halunka/CLionProjects/PLD_COMP_master/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/halunka/CLionProjects/PLD_COMP_master/cmake-build-debug/CMakeFiles/helloworld.dir
+/home/halunka/CLionProjects/PLD_COMP_master/cmake-build-debug/CMakeFiles/generate.dir
+/home/halunka/CLionProjects/PLD_COMP_master/cmake-build-debug/CMakeFiles/compilate.dir

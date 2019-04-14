@@ -1,5 +1,8 @@
 /*************************************************************************
                            PLD_COMP  -  description
+
+    Classe permettant de parcourir l'arbre généré par la grammaire afin
+    de créer les temporals et les variables utiles à l'IR
                              -------------------
     début                : 05/03/2019
     copyright            : (C) 2019 par HALUNKA Matthieu, COQUIO-LEBRESNE Clémentine,
@@ -7,7 +10,7 @@
     e-mail               : matthieu.halunka@insa-lyon.fr (chef de projet)
 *************************************************************************/
 
-/*---------- Réalisation de la classe <Visiteur> (fichier Visiteur.cpp.cpp) ------------*/
+/*---------- Réalisation de la classe <Visiteur> (fichier Visiteur.cpp) ------------*/
 /*---------------------------------------------------------------- INCLUDE*/
 /*-------------------------------------------------------- Include système*/
 #include <iostream>
@@ -22,8 +25,7 @@ antlrcpp::Any Visiteur::visitProg(ExprParser::ProgContext *ctx)
 // Algorithme :
 //
 {
-    visitChildren(ctx);
-    return symboleManager;
+    return visitChildren(ctx);
 }
 /*------------------------------------------------------------------------*/
 antlrcpp::Any Visiteur::visitBase(ExprParser::BaseContext *ctx)
@@ -38,7 +40,10 @@ antlrcpp::Any Visiteur::visitFunction(ExprParser::FunctionContext *ctx)
     string functName = ctx->VAR()->getText();
     if (!checkFunctDec(functName)) // si function existe deja
     {
-        cout << "function exists" << endl;
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : name of function '"<<functName<<"' already assigne !"<<endl;
+        }
+        hasError=true;
         return false;
     }
     //Si functName n'existe pas dans la table des fonctions
@@ -88,7 +93,7 @@ antlrcpp::Any Visiteur::visitParam(ExprParser::ParamContext *ctx)
         symboleManager.createVar(varName);
         symboleManager.pushInTemporalCommande(varName);
     }
-    // todo : if name already exists, break and error
+    // Fixme : if name already exists, break and error
 
     return true;
 }
@@ -96,8 +101,8 @@ antlrcpp::Any Visiteur::visitParam(ExprParser::ParamContext *ctx)
 //------------------------------------------------------------------------
 antlrcpp::Any Visiteur::visitAfffunc(ExprParser::AfffuncContext *ctx)
 // Algorithme : renvoi "true" si la variable avec le nom 'varName' n'est pas déclarée
-// De plus, si la variable est déjà déclarée, efface la commande temporelle et la remplit avec une erreur
-// Sinon, ajoute la variable dans la pile de la commande
+//              De plus, si la variable est déjà déclarée, efface la commande temporelle et la remplit avec une erreur
+//              Sinon, ajoute la variable dans la pile de la commande
 {
     string funcName = ctx->VAR()[1]->getText();
     commandeType code = commandeType::FUNC_AFF;
@@ -127,6 +132,9 @@ antlrcpp::Any Visiteur::visitAfffunc(ExprParser::AfffuncContext *ctx)
         string error3 = "name of function '" + funcName + "' not assigned";
         err.push_back("0323");
         err.push_back(error3);
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : Name of function '"<<funcName<<"' not assigned !"<<endl;
+        }
         symboleManager.deleteTemporalCommand(); //temporalStack = null;
         symboleManager.pushInTemporalCommande(code, err);
         symboleManager.writeStack(symboleManager.getTemporalCommande());
@@ -158,20 +166,70 @@ antlrcpp::Any Visiteur::visitCallfunc(ExprParser::CallfuncContext *ctx)
         symboleManager.deleteTemporalCommand();
     }
     else{
-        cout << "the function doesn't exist, how do you want me to call it..." << endl;
         commandeType code = commandeType::ERR;
         vector<string> err;
         string error1 = "name of function '" + funcName + "' already assigned";
         err.push_back("0667");
         err.push_back(error1);
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : Name of function '"<<funcName<<"' already assigned !"<<endl;
+        }
         symboleManager.deleteTemporalCommand(); //temporalStack = null;
         symboleManager.pushInTemporalCommande(code, err);
         symboleManager.writeStack(symboleManager.getTemporalCommande());
         symboleManager.deleteTemporalCommand();
+        hasError=true;
         return false;
 
     }
 
+
+    return true;
+}
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitLvalue(ExprParser::LvalueContext *ctx)
+// Algorithme :
+//
+{
+    ExprParser::ExprlContext * expr1=ctx->exprl();
+
+    //string varName = expr1->VAR()->getText();
+
+    commandeType code = commandeType::AFFL;
+    symboleManager.pushInTemporalCommande(code);
+
+    /*if(symboleManager.varExist(varName)){
+        vector<ExprParser::ExprContext *> listExpr1=expr1->expr();
+        unsigned long size=listExpr1.size();
+        for(int i(0); i<size; i++)
+        {
+            ExprParser::ExprContext* e=listExpr1[i];
+            if (!visitExpr(e))
+            {
+                return false;
+            }
+
+            symboleManager.pushInTemporalCommande(symboleManager.getTemporalExpression()->back().elements[1]);
+            symboleManager.writeStack(*symboleManager.getTemporalExpression());
+            symboleManager.deleteTemporalExpression();
+            symboleManager.writeStack(symboleManager.getTemporalCommande());
+            symboleManager.deleteTemporalCommand();
+        }
+    }
+    else
+    {
+        commandeType code = commandeType::ERR;
+        vector<string> err;
+        string error3 = "name of variable '" + varName + "' not assigned";
+        err.push_back("0323");
+        err.push_back(error3);
+        symboleManager.deleteTemporalCommand(); //temporalStack = null;
+        symboleManager.pushInTemporalCommande(code, err);
+        symboleManager.writeStack(symboleManager.getTemporalCommande());
+        symboleManager.deleteTemporalCommand();
+        symboleManager.deleteTemporalExpression();
+    }*/
 
     return true;
 }
@@ -202,6 +260,11 @@ antlrcpp::Any Visiteur::visitCore(ExprParser::CoreContext *ctx)
         return true;
     }
 
+    hasError=true;
+    //TODO check message
+    if(showError){
+        cerr<<"Line "<<ctx->start->getLine()<<" : the following block is not closed !"<<endl;
+    }
     return false;
 }
 
@@ -234,6 +297,11 @@ antlrcpp::Any Visiteur::visitAff(ExprParser::AffContext *ctx)
         symboleManager.pushInTemporalCommande(varName);
         if(!visit(ctx->expr()))
         {
+            //TODO check message
+            if(showError){
+                cerr<<"Line "<<ctx->start->getLine()<<" : the following expression is not valid !"<<endl;
+            }
+            hasError=true;
             return false;
         }
         symboleManager.pushInTemporalCommande(symboleManager.getTemporalExpression()->back().elements[1]);
@@ -249,6 +317,9 @@ antlrcpp::Any Visiteur::visitAff(ExprParser::AffContext *ctx)
         string error3 = "name of variable '" + varName + "' not assigned";
         err.push_back("0323");
         err.push_back(error3);
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : Name of variable '"<<varName<<"' not assigned !"<<endl;
+        }
         symboleManager.deleteTemporalCommand(); //temporalStack = null;
         symboleManager.pushInTemporalCommande(code, err);
         symboleManager.writeStack(symboleManager.getTemporalCommande());
@@ -271,6 +342,11 @@ antlrcpp::Any Visiteur::visitRet(ExprParser::RetContext *ctx)
         symboleManager.deleteTemporalExpression();
         return true;
     }
+    hasError=true;
+    //TODO check message
+    if(showError){
+        cerr<<"Line "<<ctx->start->getLine()<<" : the return expression is invalid !"<<endl;
+    }
     return false;
 }
 
@@ -286,10 +362,12 @@ antlrcpp::Any Visiteur::visitDecVar(ExprParser::DecVarContext *ctx)
 
         if (!checkVarDec(nameVar))
         {
+            if(showError){
+                cerr<<"Line "<<ctx->start->getLine()<<" : Name of variable '"<<nameVar<<"' already assigned !"<<endl;
+            }
+            hasError=true;
             return false;
-        }
-
-        else
+        }else
         {
             symboleManager.createVar(nameVar);
             commandeType code = commandeType::VAR_DEC;
@@ -316,6 +394,12 @@ antlrcpp::Any Visiteur::visitDefVar(ExprParser::DefVarContext *ctx)
     if (!checkVarDec(nameVar))
     {
         symboleManager.deleteTemporalExpression();
+
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : Name of variable '"<<nameVar<<"' already assigned !"<<endl;
+        }
+
+        hasError=true;
         return false;
 
     }
@@ -335,6 +419,11 @@ antlrcpp::Any Visiteur::visitDefVar(ExprParser::DefVarContext *ctx)
             symboleManager.deleteTemporalCommand();
             return true;
         }
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : the definition of "<<nameVar<<" is invalid !"<<endl;
+        }
+        hasError=true;
         return false;
     }
 }
@@ -350,11 +439,21 @@ antlrcpp::Any Visiteur::visitExpr(ExprParser::ExprContext *ctx)
 
         if(i==1&&!visit(ctx->terme(i-1)))
         {
+            hasError=true;
+            //TODO check message
+            if(showError){
+                cerr<<"Line "<<ctx->start->getLine()<<" : the last factor is invalid !"<<endl;
+            }
             return false;
         }
         string nomVar1=symboleManager.getTemporalExpression()->back().elements[1];
         if(!visit(ctx->terme(i)))
         {
+            hasError=true;
+            //TODO check message
+            if(showError){
+                cerr<<"Line "<<ctx->start->getLine()<<" : one of the factor used is invalid !"<<endl;
+            }
             return false;
         }
         string nomVar2=symboleManager.getTemporalExpression()->back().elements[1];
@@ -390,11 +489,22 @@ antlrcpp::Any Visiteur::visitTerme(ExprParser::TermeContext *ctx)
         vector<string> commande;
         if(i==1&&!visit(ctx->facteur(i-1)))
         {
+            hasError=true;
+
+            //TODO check message
+            if(showError){
+                cerr<<"Line "<<ctx->start->getLine()<<" : one of the factor used is invalid !"<<endl;
+            }
             return false;
         }
         string nomVar1=symboleManager.getTemporalExpression()->back().elements[1];
         if(!visit(ctx->facteur(i)))
         {
+            hasError=true;
+            //TODO check message
+            if(showError){
+                cerr<<"Line "<<ctx->start->getLine()<<" : one of the factor used is invalid !"<<endl;
+            }
             return false;
         }
         string nomVar2=symboleManager.getTemporalExpression()->back().elements[1];
@@ -449,11 +559,16 @@ antlrcpp::Any Visiteur::visitFactVar(ExprParser::FactVarContext *ctx)
         string error2 = "variable : '" + var + "' not defined";
         err.push_back("0322");
         err.push_back(error2);
+
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : Variable '"<<var<<"' not defined !"<<endl;
+        }
         symboleManager.deleteTemporalExpression(); //temporalStack = null;
 
         symboleManager.pushInTemporalCommande(code, err);
         symboleManager.writeStack(symboleManager.getTemporalCommande());
         symboleManager.deleteTemporalCommand();
+        hasError=true;
         return false;
     }
 }
@@ -514,6 +629,12 @@ antlrcpp::Any Visiteur::visitIfElse(ExprParser::IfElseContext *ctx)
     }
     else
     {
+        hasError=true;
+
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : the boolean expression is invalid !"<<endl;
+        }
         return false;
     }
     Cell* curBlock=symboleManager.getFlowControl()->last;
@@ -526,6 +647,12 @@ antlrcpp::Any Visiteur::visitIfElse(ExprParser::IfElseContext *ctx)
     }
     else
     {
+        hasError=true;
+
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : the block of if structure is invalid !"<<endl;
+        }
         return false;
     }
 
@@ -538,6 +665,7 @@ antlrcpp::Any Visiteur::visitIfElse(ExprParser::IfElseContext *ctx)
     }
     else
     {
+        hasError=true;
         return false;
     }
     return true;
@@ -558,6 +686,11 @@ antlrcpp::Any Visiteur::visitSimpleIf(ExprParser::SimpleIfContext *ctx){
     }
     else
     {
+        hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : the boolean expression is invalid !"<<endl;
+        }
         return false;
     }
 
@@ -571,6 +704,11 @@ antlrcpp::Any Visiteur::visitSimpleIf(ExprParser::SimpleIfContext *ctx){
     }
     else
     {
+        hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : the content of the if block is invalid !"<<endl;
+        }
         return false;
     }
     return true;
@@ -591,6 +729,12 @@ antlrcpp::Any Visiteur::visitGe(ExprParser::GeContext *ctx)
     }
     else
     {
+        hasError=true;
+
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : one of the expression used is invalid !"<<endl;
+        }
         return false;
     }
 
@@ -600,6 +744,11 @@ antlrcpp::Any Visiteur::visitGe(ExprParser::GeContext *ctx)
     }
     else
     {
+        hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : one of the expression used is invalid !"<<endl;
+        }
         return false;
     }
     string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
@@ -627,6 +776,11 @@ antlrcpp::Any Visiteur::visitGt(ExprParser::GtContext *ctx)
     }
     else
     {
+        hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : one of the expression used is invalid !"<<endl;
+        }
         return false;
     }
 
@@ -636,6 +790,11 @@ antlrcpp::Any Visiteur::visitGt(ExprParser::GtContext *ctx)
     }
     else
     {
+        hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : one of the expression used is invalid !"<<endl;
+        }
         return false;
     }
     string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
@@ -663,6 +822,11 @@ antlrcpp::Any Visiteur::visitLe(ExprParser::LeContext *ctx)
     }
     else
     {
+        hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : one of the expression used is invalid !"<<endl;
+        }
         return false;
     }
 
@@ -672,6 +836,11 @@ antlrcpp::Any Visiteur::visitLe(ExprParser::LeContext *ctx)
     }
     else
     {
+        hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : one of the expression used is invalid !"<<endl;
+        }
         return false;
     }
     string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
@@ -700,6 +869,11 @@ antlrcpp::Any Visiteur::visitLt(ExprParser::LtContext *ctx)
     }
     else
     {
+        hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : one of the expression used is invalid !"<<endl;
+        }
         return false;
     }
 
@@ -709,6 +883,11 @@ antlrcpp::Any Visiteur::visitLt(ExprParser::LtContext *ctx)
     }
     else
     {
+        hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : one of the expression used is invalid !"<<endl;
+        }
         return false;
     }
     string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
@@ -724,7 +903,11 @@ antlrcpp::Any Visiteur::visitLt(ExprParser::LtContext *ctx)
 }
 
 
-antlrcpp::Any Visiteur::visitEgal(ExprParser::EgalContext *ctx){
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitEgal(ExprParser::EgalContext *ctx)
+// Algorithme :
+//
+{
     cout<<"test predicat"<<endl;
     string nomVar1;
     string nomVar2;
@@ -734,6 +917,11 @@ antlrcpp::Any Visiteur::visitEgal(ExprParser::EgalContext *ctx){
     }
     else
     {
+        hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : one of the expression used is invalid !"<<endl;
+        }
         return false;
     }
 
@@ -743,6 +931,11 @@ antlrcpp::Any Visiteur::visitEgal(ExprParser::EgalContext *ctx){
     }
     else
     {
+        hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : one of the expression used is invalid !"<<endl;
+        }
         return false;
     }
     string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
@@ -755,6 +948,99 @@ antlrcpp::Any Visiteur::visitEgal(ExprParser::EgalContext *ctx){
     symboleManager.writeStack(*symboleManager.getTemporalExpression());
     symboleManager.writeStack(symboleManager.getTemporalCommande());
     return true;
+}
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitNEgal(ExprParser::NegalContext *ctx)
+// Algorithme :
+//
+{
+    cout<<"test predicat"<<endl;
+    string nomVar1;
+    string nomVar2;
+    if(visit(ctx->expr(0)))
+    {
+        nomVar1=symboleManager.getTemporalExpression()->back().elements[1];
+    }
+    else
+    {
+        hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : one of the expression used is invalid !"<<endl;
+        }
+        return false;
+    }
+
+    if(visit(ctx->expr(1)))
+    {
+        nomVar2=symboleManager.getTemporalExpression()->back().elements[1];
+    }
+    else
+    {
+        hasError=true;
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : one of the expression used is invalid !"<<endl;
+        }
+        return false;
+    }
+    string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
+    symboleManager.pushInTemporalCommande(commandeType::CONDITION);
+    symboleManager.pushInTemporalCommande("bool");
+    symboleManager.pushInTemporalCommande(tempVar);
+    symboleManager.pushInTemporalCommande(nomVar1);
+    symboleManager.pushInTemporalCommande("!=");
+    symboleManager.pushInTemporalCommande(nomVar2);
+    symboleManager.writeStack(*symboleManager.getTemporalExpression());
+    symboleManager.writeStack(symboleManager.getTemporalCommande());
+    return true;
+}
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitBoolExpressionWhile(ExprParser::BoolExpressionWhileContext *ctx)
+// Algorithme :
+//
+{
+    symboleManager.pushInTemporalCommande(commandeType::CONDITIONWHILE);
+
+    return visitChildren(ctx);
+}
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitWhileLoop(ExprParser::WhileLoopContext *ctx)
+// Algorithme :
+//
+{
+    commandeType code = commandeType::WHILE;
+    symboleManager.pushInTemporalCommande(code);
+    symboleManager.writeStack(symboleManager.getTemporalCommande());
+    if (visit(ctx->boolExpressionWhile()))
+    {
+        symboleManager.pushIntoFlowControl();
+    }
+    else
+    {
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : the boolean expression of while loop is invalid !"<<endl;
+        }
+        return false;
+    }
+
+    if (visit(ctx->coreIf()))
+    {
+        symboleManager.pushIntoFlowControl();
+        return true;
+    }
+    else
+    {
+        //TODO check message
+        if(showError){
+            cerr<<"Line "<<ctx->start->getLine()<<" : the content of the while loop is invalid !"<<endl;
+        }
+        return false;
+    }
 }
 
  /*
@@ -779,6 +1065,14 @@ antlrcpp::Any Visiteur::visitLdconst(ExprParser::LdconstContext *ctx)
 }
 */
 
+//------------------------------------------------------------------------
+Symbole Visiteur::getSymboleManager()
+// Algorithme :
+//
+{
+    return symboleManager;
+}
+
 //------------------------------------------------------------------ PRIVE
 
 //----------------------------------------------------- Méthodes protégées
@@ -788,8 +1082,8 @@ antlrcpp::Any Visiteur::visitLdconst(ExprParser::LdconstContext *ctx)
 //------------------------------------------------------------------------
 bool Visiteur::checkVarDec(string varName)
 // Algorithme : renvoi "true" si la variable avec le nom 'varName' n'est pas déclarée
-// De plus, si la variable est déjà déclarée, efface la commande temporelle et la remplit avec une erreur
-// Sinon, ajoute la variable dans la pile de la commande
+//              De plus, si la variable est déjà déclarée, efface la commande temporelle et la remplit avec une erreur
+//              Sinon, ajoute la variable dans la pile de la commande
 {
     if (symboleManager.varExist(varName)) //doit verifier que la variable est bien au dessus et pas en dessous
     {                                     //check if the variable exist
@@ -798,10 +1092,12 @@ bool Visiteur::checkVarDec(string varName)
         string error1 = "name of variable '" + varName + "' already assigned";
         err.push_back("0321");
         err.push_back(error1);
+
         symboleManager.deleteTemporalCommand(); //temporalStack = null;
         symboleManager.pushInTemporalCommande(code, err);
         symboleManager.writeStack(symboleManager.getTemporalCommande());
         symboleManager.deleteTemporalCommand();
+        hasError=true;
         return false;
     }
     else
@@ -814,8 +1110,8 @@ bool Visiteur::checkVarDec(string varName)
 //------------------------------------------------------------------------
 bool Visiteur::checkVarDef(string varName)
 // Algorithme : renvoi 'true' si la variable 'varName' est bien défini.
-// De plus, si la variable n'est pas définit, efface la commande temporelle et la remplit avec une erreur
-//Dans le cas contraire, ajoute le nom de la variable dans la pile de la commande
+//              De plus, si la variable n'est pas définit, efface la commande temporelle et la remplit avec une erreur
+//              Dans le cas contraire, ajoute le nom de la variable dans la pile de la commande
 {
     if (!symboleManager.varDef(varName)) //doit verifier que la variable est bien au dessus et pas en dessous
     {                                     //check if the variable exist
@@ -828,6 +1124,8 @@ bool Visiteur::checkVarDef(string varName)
         symboleManager.pushInTemporalCommande(code, err);
         symboleManager.writeStack(symboleManager.getTemporalCommande());
         symboleManager.deleteTemporalCommand();
+        hasError=true;
+
         return false;
     }
     else
@@ -839,8 +1137,8 @@ bool Visiteur::checkVarDef(string varName)
 //------------------------------------------------------------------------
 bool Visiteur::checkFunctDec(string functName)
 // Algorithme : renvoi "true" si la variable avec le nom 'varName' n'est pas déclarée
-// De plus, si la variable est déjà déclarée, efface la commande temporelle et la remplit avec une erreur
-// Sinon, ajoute la variable dans la pile de la commande
+//              De plus, si la variable est déjà déclarée, efface la commande temporelle et la remplit avec une erreur
+//              Sinon, ajoute la variable dans la pile de la commande
 {
     if (symboleManager.functExist(functName)) //doit verifier que la fonction est bien au dessus et pas en dessous
     {                                     //check if the function exists
@@ -853,6 +1151,7 @@ bool Visiteur::checkFunctDec(string functName)
         symboleManager.pushInTemporalCommande(code, err);
         symboleManager.writeStack(symboleManager.getTemporalCommande());
         symboleManager.deleteTemporalCommand();
+        hasError=true;
         return false;
     }
     else

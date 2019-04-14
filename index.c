@@ -1,6 +1,6 @@
 int sum()
 {
-    return c+10;
+    return 10;
 }
 
 int main()

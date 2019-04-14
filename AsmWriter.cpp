@@ -1,39 +1,49 @@
-//
-// Created by halunka on 26/03/19.
-//
+/*************************************************************************
+                           PLD_COMP  -  description
+    Classe en charge de la transformation en assembleur des blocks renvoyés par l'IR
+                             -------------------
+    début                : 05/03/2019
+    copyright            : (C) 2019 par HALUNKA Matthieu, COQUIO-LEBRESNE Clémentine,
+                            FLOCH Tifenn, GASIUK Anatolii, HIRT Christophe, PAUGOIS Alan
+    e-mail               : matthieu.halunka@insa-lyon.fr (chef de projet)
+*************************************************************************/
 
+//---------- Réalisation de la classe <AsmWriter> (fichier AsmWriter.cpp) ------------
+
+//---------------------------------------------------------------- INCLUDE
+
+//-------------------------------------------------------- Include système
 #include "AsmWriter.h"
 
 #include <iostream>
 #include <fstream>
 #include <string>
+
+//------------------------------------------------------ Include personnel
 #include <stdio.h>
 
-void AsmWriter::setNomFichierInput(string nom){
-    inFile=nom;
-}
 
-void AsmWriter::setNomFichierOutput(string nom){
+//------------------------------------------------------------- Constantes
+
+//---------------------------------------------------- Variables de classe
+
+//----------------------------------------------------------- Types privés
+
+
+//----------------------------------------------------------------- PUBLIC
+
+//----------------------------------------------------- Méthodes publiques
+void AsmWriter::setNomFichierOutput(string nom)
+// Algorithme :
+//
+{
     outFile=nom;
 }
 
-bool AsmWriter::convert(){
-    size_t foundCpp=inFile.find(".cpp",0);
-    if (foundCpp!=std::string::npos){
-        inFile.replace(inFile.end()-4,inFile.end(),".asm");
-    }else{
-        size_t foundC=inFile.find(".c",0);
-        if (foundC!=std::string::npos){
-            inFile.replace(inFile.end()-2,inFile.end(),".s");
-        }else{
-            cerr<<"Le fichier d'entrée n'a pas la bonne extension !\n";
-            return 0;
-        }
-    }
-    return 1;
-}
-
+//------------------------------------------------------------------------
 void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBlock, int curFlagCounter)
+// Algorithme :
+//
 {
     vector<Commande> resultat= block->data;
     vector<Commande>::iterator itInstr;
@@ -145,7 +155,12 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
                 break;
             case 10: //MAIN
                 cerr << "in case MAIN" << endl;
+
+#ifdef __APPLE__
+                myfile << ".globl _main\n";
+#else
                 myfile << ".global main\n";
+#endif
                 myfile << "\t.type\t main, @function\n";
                 myfile << "main:\n";
                 myfile << "\tpushq\t%rbp"<<endl;
@@ -171,7 +186,10 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
     }*/
 }
 
+//------------------------------------------------------------------------
 void AsmWriter::browseGraph(Cell *block, ofstream &myfile, typeBlock typeCurBlock, int flagCounter)
+// Algorithme :
+//
 {
     int curFlagCounter = flagCounter;
 
@@ -221,7 +239,11 @@ void AsmWriter::browseGraph(Cell *block, ofstream &myfile, typeBlock typeCurBloc
 }
 
 
-bool AsmWriter::writeOutputFile(Cell *firstBlock) {
+//------------------------------------------------------------------------
+bool AsmWriter::writeOutputFile(Cell *firstBlock)
+// Algorithme :
+//
+{
     ofstream myfile (outFile);
     if (myfile.is_open()){
         myfile << ".text\n";
@@ -248,7 +270,10 @@ bool AsmWriter::writeOutputFile(Cell *firstBlock) {
     }
 }
 
+//------------------------------------------------------------------------
 string AsmWriter::writeReturn(Commande returnCmd)
+// Algorithme :
+//
 {
     string nomVar = returnCmd.elements[0];
     map<string, string>::iterator it = variables.find(nomVar);
@@ -268,7 +293,10 @@ string AsmWriter::writeReturn(Commande returnCmd)
     return asmInstr;
 }
 
+//------------------------------------------------------------------------
 string AsmWriter::writeAff(Commande affectationCmd)
+// Algorithme :
+//
 {
     string nomVar = affectationCmd.elements[1];
     string valVar = affectationCmd.elements[2];
@@ -290,11 +318,13 @@ string AsmWriter::writeAff(Commande affectationCmd)
         asmInstr = "\tmovl\t"+valVar+", "+address+"\n";
     }
 
-
     return asmInstr;
 }
 
+//------------------------------------------------------------------------
 void AsmWriter::writeDec(Commande declarationCmd)
+// Algorithme :
+//
 {
     string varName = declarationCmd.elements[1];
     int stackPos = (variables.size()+1) * (-4);
@@ -302,14 +332,20 @@ void AsmWriter::writeDec(Commande declarationCmd)
     variables.insert(make_pair(varName, varAddress));
 }
 
+//------------------------------------------------------------------------
 string AsmWriter::writeDef(Commande definitionCmd)
+// Algorithme :
+//
 {
     writeDec(definitionCmd);
     string asmInstr = writeAff(definitionCmd);
     return asmInstr;
 }
 
+//------------------------------------------------------------------------
 string AsmWriter::writeOperation(Commande operationCmd)
+// Algorithme :
+//
 {
     if (operationCmd.elements[3] == "*")
     {
@@ -327,7 +363,10 @@ string AsmWriter::writeOperation(Commande operationCmd)
     }
 }
 
+//------------------------------------------------------------------------
 string AsmWriter::writeAdd(Commande additionCmd)
+// Algorithme :
+//
 {
     map<string, string>::iterator it;
 
@@ -376,9 +415,11 @@ string AsmWriter::writeAdd(Commande additionCmd)
     return asmInstr;
 }
 
+//------------------------------------------------------------------------
 string AsmWriter::writeSub(Commande substractionCmd)
+// Algorithme :
+//
 {
-    cout << "yeah for substraction" << endl;
     map<string, string>::iterator it;
 
     string varResultat = substractionCmd.elements[1];
@@ -426,7 +467,10 @@ string AsmWriter::writeSub(Commande substractionCmd)
     return asmInstr;
 }
 
+//------------------------------------------------------------------------
 string AsmWriter::writeMult(Commande multiplicationCmd)
+// Algorithme :
+//
 {
     map<string, string>::iterator it;
 
@@ -475,8 +519,10 @@ string AsmWriter::writeMult(Commande multiplicationCmd)
     return asmInstr;
 }
 
-
+//------------------------------------------------------------------------
 string AsmWriter::writeIf(int curFlagCounter)
+// Algorithme :
+//
 {
     string flagIf = "if"+std::to_string(curFlagCounter);
     namespaceFlags.push_back(flagIf);
@@ -485,7 +531,10 @@ string AsmWriter::writeIf(int curFlagCounter)
 
 }
 
+//------------------------------------------------------------------------
 void AsmWriter::printVariableMap()
+// Algorithme :
+//
 {
     map<string, string>::iterator it;
     for (it = variables.begin() ; it != variables.end() ; ++it)
@@ -494,7 +543,10 @@ void AsmWriter::printVariableMap()
     }
 }
 
+//------------------------------------------------------------------------
 string AsmWriter::generateIfLine(Commande curCommande)
+// Algorithme :
+//
 {
     map<string, string>::iterator it;
     string addVar1;
@@ -527,7 +579,10 @@ string AsmWriter::generateIfLine(Commande curCommande)
     return asmInstr;
 }
 
+//------------------------------------------------------------------------
 string AsmWriter::writePredicat(Commande ifCondition, string nextFlag)
+// Algorithme :
+//
 {
     string line = generateIfLine(ifCondition);
     if (ifCondition.elements[3] == "==")
@@ -560,7 +615,10 @@ string AsmWriter::writePredicat(Commande ifCondition, string nextFlag)
     return line;
 }
 
+//------------------------------------------------------------------------
 string AsmWriter::writeFunc(Commande functionCmd)
+// Algorithme :
+//
 {
     string functName = functionCmd.elements[0];
     string asmInstr = "\t.global " + functName + "\n";
@@ -594,7 +652,10 @@ string AsmWriter::writeFunc(Commande functionCmd)
     return asmInstr;
 }
 
+//------------------------------------------------------------------------
 string AsmWriter::writeFuncCall(Commande functionCmd)
+// Algorithme :
+//
 {
     string funcName = functionCmd.elements[0];
     string asmInstr = "";
@@ -612,7 +673,10 @@ string AsmWriter::writeFuncCall(Commande functionCmd)
     return asmInstr;
 }
 
+//------------------------------------------------------------------------
 string AsmWriter::writeFuncAff(Commande functionCmd)
+// Algorithme :
+//
 {
     string funcName = functionCmd.elements[0];
     string asmInstr = "";
