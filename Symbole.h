@@ -1,5 +1,5 @@
 /*************************************************************************
-                           PLD_COMP  -  d
+                           PLD_COMP  -  description
                              -------------------
     début                : 05/03/2019
     copyright            : (C) 2019 par HALUNKA Matthieu, COQUIO-LEBRESNE Clémentine,
@@ -72,7 +72,6 @@ typedef struct ListC
 //------------------------------------------------------------------------
 // Rôle de la classe <Symbole>
 // génère la représentation intermédiaire
-//
 //------------------------------------------------------------------------
 
 class Symbole
@@ -81,12 +80,12 @@ class Symbole
 
   public:
     //----------------------------------------------------- Méthodes publiques
-    bool varExist(string var);
     // Mode d'emploi :
-    // vérifie qu'une variable a été déclarée
-    // renvoie true si oui, false sinon
+    //      vérifie qu'une variable a été déclarée
+    //      renvoie true si oui, false sinon
     // Contrat :
-    //
+    //      Aucun
+    bool varExist(string var);
 
     bool varDef(string var);
     // Mode d'emploi :

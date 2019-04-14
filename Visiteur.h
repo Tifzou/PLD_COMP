@@ -35,6 +35,10 @@ class Visiteur : public ExprBaseVisitor
 
 public:
 //----------------------------------------------------- Méthodes publiques
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
     antlrcpp::Any visitProg(ExprParser::ProgContext *ctx);
     // Mode d'emploi :
     //

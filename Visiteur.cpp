@@ -7,7 +7,7 @@
     e-mail               : matthieu.halunka@insa-lyon.fr (chef de projet)
 *************************************************************************/
 
-/*---------- Réalisation de la classe <Visiteur> (fichier Visiteur.cpp.cpp) ------------*/
+/*---------- Réalisation de la classe <Visiteur> (fichier Visiteur.cpp) ------------*/
 /*---------------------------------------------------------------- INCLUDE*/
 /*-------------------------------------------------------- Include système*/
 #include <iostream>
