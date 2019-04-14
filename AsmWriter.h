@@ -1,6 +1,11 @@
-//
-// Created by halunka on 26/03/19.
-//
+/*************************************************************************
+                           PLD_COMP  -  description
+                             -------------------
+    début                : 05/03/2019
+    copyright            : (C) 2019 par HALUNKA Matthieu, COQUIO-LEBRESNE Clémentine,
+                            FLOCH Tifenn, GASIUK Anatolii, HIRT Christophe, PAUGOIS Alan
+    e-mail               : matthieu.halunka@insa-lyon.fr (chef de projet)
+*************************************************************************/
 
 #ifndef PLD_COMP_ASMWRITER_H
 #define PLD_COMP_ASMWRITER_H

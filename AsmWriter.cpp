@@ -1,6 +1,11 @@
-//
-// Created by halunka on 26/03/19.
-//
+/*************************************************************************
+                           PLD_COMP  -  description
+                             -------------------
+    début                : 05/03/2019
+    copyright            : (C) 2019 par HALUNKA Matthieu, COQUIO-LEBRESNE Clémentine,
+                            FLOCH Tifenn, GASIUK Anatolii, HIRT Christophe, PAUGOIS Alan
+    e-mail               : matthieu.halunka@insa-lyon.fr (chef de projet)
+*************************************************************************/
 
 #include "AsmWriter.h"
 
@@ -129,7 +134,12 @@ void AsmWriter::browseBlock(Cell *block, ofstream &myfile, typeBlock typeCurBloc
                 break;
             case 10: //MAIN
                 cerr << "in case MAIN" << endl;
+
+#ifdef __APPLE__
+                myfile << ".globl _main\n";
+#else
                 myfile << ".global main\n";
+#endif
                 myfile << "\t.type\t main, @function\n";
                 myfile << "main:\n";
                 myfile << "\tpushq\t%rbp"<<endl;
@@ -245,7 +255,7 @@ string AsmWriter::writeReturn(Commande returnCmd)
     {
         address = "$"+nomVar;
     }
-    string asmInstr = "\tmovl\t"+address+", %eax\n";
+    string asmInstr = "\tmovq\t"+address+", %eax\n";
     asmInstr += "\tmovq\t%rbp, %rsp\n";
     asmInstr += "\tpopq\t%rbp\n";
     asmInstr += "\tret\n";
@@ -265,13 +275,13 @@ string AsmWriter::writeAff(Commande affectationCmd)
     if (it != variables.end())
     {
         valVar = it->second;
-        asmInstr = "\tmovl\t"+valVar+", %eax\n";
-        asmInstr += "\tmovl\t%eax, "+address+"\n";
+        asmInstr = "\tmovq\t"+valVar+", %eax\n";
+        asmInstr += "\tmovq\t%eax, "+address+"\n";
     }
     else
     {
         valVar = "$"+valVar;
-        asmInstr = "\tmovl\t"+valVar+", "+address+"\n";
+        asmInstr = "\tmovq\t"+valVar+", "+address+"\n";
     }
 
 
@@ -352,10 +362,10 @@ string AsmWriter::writeAdd(Commande additionCmd)
         addressOp2 = "$"+varOp2;
     }
 
-    string asmInstr = "\tmovl\t"+addressOp1+", %edx\n";
-    asmInstr += "\tmovl\t"+addressOp2+", %eax\n";
-    asmInstr += "\taddl\t%edx, %eax\n";
-    asmInstr += "\tmovl\t %eax, "+addressRes+"\n";
+    string asmInstr = "\tmovq\t"+addressOp1+", %edx\n";
+    asmInstr += "\tmovq\t"+addressOp2+", %eax\n";
+    asmInstr += "\taddq\t%edx, %eax\n";
+    asmInstr += "\tmovq\t %eax, "+addressRes+"\n";
 
     return asmInstr;
 }
@@ -402,10 +412,10 @@ string AsmWriter::writeSub(Commande substractionCmd)
         addressOp2 = "$"+varOp2;
     }
 
-    string asmInstr = "\tmovl\t"+addressOp1+", %eax\n";
-    asmInstr += "\tmovl\t"+addressOp2+", %edx\n";
+    string asmInstr = "\tmovq\t"+addressOp1+", %eax\n";
+    asmInstr += "\tmovq\t"+addressOp2+", %edx\n";
     asmInstr += "\tsubl\t%edx, %eax\n";
-    asmInstr += "\tmovl\t %eax, "+addressRes+"\n";
+    asmInstr += "\tmovq\t %eax, "+addressRes+"\n";
 
     return asmInstr;
 }
@@ -451,10 +461,10 @@ string AsmWriter::writeMult(Commande multiplicationCmd)
         addressOp2 = "$"+varOp2;
     }
 
-    string asmInstr = "\tmovl\t"+addressOp1+", %edx\n";
-    asmInstr += "\tmovl\t"+addressOp2+", %eax\n";
+    string asmInstr = "\tmovq\t"+addressOp1+", %edx\n";
+    asmInstr += "\tmovq\t"+addressOp2+", %eax\n";
     asmInstr += "\timull\t%edx, %eax\n";
-    asmInstr += "\tmovl\t %eax, "+addressRes+"\n";
+    asmInstr += "\tmovq\t %eax, "+addressRes+"\n";
 
     return asmInstr;
 }
@@ -504,8 +514,8 @@ string AsmWriter::generateIfLine(Commande curCommande)
         addVar2 = curCommande.elements[2];
     }
 
-    string asmInstr = "\tmovl\t"+addVar1+", %edx\n";
-    asmInstr += "\tmovl\t"+addVar2+", %eax\n";
+    string asmInstr = "\tmovq\t"+addVar1+", %edx\n";
+    asmInstr += "\tmovq\t"+addVar2+", %eax\n";
     asmInstr += "\tcmpl\t%edx, %eax\n";
 
     return asmInstr;
@@ -572,7 +582,7 @@ string AsmWriter::writeFunc(Commande functionCmd)
             //variables.insert(make_pair(varName, varAddress));
             variables.insert(p);
             cout << "la paire a ete inseree dans la map" << endl;
-            asmInstr += "\tmovl\t" + paramRegister[i-1] + ", " + varAddress + "\n";
+            asmInstr += "\tmovq\t" + paramRegister[i-1] + ", " + varAddress + "\n";
         }
     }
     return asmInstr;
@@ -593,7 +603,7 @@ string AsmWriter::writeFuncAff(Commande functionCmd)
     if(it != variables.end())
     {
         string retVarAddr = it->second;
-        asmInstr += "\tmovl %eax, " + retVarAddr + "\n";
+        asmInstr += "\tmovq %eax, " + retVarAddr + "\n";
     }
 
     return asmInstr;

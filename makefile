@@ -16,27 +16,34 @@ OBJ      = $(SRC:.cpp=.o)
 all: antlr $(EXEC)
 
 antlr:
-	@echo --------- Génération avec antlr ----------------
+	@echo --------- Génération des classes pour l'analyse avec antlr ----------------
 	$(ANTLR) -visitor -no-listener -Dlanguage=Cpp Expr.g4
 
 $(EXEC):
-	@echo --------- Compilation des sources --------------
+	@echo --------- Compilation des sources du projet avec les classes d'antlr --------------
 	$(CXX) $(CXXFLAGS) $(ANTLRRUNTIME)/antlr4-runtime/ -o $(EXEC) *.cpp $(ANTLRRUNTIME)/lib/libantlr4-runtime.a
 
 .PHONY: clean mrproper
 
 depend:
+	@echo --------- Génération des dépendances dans le makefile --------------
 	makedepend $(SRC)
 
 clean:
+	@echo --------- Suppression des classes compilées --------------
 	@rm -rf *.o
 
 mrproper: clean
+	@echo --------- Suppression de l'exécutable --------------
 	@rm -rf $(EXEC) core
 # DO NOT DELETE
 
-main.o: ExprLexer.h ExprParser.h ExprBaseVisitor.h ExprVisitor.h Visiteur.h
 ExprVisitor.o: ExprVisitor.h ExprParser.h
-ExprParser.o: ExprVisitor.h ExprParser.h
-ExprLexer.o: ExprLexer.h
 ExprBaseVisitor.o: ExprBaseVisitor.h ExprVisitor.h ExprParser.h
+Symbole.o: Symbole.h
+ExprLexer.o: ExprLexer.h
+AsmWriter.o: AsmWriter.h /usr/include/stdio.h Symbole.h
+Visiteur.o: Visiteur.h ExprBaseVisitor.h ExprVisitor.h ExprParser.h Symbole.h
+main.o: ExprLexer.h ExprParser.h ExprBaseVisitor.h ExprVisitor.h Visiteur.h
+main.o: Symbole.h AsmWriter.h /usr/include/stdio.h
+ExprParser.o: ExprVisitor.h ExprParser.h

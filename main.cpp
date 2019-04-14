@@ -1,3 +1,23 @@
+/*************************************************************************
+                           PLD_COMP  -  description
+      Compilateur pour le language définit dans le polycopié.
+      Ce dernier renvoie la structure en mémoire généré lors de l'analyse du fichier.
+
+      Les différentes options sont :
+      -a pour afficher les erreurs détectées à l'analyse
+      -c <NomOptionel> pour générer un fichier ASM avec la possibilité de définir le nom de ce dernier
+      -o pour activer l'optimisation du code analysé
+
+      L'ajout, lors de la compilation du projet, des définitions suivantes modifie le programme :
+      - GEN_EXE permet d'obtenir un executable à la fin de l'exécution (extension en .exe)
+      - DEBUG permet d'afficher certaines informations de débuggage.
+
+                             -------------------
+    début                : 05/03/2019
+    copyright            : (C) 2019 par HALUNKA Matthieu, COQUIO-LEBRESNE Clémentine,
+                            FLOCH Tifenn, GASIUK Anatolii, HIRT Christophe, PAUGOIS Alan
+    e-mail               : matthieu.halunka@insa-lyon.fr (chef de projet)
+*************************************************************************/
 #include <iostream>
 #include <fstream>
 #include <string>
