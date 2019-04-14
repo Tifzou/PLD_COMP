@@ -5,8 +5,11 @@ OPTIONS=
 # -DGEN_EXE pour générer un executable à la fin de la compilation par l'application
 
 
-# POUR IF : ANTLR=/shares/public/tp/ANTLR4-CPP/bin/antlr4
-#           ANTLRRUNTIME=/shares/public/tp/ANTLR4-CPP
+# POUR UTILISER EN IF :
+# ANTLR=/shares/public/tp/ANTLR4-CPP/bin/antlr4
+# ANTLRRUNTIME=/shares/public/tp/ANTLR4-CPP
+
+# POUR UTILISER HORS-IF :
 ANTLR=/shares/public/tp/antlr4/bin/antlr4
 ANTLRRUNTIME=/shares/public/tp/antlr4
 

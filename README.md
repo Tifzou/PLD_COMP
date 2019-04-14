@@ -43,6 +43,8 @@ Tuto sur comment générer et installer Antlr sous Ubuntu 18.10 en dehors du dé
 - Créez les répertoires nécessaire à la racine du système pour obtenir le chemin suivant "/shares/public/tp/".
 - Décompressez le .zip du dossier install intitulé "Antlr4-Dump.zip" dans ce répertoire.
 
+Modifiez le makefile en commentant les lignes (9-10) pour le département IF et en décommentant les lignes (13-14) pour le déploiement sur machines hors IF.
+
 ## Contributions
 
 Seuls les membres de l'hexanôme H4213 peuvent commit et ouvrir des pull request sur ce repo GIT ! 
