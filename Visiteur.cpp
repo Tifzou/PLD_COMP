@@ -183,6 +183,53 @@ antlrcpp::Any Visiteur::visitCallfunc(ExprParser::CallfuncContext *ctx)
 }
 
 //------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitLvalue(ExprParser::LvalueContext *ctx)
+// Algorithme :
+//
+{
+    ExprParser::ExprlContext * expr1=ctx->exprl();
+
+    //string varName = expr1->VAR()->getText();
+
+    commandeType code = commandeType::AFFL;
+    symboleManager.pushInTemporalCommande(code);
+
+    /*if(symboleManager.varExist(varName)){
+        vector<ExprParser::ExprContext *> listExpr1=expr1->expr();
+        unsigned long size=listExpr1.size();
+        for(int i(0); i<size; i++)
+        {
+            ExprParser::ExprContext* e=listExpr1[i];
+            if (!visitExpr(e))
+            {
+                return false;
+            }
+
+            symboleManager.pushInTemporalCommande(symboleManager.getTemporalExpression()->back().elements[1]);
+            symboleManager.writeStack(*symboleManager.getTemporalExpression());
+            symboleManager.deleteTemporalExpression();
+            symboleManager.writeStack(symboleManager.getTemporalCommande());
+            symboleManager.deleteTemporalCommand();
+        }
+    }
+    else
+    {
+        commandeType code = commandeType::ERR;
+        vector<string> err;
+        string error3 = "name of variable '" + varName + "' not assigned";
+        err.push_back("0323");
+        err.push_back(error3);
+        symboleManager.deleteTemporalCommand(); //temporalStack = null;
+        symboleManager.pushInTemporalCommande(code, err);
+        symboleManager.writeStack(symboleManager.getTemporalCommande());
+        symboleManager.deleteTemporalCommand();
+        symboleManager.deleteTemporalExpression();
+    }*/
+
+    return true;
+}
+
+//------------------------------------------------------------------------
 antlrcpp::Any Visiteur::visitCore(ExprParser::CoreContext *ctx)
 // Algorithme :
 //
@@ -807,6 +854,83 @@ antlrcpp::Any Visiteur::visitEgal(ExprParser::EgalContext *ctx)
     symboleManager.writeStack(*symboleManager.getTemporalExpression());
     symboleManager.writeStack(symboleManager.getTemporalCommande());
     return true;
+}
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitNEgal(ExprParser::NegalContext *ctx)
+// Algorithme :
+//
+{
+    cout<<"test predicat"<<endl;
+    string nomVar1;
+    string nomVar2;
+    if(visit(ctx->expr(0)))
+    {
+        nomVar1=symboleManager.getTemporalExpression()->back().elements[1];
+    }
+    else
+    {
+        hasError=true;
+        return false;
+    }
+
+    if(visit(ctx->expr(1)))
+    {
+        nomVar2=symboleManager.getTemporalExpression()->back().elements[1];
+    }
+    else
+    {
+        hasError=true;
+        return false;
+    }
+    string tempVar = "!t" + to_string(symboleManager.createTemporalVar());
+    symboleManager.pushInTemporalCommande(commandeType::CONDITION);
+    symboleManager.pushInTemporalCommande("bool");
+    symboleManager.pushInTemporalCommande(tempVar);
+    symboleManager.pushInTemporalCommande(nomVar1);
+    symboleManager.pushInTemporalCommande("!=");
+    symboleManager.pushInTemporalCommande(nomVar2);
+    symboleManager.writeStack(*symboleManager.getTemporalExpression());
+    symboleManager.writeStack(symboleManager.getTemporalCommande());
+    return true;
+}
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitBoolExpressionWhile(ExprParser::BoolExpressionWhileContext *ctx)
+// Algorithme :
+//
+{
+    symboleManager.pushInTemporalCommande(commandeType::CONDITIONWHILE);
+
+    return visitChildren(ctx);
+}
+
+//------------------------------------------------------------------------
+antlrcpp::Any Visiteur::visitWhileLoop(ExprParser::WhileLoopContext *ctx)
+// Algorithme :
+//
+{
+    commandeType code = commandeType::WHILE;
+    symboleManager.pushInTemporalCommande(code);
+    symboleManager.writeStack(symboleManager.getTemporalCommande());
+    if (visit(ctx->boolExpressionWhile()))
+    {
+        symboleManager.pushIntoFlowControl();
+    }
+    else
+    {
+        return false;
+    }
+
+    if (visit(ctx->coreIf()))
+    {
+        symboleManager.pushIntoFlowControl();
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
  /*

@@ -73,6 +73,12 @@ public:
     antlrcpp::Any visitBase(ExprParser::BaseContext *ctx);
 
     // Mode d'emploi :
+    //
+    // Contrat :
+    //
+    antlrcpp::Any visitLvalue(ExprParser::LvalueContext *ctx);
+
+    // Mode d'emploi :
     //      Permet d'analyser les noeuds Function
     // Contrat :
     //
@@ -254,6 +260,26 @@ public:
     // Contrat :
     //
     antlrcpp::Any visitLt(ExprParser::LtContext *ctx);
+
+
+    // Mode d'emploi :
+    //      Permet d'analyser les noeuds pour les comparaisons !=
+    // Contrat :
+    //
+    antlrcpp::Any visitNEgal(ExprParser::NegalContext *ctx);
+
+    // Mode d'emploi :
+    //      Permet d'analyser les noeuds pour les expression bool des boucles while
+    // Contrat :
+    //
+    antlrcpp::Any visitBoolExpressionWhile(ExprParser::BoolExpressionWhileContext *ctx);
+
+    // Mode d'emploi :
+    //      Permet d'analyser le contenu d'une boucle while
+    // Contrat :
+    //
+    antlrcpp::Any visitWhileLoop(ExprParser::WhileLoopContext *ctx);
+
 
     // Mode d'emploi :
     //      Permet d'obtenir l'IR associé au visiteur

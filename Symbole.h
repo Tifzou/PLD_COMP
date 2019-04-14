@@ -41,7 +41,10 @@ enum commandeType
     FUNC,
     MAIN,
     FUNC_CALL,
-    FUNC_AFF
+    FUNC_AFF,
+    WHILE,
+    CONDITIONWHILE,
+    AFFL,
 };
 
 //structure contenant une commande correspondant à un type defini par 1 enum particuliere

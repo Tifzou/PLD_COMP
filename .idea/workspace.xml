@@ -13,16 +13,13 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9cadfbaa-bb7d-488b-a991-4828cb9d5e79" name="Default Changelist" comment="Readme ajouté">
+    <list default="true" id="9cadfbaa-bb7d-488b-a991-4828cb9d5e79" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Expr.g4" beforeDir="false" afterPath="$PROJECT_DIR$/Expr.g4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Symbole.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Symbole.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Symbole.h" beforeDir="false" afterPath="$PROJECT_DIR$/Symbole.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Visiteur.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Visiteur.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Visiteur.h" beforeDir="false" afterPath="$PROJECT_DIR$/Visiteur.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.c" beforeDir="false" afterPath="$PROJECT_DIR$/index.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/Test06/resultat.s" beforeDir="false" afterPath="$PROJECT_DIR$/test/Test06/resultat.s" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/Test10/resultat.s" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/Test12/resultat.s" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/Test14/resultat.s" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -51,29 +48,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Visiteur.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="294">
-              <caret line="260" column="6" selection-start-line="260" selection-start-column="6" selection-end-line="261" selection-end-column="32" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/index.c">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="14" lean-forward="true" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/main.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="203" column="4" selection-start-line="203" selection-start-column="4" selection-end-line="203" selection-end-column="4" />
+            <state relative-caret-position="384">
+              <caret line="284" lean-forward="true" selection-start-line="284" selection-end-line="284" />
             </state>
           </provider>
         </entry>
@@ -81,8 +60,44 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Visiteur.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="80">
-              <caret line="840" column="5" selection-start-line="840" selection-start-column="5" selection-end-line="840" selection-end-column="5" />
+            <state relative-caret-position="17">
+              <caret line="901" selection-start-line="901" selection-end-line="901" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/main.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="131">
+              <caret line="194" column="22" selection-start-line="194" selection-start-column="22" selection-end-line="194" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Expr.g4">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="168">
+              <caret line="34" column="14" lean-forward="true" selection-start-line="34" selection-start-column="14" selection-end-line="34" selection-end-column="14" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Symbole.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="317">
+              <caret line="45" column="19" lean-forward="true" selection-start-line="45" selection-start-column="19" selection-end-line="45" selection-end-column="19" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Symbole.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="34">
+              <caret line="317" column="36" selection-start-line="317" selection-start-column="36" selection-end-line="317" selection-end-column="36" />
             </state>
           </provider>
         </entry>
@@ -113,6 +128,8 @@
       <find>check</find>
       <find>checkVar</find>
       <find>symboleManager</find>
+      <find>false</find>
+      <find>aff</find>
     </findStrings>
     <replaceStrings>
       <replace>adds</replace>
@@ -134,11 +151,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
-        <option value="$PROJECT_DIR$/Expr.g4" />
         <option value="$PROJECT_DIR$/ultimate_script.sh" />
         <option value="$PROJECT_DIR$/AsmWriter.h" />
-        <option value="$PROJECT_DIR$/Symbole.h" />
-        <option value="$PROJECT_DIR$/Symbole.cpp" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/makefile" />
         <option value="$PROJECT_DIR$/test/readme.txt" />
@@ -164,19 +178,22 @@
         <option value="$PROJECT_DIR$/test/test.sh" />
         <option value="$PROJECT_DIR$/test/Test06/resultat.s" />
         <option value="$PROJECT_DIR$/AsmWriter.cpp" />
-        <option value="$PROJECT_DIR$/Visiteur.h" />
         <option value="$PROJECT_DIR$/index.c" />
-        <option value="$PROJECT_DIR$/Visiteur.cpp" />
         <option value="$PROJECT_DIR$/main.cpp" />
+        <option value="$PROJECT_DIR$/Symbole.cpp" />
+        <option value="$PROJECT_DIR$/Visiteur.h" />
+        <option value="$PROJECT_DIR$/Symbole.h" />
+        <option value="$PROJECT_DIR$/Expr.g4" />
+        <option value="$PROJECT_DIR$/Visiteur.cpp" />
       </list>
     </option>
   </component>
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="65" />
-    <option name="y" value="-4" />
-    <option name="width" value="1301" />
-    <option name="height" value="772" />
+    <option name="x" value="292" />
+    <option name="y" value="12" />
+    <option name="width" value="649" />
+    <option name="height" value="736" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
@@ -203,7 +220,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/install" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../PLD_COMP (copie)" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -258,7 +275,7 @@
       <workItem from="1554975014881" duration="1264000" />
       <workItem from="1555046790805" duration="1746000" />
       <workItem from="1555180302172" duration="5298000" />
-      <workItem from="1555229303719" duration="19840000" />
+      <workItem from="1555229303719" duration="23183000" />
     </task>
     <task id="LOCAL-00001" summary="added clion config file">
       <created>1553592128766</created>
@@ -372,11 +389,25 @@
       <option name="project" value="LOCAL" />
       <updated>1555250796120</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Ajout de la gestion d'erreur basique">
+      <created>1555256474308</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1555256474308</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Ajout de la gestion d'erreur avancée">
+      <created>1555257692559</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1555257692559</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="51849000" />
+    <option name="totallyTimeSpent" value="55192000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -395,15 +426,15 @@
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3285968" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32713178" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.49925706" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32868218" />
       <window_info anchor="bottom" id="Database Changes" order="7" />
       <window_info anchor="bottom" id="Messages" order="8" weight="0.32838038" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.49853945" visible="true" weight="0.49925706" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.49853945" visible="true" weight="0.307578" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50048685" side_tool="true" weight="0.3297587" />
       <window_info anchor="bottom" id="Version Control" order="11" sideWeight="0.4996016" weight="0.7578009" />
       <window_info anchor="bottom" id="CMake" order="12" weight="0.32838038" />
@@ -496,19 +527,21 @@
     <MESSAGE value="Commentage jugé satisfaisant, il reste des choses à commenté mais je ne peux pas le faire car je risque de meetre de la merde" />
     <MESSAGE value="Readme ajouté" />
     <MESSAGE value="Correction des tests liées aux modifs du main" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correction des tests liées aux modifs du main" />
+    <MESSAGE value="Ajout de la gestion d'erreur basique" />
+    <MESSAGE value="Ajout de la gestion d'erreur avancée" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ajout de la gestion d'erreur avancée" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>248</line>
+          <line>247</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>250</line>
+          <line>249</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
@@ -600,13 +633,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Expr.g4">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="629">
-          <caret line="37" column="23" lean-forward="true" selection-start-line="37" selection-start-column="23" selection-end-line="37" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/makefile">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -647,13 +673,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="9" column="7" lean-forward="true" selection-start-line="9" selection-start-column="7" selection-end-line="9" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Symbole.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="262" column="8" selection-start-line="262" selection-start-column="4" selection-end-line="262" selection-end-column="8" />
         </state>
       </provider>
     </entry>
@@ -842,48 +861,62 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/index.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="14" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/AsmWriter.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-13">
-          <caret line="161" column="16" lean-forward="true" selection-start-line="161" selection-start-column="16" selection-end-line="161" selection-end-column="16" />
+        <state relative-caret-position="-184">
+          <caret line="582" column="18" selection-start-line="582" selection-start-column="18" selection-end-line="582" selection-end-column="18" />
           <folding>
             <element signature="e#863#885#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Symbole.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="317" column="36" selection-start-line="317" selection-start-column="36" selection-end-line="317" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Expr.g4">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="34" column="14" lean-forward="true" selection-start-line="34" selection-start-column="14" selection-end-line="34" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Symbole.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="78" column="6" selection-start-line="78" selection-start-column="6" selection-end-line="78" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Visiteur.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="80">
-          <caret line="840" column="5" selection-start-line="840" selection-start-column="5" selection-end-line="840" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="14" lean-forward="true" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Visiteur.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="260" column="6" selection-start-line="260" selection-start-column="6" selection-end-line="261" selection-end-column="32" />
+        <state relative-caret-position="317">
+          <caret line="45" column="19" lean-forward="true" selection-start-line="45" selection-start-column="19" selection-end-line="45" selection-end-column="19" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="203" column="4" selection-start-line="203" selection-start-column="4" selection-end-line="203" selection-end-column="4" />
+        <state relative-caret-position="131">
+          <caret line="194" column="22" selection-start-line="194" selection-start-column="22" selection-end-line="194" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Visiteur.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="901" selection-start-line="901" selection-end-line="901" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Visiteur.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="384">
+          <caret line="284" lean-forward="true" selection-start-line="284" selection-end-line="284" />
         </state>
       </provider>
     </entry>
