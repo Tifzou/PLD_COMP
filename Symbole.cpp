@@ -178,7 +178,10 @@ void Symbole::pushIfIntoFlowControl(Cell *curBlock)
     temporalStackCommande.type=ERR;
 }
 
+//------------------------------------------------------------------------
 void Symbole::pushElseIntoFlowControl(Cell* curBlock)
+// Algorithme :
+//
 {
     Cell *bloc = new Cell();
     bloc->data = resp;
@@ -194,8 +197,10 @@ void Symbole::pushElseIntoFlowControl(Cell* curBlock)
     temporalStackCommande.type=ERR;
 }
 
-
+//------------------------------------------------------------------------
 void Symbole::pushLastBlockIntoFlowControl()
+// Algorithme :
+//
 {
     Cell *bloc = new Cell();
     bloc->data = resp;
@@ -333,6 +338,8 @@ bool Symbole::varDef(string var)
 
 //------------------------------------------------------- Méthodes privées
 void Symbole::destroyGraph(Cell *block)
+// Algorithme :
+//
 {
     if(block==nullptr)
     {

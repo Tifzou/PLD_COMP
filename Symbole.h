@@ -87,74 +87,72 @@ class Symbole
     //      Aucun
     bool varExist(string var);
 
+    // Mode d'emploi :
+    //      vérifie qu'une variable a déjà une valeur soit avec une définition soit avec une affectation
+    //      renvoie true si oui, false sinon
+    // Contrat :
+    //      renvoie false si la variable n'a pas été déclarée
     bool varDef(string var);
-    // Mode d'emploi :
-    // vérifie qu'une variable a déjà une valeur
-    // soit avec une définition soit avec une affectation
-    // renvoie true si oui, false sinon
-    // Contrat :
-    // renvoie false si la variable n'a pas été déclarée
 
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
     bool functExist(string funct);
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
 
-    void writeStack(Commande curCommande);
     // Mode d'emploi :
     // ajoute une commande à la liste de commandes
     // Contrat :
     // la commande doit être complète
+    void writeStack(Commande curCommande);
 
     // TODO : à supprimer ? vu qu'elle n'est pas utilisée
-    void writeStack(commandeType code, vector<string> commande);
     // Mode d'emploi :
     // ajoute une commande à la liste de commandes
     // Contrat :
     // la commande est créée dans cette méthode directement
+    void writeStack(commandeType code, vector<string> commande);
 
-
-    void writeStack(matrice commandes);
     // Mode d'emploi :
     // ajoute une liste de commandes à la liste de commandes existante
     // Contrat :
     // les commandes doivent être complètes
+    void writeStack(matrice commandes);
 
 
-    void pushInTemporalCommande(commandeType code, vector<string> commande)
     // Mode d'emploi :
     // crée une commande temporaire
+    void pushInTemporalCommande(commandeType code, vector<string> commande)
     {
         temporalStackCommande.type = code;
         temporalStackCommande.elements = commande;
     }
 
     // TODO : à supprimer ? vu qu'elle n'est pas utilisée et n'a pas de code ?
-    void pushInTemporalCommande(vector<string> commande)
     // Mode d'emploi :
     // crée une commande temporaire
     // Contrat :
     // ne possède pas de code définissant le type de la commande
+    void pushInTemporalCommande(vector<string> commande)
     {
         temporalStackCommande.elements = commande;
     }
 
-    void pushInTemporalCommande(commandeType code)
     // Mode d'emploi :
     // crée une commande temporaire
     // Contrat :
     // ne possède pas de corps définissant les instructions de la commande
+    void pushInTemporalCommande(commandeType code)
     {
         temporalStackCommande.type = code;
     }
 
-    void pushInTemporalCommande(string element)
     // Mode d'emploi :
     // crée une commande temporaire
     // Contrat :
     // ne possède pas de code définissant le type de la commande
     // la commande ne possède qu'un seul élément dans le vector
+    void pushInTemporalCommande(string element)
     {
         temporalStackCommande.elements.push_back(element);
     }
@@ -329,9 +327,9 @@ class Symbole
 
     }
 
-    void destroyGraph(Cell* block);
     // Mode d'emploi :
     // libère la mémoire de tous les blocks du graphe de controle
+    void destroyGraph(Cell* block);
 
     //------------------------------------------------------------------ PRIVE
 

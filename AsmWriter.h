@@ -56,14 +56,15 @@ enum typeBlock
 class AsmWriter {
 //----------------------------------------------------------------- PUBLIC
 public:
-//----------------------------------------------------- Constructeurs
+
+    //-------------------------------------------- Constructeurs - destructeur
     // Mode d'emploi :
     //      Le constructeur initialise les différents attibuts et structures nécessaires à la transformation
     // Contrat :
     //      Le système doit avoir les droits en écriture sur le répertoire d'exécution
     //      L'arbre doit être bien formé pour pouvoir être transformé correctement
-    AsmWriter(string const nom, string const outName, string const arbre)
-            : inFile(nom), outFile(outName), arbreAntlr(arbre)
+    AsmWriter(string const outName, string const arbre)
+            : outFile(outName), arbreAntlr(arbre)
     {
         flagCounter=0;
         // {RDI, RSI, RDX, RCX, R8, R9}
@@ -81,6 +82,12 @@ public:
     // Contrat :
     //      Ne pas utiliser ce dernier
     AsmWriter(){flagCounter=0;}
+
+    // Mode d'emploi :
+    //      Destructeur de base
+    // Contrat :
+    //      Aucun
+    virtual ~AsmWriter(){}
 
 //----------------------------------------------------- Méthodes publiques
 

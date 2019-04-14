@@ -237,13 +237,13 @@ int main(int argc, char *argv[])
 #endif
 
     if(toAsmFile){
-        AsmWriter* a = new AsmWriter(inputName, (!custumOutput)?(outputName+".s"):outputName, tree->toStringTree(&parser));
+        AsmWriter* a = new AsmWriter((!custumOutput)?(outputName+".s"):outputName, tree->toStringTree(&parser));
         a->writeOutputFile(stack->first);
     }
 
 #ifdef GEN_EXE
     if(!toAsmFile){
-        AsmWriter* a = new AsmWriter(inputName, outputName+".s", tree->toStringTree(&parser));
+        AsmWriter* a = new AsmWriter(outputName+".s", tree->toStringTree(&parser));
         a->writeOutputFile(stack->first);
 
         string asCmd = "as -o " + outputName+".o " + outputName+".s";

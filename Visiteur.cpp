@@ -719,6 +719,7 @@ antlrcpp::Any Visiteur::visitLt(ExprParser::LtContext *ctx)
 }
 
 
+//------------------------------------------------------------------------
 antlrcpp::Any Visiteur::visitEgal(ExprParser::EgalContext *ctx){
     cout<<"test predicat"<<endl;
     string nomVar1;
