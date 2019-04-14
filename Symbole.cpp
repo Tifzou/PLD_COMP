@@ -1,5 +1,8 @@
 /*************************************************************************
                            PLD_COMP  -  description
+
+    Classe réalisant l'IR et génèrant la représentation intermédiaire
+
                              -------------------
     début                : 05/03/2019
     copyright            : (C) 2019 par HALUNKA Matthieu, COQUIO-LEBRESNE Clémentine,

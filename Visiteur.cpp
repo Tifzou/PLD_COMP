@@ -1,5 +1,8 @@
 /*************************************************************************
                            PLD_COMP  -  description
+
+    Classe permettant de parcourir l'arbre généré par la grammaire afin
+    de créer les temporals et les variables utiles à l'IR
                              -------------------
     début                : 05/03/2019
     copyright            : (C) 2019 par HALUNKA Matthieu, COQUIO-LEBRESNE Clémentine,
