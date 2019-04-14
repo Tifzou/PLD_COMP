@@ -1,6 +1,6 @@
-int sum()
+int sum(int z)
 {
-    return 10;
+    return z+1;
 }
 
 int main()
@@ -8,7 +8,7 @@ int main()
     int a;
     int b = 5;
     int e = 1;
-    a = sum();
+    a = sum(b);
 
     return a;
 }
