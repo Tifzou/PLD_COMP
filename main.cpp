@@ -184,6 +184,7 @@ int main(int argc, char *argv[])
 
     if(showError){
         cerr<<erreur;
+        //cerr<<tree->getNumberOfSyntaxErrors()<<" erreurs ont été detectées lors de l'analyse via la grammaire !"<<endl;
     }
     Visiteur visitor(showError);
 

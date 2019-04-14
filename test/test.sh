@@ -177,7 +177,7 @@ fi
 
 #delete all generated files created by compilation
 find . -maxdepth 2 -name "*.o" -type f -delete
-find . -maxdepth 2 -name "*.s" -type f -delete
+#find . -maxdepth 2 -name "*.s" -type f -delete
 find . -maxdepth 2 -name "*.exe" -type f -delete
 
 exit $resultGlobal

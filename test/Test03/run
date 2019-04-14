@@ -1,4 +1,4 @@
-../../exec ../File/indexSprint-2-2.c
+../../exec ../File/indexSprint-2-2.c -c resultat.s
 
 && as -o resultat.o resultat.s
 && gcc resultat.o -o resultat.exe

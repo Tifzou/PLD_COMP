@@ -409,7 +409,7 @@ string AsmWriter::writeAdd(Commande additionCmd)
 
     string asmInstr = "\tmovl\t"+addressOp1+", %edx\n";
     asmInstr += "\tmovl\t"+addressOp2+", %eax\n";
-    asmInstr += "\taddq\t%edx, %eax\n";
+    asmInstr += "\taddl\t%edx, %eax\n";
     asmInstr += "\tmovl\t %eax, "+addressRes+"\n";
 
     return asmInstr;
